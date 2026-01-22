@@ -5,8 +5,8 @@ import 'package:workout_tracker/ui/theme/dimensions.dart';
 import 'package:workout_tracker/ui/theme/text_styles.dart';
 
 final appTheme = ThemeData(
-  scaffoldBackgroundColor: Colors.white,
-  fontFamily: GoogleFonts.outfit().fontFamily,
+  scaffoldBackgroundColor: white,
+  textTheme: GoogleFonts.outfitTextTheme().apply(bodyColor: black),
   inputDecorationTheme: InputDecorationTheme(
     fillColor: Colors.white,
     filled: true,
@@ -15,12 +15,13 @@ final appTheme = ThemeData(
       borderSide: BorderSide.none,
     ),
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(foregroundColor: white, backgroundColor: black),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: black,
       foregroundColor: Colors.white,
       padding: EdgeInsets.all(Dimensions.buttonPadding),
-      textStyle: TextStyles.bodyMedium.copyWith(
+      textStyle: TextStyles.labelMedium.copyWith(
         fontFamily: GoogleFonts.redHatDisplay().fontFamily,
       ),
     ),

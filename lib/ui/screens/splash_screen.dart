@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:workout_tracker/router.dart';
-import 'package:workout_tracker/ui/screens/base_scaffold.dart';
+import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/theme/text_styles.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
+    return CustomScaffold(
       body: Center(
         child: Text(
           "Let's track your workouts!",

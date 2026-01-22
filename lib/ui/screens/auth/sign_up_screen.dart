@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/router.dart';
-import 'package:workout_tracker/ui/screens/base_scaffold.dart';
+import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/theme/text_styles.dart';
 import 'package:workout_tracker/utils/validators.dart';
 
@@ -33,8 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      backgroundColor: Color(0xfff1f1f1),
+    return CustomScaffold(
       body: Form(
         key: formKey,
         child: Column(
@@ -93,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             30.height,
             ElevatedButton(
               onPressed: () {
-                context.goNamed(Routes.home);
+                context.goNamed(Routes.homeBase);
                 return;
                 if (formKey.currentState?.validate() == true) {}
               },

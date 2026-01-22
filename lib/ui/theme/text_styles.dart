@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class TextStyles {
   TextStyles._();
@@ -6,16 +7,24 @@ class TextStyles {
   static final heading = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
-    color: Colors.black,
   );
 
   static final subHeading = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
-    color: Colors.black,
   );
-  static final bodyMedium = TextStyle(
+
+  static final labelMedium = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w600,
+  );
+
+  static final bodyMedium = TextStyle(
+    fontWeight: FontWeight.w600,
+  );
+
+  static final bodySmall = TextStyle(
+    fontSize: 12,
+    color: grey,
   );
 }

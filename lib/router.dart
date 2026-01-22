@@ -1,20 +1,20 @@
 import 'package:go_router/go_router.dart';
 import 'package:workout_tracker/ui/screens/auth/login_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/sign_up_screen.dart';
-import 'package:workout_tracker/ui/screens/home_screen.dart';
+import 'package:workout_tracker/ui/screens/main/home_base_screen.dart';
 import 'package:workout_tracker/ui/screens/splash_screen.dart';
 
 class Routes {
   Routes._();
 
-  static const home = '/';
+  static const homeBase = '/';
   static const splash = '/splash';
   static const login = '/login';
   static const signup = '/signup';
 }
 
 final routerConfig = GoRouter(
-  initialLocation: Routes.signup,
+  initialLocation: Routes.homeBase,
   routes: [
     GoRoute(
       name: Routes.splash,
@@ -32,9 +32,9 @@ final routerConfig = GoRouter(
       builder: (context, state) => LoginScreen(),
     ),
     GoRoute(
-      path: Routes.home,
-      name: Routes.home,
-      builder: (context, state) => HomeScreen(),
+      path: Routes.homeBase,
+      name: Routes.homeBase,
+      builder: (context, state) => HomeBaseScreen(),
     ),
   ],
 );
