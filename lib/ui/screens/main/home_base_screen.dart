@@ -14,16 +14,16 @@ class HomeBaseScreen extends StatefulWidget {
 }
 
 class _HomeBaseScreenState extends State<HomeBaseScreen> {
-  int selectedIndex = 0;
+  int selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _buildBottomNavigationBar((index) => setState(() => selectedIndex = index), selectedIndex),
       body: [
-        PastRecordsScreen(),
         RoutinesScreen(),
         WorkoutsScreen(),
+        PastRecordsScreen(),
       ][selectedIndex],
     );
   }
@@ -32,6 +32,7 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
 Widget _buildBottomNavigationBar(Function(int index) onTabChanged, int selectedIndex) {
   return GNav(
     onTabChange: onTabChanged,
+    selectedIndex: selectedIndex,
     padding: EdgeInsetsGeometry.all(10),
     backgroundColor: Colors.white,
     tabBackgroundColor: lightBlue,
@@ -39,16 +40,16 @@ Widget _buildBottomNavigationBar(Function(int index) onTabChanged, int selectedI
     gap: 10,
     tabs: [
       GButton(
-        icon: selectedIndex == 0 ? FluentIcons.history_16_filled : FluentIcons.history_16_regular,
-        text: "Past Records",
-      ),
-      GButton(
-        icon: selectedIndex == 1 ? FluentIcons.calendar_16_filled : FluentIcons.calendar_16_regular,
+        icon: selectedIndex == 0 ? FluentIcons.calendar_16_filled : FluentIcons.calendar_16_regular,
         text: "Routine",
       ),
       GButton(
         icon: selectedIndex == 2 ? FluentIcons.dumbbell_16_filled : FluentIcons.dumbbell_16_regular,
         text: "Workouts",
+      ),
+      GButton(
+        icon: selectedIndex == 2 ? FluentIcons.history_16_filled : FluentIcons.history_16_regular,
+        text: "Past Records",
       ),
     ],
   );

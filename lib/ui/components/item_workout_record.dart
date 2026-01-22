@@ -7,7 +7,14 @@ class ItemWorkoutRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final workouts = ["Flat Bench Press", "Inclined Dumbbell Press", "Pec Deck Fly"];
+    final workouts = [
+      "Flat Bench Press",
+      "Inclined Dumbbell Press",
+      "Declined Dumbbell Press",
+      "Pec Deck Fly",
+      "Low to High Cable Crossover",
+      "High to Low Cable Crossover",
+    ];
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,
@@ -30,9 +37,7 @@ class ItemWorkoutRecord extends StatelessWidget {
             ),
           ),
           Divider(
-            color: Colors.black,
             height: 1,
-            thickness: 0.0,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -40,9 +45,9 @@ class ItemWorkoutRecord extends StatelessWidget {
               ListView.separated(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
                 itemBuilder: (_, i) => _ItemWorkoutRecordExercise(workoutName: workouts[i], index: i),
-                separatorBuilder: (_, i) => Divider(thickness: 0.0, height: 1),
+                separatorBuilder: (_, i) => Divider(thickness: 0.0, height: 0),
                 itemCount: workouts.length,
               ),
             ],
@@ -74,7 +79,7 @@ class _ItemWorkoutRecordExerciseState extends State<_ItemWorkoutRecordExercise> 
       borderRadius: BorderRadius.circular(10),
       child: AnimatedContainer(
         duration: duration,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
         child: Row(
           children: [
             Text(
