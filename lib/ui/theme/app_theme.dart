@@ -6,7 +6,13 @@ import 'package:workout_tracker/ui/theme/text_styles.dart';
 
 final appTheme = ThemeData(
   scaffoldBackgroundColor: white,
+  bottomSheetTheme: BottomSheetThemeData(
+    backgroundColor: white,
+  ),
   textTheme: GoogleFonts.outfitTextTheme().apply(bodyColor: black),
+  radioTheme: RadioThemeData(
+    fillColor: WidgetStatePropertyAll(black),
+  ),
   inputDecorationTheme: InputDecorationTheme(
     fillColor: Colors.white,
     filled: true,
