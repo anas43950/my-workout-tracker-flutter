@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Text(
           "Let's track your workouts!",
-          style: TextStyles.heading,
+          style: AppTextStyles.heading,
         ),
       ),
     );

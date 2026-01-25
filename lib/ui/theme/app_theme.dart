@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:workout_tracker/ui/theme/colors.dart';
 import 'package:workout_tracker/ui/theme/dimensions.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 final appTheme = ThemeData(
   scaffoldBackgroundColor: white,
@@ -12,6 +12,14 @@ final appTheme = ThemeData(
   textTheme: GoogleFonts.outfitTextTheme().apply(bodyColor: black),
   radioTheme: RadioThemeData(
     fillColor: WidgetStatePropertyAll(black),
+  ),
+  checkboxTheme: CheckboxThemeData(
+    fillColor: WidgetStateProperty.resolveWith((state) {
+      if (state.contains(WidgetState.selected)) {
+        return Colors.blue;
+      }
+      return Colors.white;
+    }),
   ),
   inputDecorationTheme: InputDecorationTheme(
     fillColor: Colors.white,
@@ -27,7 +35,7 @@ final appTheme = ThemeData(
       backgroundColor: black,
       foregroundColor: Colors.white,
       padding: EdgeInsets.all(Dimensions.buttonPadding),
-      textStyle: TextStyles.labelMedium.copyWith(
+      textStyle: AppTextStyles.labelMedium.copyWith(
         fontFamily: GoogleFonts.redHatDisplay().fontFamily,
       ),
     ),

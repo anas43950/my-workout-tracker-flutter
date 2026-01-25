@@ -9,13 +9,10 @@ class PastRecordsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      title: "Your workout history will appear here",
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            "Your workout history will appear here",
-          ),
-          10.height,
           Expanded(
             child: ListView.separated(
               itemBuilder: (_, i) => ItemWorkoutRecord(),

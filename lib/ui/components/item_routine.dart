@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/clickable_text.dart';
 import 'package:workout_tracker/utils/constants.dart';
 
@@ -29,7 +31,9 @@ class ItemRoutine extends StatelessWidget {
           if (index < 2)
             ClickableText(
               text: "Add",
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(Routes.addRoutine);
+              },
             )
           else ...[
             ClickableText(

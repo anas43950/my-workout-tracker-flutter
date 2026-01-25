@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class TextFieldWithLabel extends StatelessWidget {
   final String label;
@@ -16,7 +16,7 @@ class TextFieldWithLabel extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 8.0, left: 5),
           child: Text(
             label,
-            style: TextStyles.bodyMedium,
+            style: AppTextStyles.bodyMedium,
           ),
         ),
         TextFormField(

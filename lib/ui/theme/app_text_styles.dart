@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class TextStyles {
-  TextStyles._();
+class AppTextStyles {
+  AppTextStyles._();
 
   static final heading = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
+    color: black
   );
 
   static final subHeading = TextStyle(

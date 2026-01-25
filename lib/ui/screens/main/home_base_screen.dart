@@ -14,7 +14,7 @@ class HomeBaseScreen extends StatefulWidget {
 }
 
 class _HomeBaseScreenState extends State<HomeBaseScreen> {
-  int selectedIndex = 1;
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {

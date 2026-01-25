@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/ui/components/text_field_with_label.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class BottomSheetAddWorkout extends StatefulWidget {
   const BottomSheetAddWorkout({
@@ -27,7 +27,7 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
         children: [
           Text(
             "Add Workout",
-            style: TextStyles.labelMedium,
+            style: AppTextStyles.labelMedium,
             textAlign: TextAlign.center,
           ),
           Divider(),
@@ -44,7 +44,7 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
           15.height,
           Text(
             "Reps",
-            style: TextStyles.bodyMedium,
+            style: AppTextStyles.bodyMedium,
           ),
           RadioGroup(
             onChanged: (val) {

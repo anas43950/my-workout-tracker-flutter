@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/validators.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Text(
               "Login to continue",
-              style: TextStyles.heading,
+              style: AppTextStyles.heading,
             ),
             20.height,
             TextFormField(
@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text(
                     "Sign Up",
-                    style: TextStyles.subHeading.copyWith(decoration: TextDecoration.underline),
+                    style: AppTextStyles.subHeading.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),
               ],

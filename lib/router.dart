@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:workout_tracker/ui/screens/add_routine_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/login_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/sign_up_screen.dart';
 import 'package:workout_tracker/ui/screens/main/home_base_screen.dart';
@@ -11,6 +12,7 @@ class Routes {
   static const splash = '/splash';
   static const login = '/login';
   static const signup = '/signup';
+  static const addRoutine = '/add-routine';
 }
 
 final routerConfig = GoRouter(
@@ -35,6 +37,11 @@ final routerConfig = GoRouter(
       path: Routes.homeBase,
       name: Routes.homeBase,
       builder: (context, state) => HomeBaseScreen(),
+    ),
+    GoRoute(
+      path: Routes.addRoutine,
+      name: Routes.addRoutine,
+      builder: (context, state) => AddRoutineScreen(),
     ),
   ],
 );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_routine.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/constants.dart';
 
 class RoutinesScreen extends StatelessWidget {
@@ -30,12 +30,12 @@ class RoutinesScreen extends StatelessWidget {
         children: [
           Text(
             "Hello, Anas 👋",
-            style: TextStyles.heading,
+            style: AppTextStyles.heading,
           ),
           10.height,
           Text(
             "Add a workout routine for each week day",
-            style: TextStyles.bodySmall,
+            style: AppTextStyles.bodySmall,
           ),
           20.height,
           Expanded(

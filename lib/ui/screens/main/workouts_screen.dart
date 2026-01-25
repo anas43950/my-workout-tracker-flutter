@@ -21,13 +21,10 @@ class WorkoutsScreen extends StatelessWidget {
         },
         child: Icon(FluentIcons.add_12_filled),
       ),
+      title: "Your added workouts will appear here",
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            "Workouts you added will appear here",
-          ),
-          25.height,
           TextField(
             decoration: InputDecoration(
               hintText: "Search workouts...",
@@ -38,7 +35,7 @@ class WorkoutsScreen extends StatelessWidget {
               ),
             ),
           ),
-          Divider(height: 50),
+          Divider(height: 40),
           Expanded(
             child: ListView.builder(
               itemBuilder: (_, i) => ItemWorkout(),

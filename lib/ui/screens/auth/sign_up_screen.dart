@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/validators.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -42,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             Text(
               "Create an account",
-              style: TextStyles.heading,
+              style: AppTextStyles.heading,
               // textAlign: TextAlign.center,
             ),
             20.height,
@@ -110,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   child: Text(
                     "Login",
-                    style: TextStyles.subHeading.copyWith(decoration: TextDecoration.underline),
+                    style: AppTextStyles.subHeading.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),
               ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:workout_tracker/ui/theme/text_styles.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class ItemWorkoutRecord extends StatelessWidget {
   const ItemWorkoutRecord({super.key});
@@ -27,11 +27,11 @@ class ItemWorkoutRecord extends StatelessWidget {
               children: [
                 Text(
                   "Wed, 21 Jan 2026  -  Chest + Triceps",
-                  style: TextStyles.bodySmall,
+                  style: AppTextStyles.bodySmall,
                 ),
                 Text(
                   "W - R",
-                  style: TextStyles.bodySmall,
+                  style: AppTextStyles.bodySmall,
                 ),
               ],
             ),
@@ -84,7 +84,7 @@ class _ItemWorkoutRecordExerciseState extends State<_ItemWorkoutRecordExercise> 
           children: [
             Text(
               (widget.index + 1).toString(),
-              style: TextStyles.bodySmall,
+              style: AppTextStyles.bodySmall,
             ),
             10.width,
             Expanded(
