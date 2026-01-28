@@ -11,7 +11,10 @@ class AppTextStyles {
   );
 
   static final subHeading = TextStyle(
-    fontSize: 14,
+      fontSize: 18,
+      color: black
+  );
+  static final bodyBold = TextStyle(
     fontWeight: FontWeight.bold,
   );
 

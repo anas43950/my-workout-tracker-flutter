@@ -1,6 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_routine.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
@@ -13,7 +15,9 @@ class RoutinesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          context.pushNamed(Routes.recordWorkout);
+        },
         label: Row(
           children: [
             Text("Start Workout"),

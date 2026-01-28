@@ -15,7 +15,7 @@ class BottomSheetAddWorkout extends StatefulWidget {
 class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
   final RANGE = "Range";
   final FIXED = "Fixed";
-  late String repsType = FIXED;
+  late String repsType = RANGE;
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +58,14 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
                 children: [
                   Expanded(
                     child: RadioListTile(
-                      value: FIXED,
-                      title: Text(FIXED),
+                      value: RANGE,
+                      title: Text(RANGE),
                     ),
                   ),
                   Expanded(
                     child: RadioListTile(
-                      value: RANGE,
-                      title: Text(RANGE),
+                      value: FIXED,
+                      title: Text(FIXED),
                     ),
                   ),
                 ],

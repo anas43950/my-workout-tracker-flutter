@@ -2,7 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:workout_tracker/ui/screens/main/past_records_screen.dart';
+import 'package:workout_tracker/ui/screens/main/workout_history_screen.dart';
 import 'package:workout_tracker/ui/screens/main/routines_screen.dart';
 import 'package:workout_tracker/ui/screens/main/workouts_screen.dart';
 
@@ -23,7 +23,7 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
       body: [
         RoutinesScreen(),
         WorkoutsScreen(),
-        PastRecordsScreen(),
+        WorkoutHistoryScreen(),
       ][selectedIndex],
     );
   }
@@ -49,7 +49,7 @@ Widget _buildBottomNavigationBar(Function(int index) onTabChanged, int selectedI
       ),
       GButton(
         icon: selectedIndex == 2 ? FluentIcons.history_16_filled : FluentIcons.history_16_regular,
-        text: "Past Records",
+        text: "Workout History",
       ),
     ],
   );

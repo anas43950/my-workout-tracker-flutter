@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text(
                     "Sign Up",
-                    style: AppTextStyles.subHeading.copyWith(decoration: TextDecoration.underline),
+                    style: AppTextStyles.bodyBold.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),
               ],

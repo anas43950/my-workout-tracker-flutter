@@ -3,6 +3,7 @@ import 'package:workout_tracker/ui/screens/add_routine_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/login_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/sign_up_screen.dart';
 import 'package:workout_tracker/ui/screens/main/home_base_screen.dart';
+import 'package:workout_tracker/ui/screens/record_workout_screen.dart';
 import 'package:workout_tracker/ui/screens/splash_screen.dart';
 
 class Routes {
@@ -13,10 +14,11 @@ class Routes {
   static const login = '/login';
   static const signup = '/signup';
   static const addRoutine = '/add-routine';
+  static const recordWorkout = '/record-workout';
 }
 
 final routerConfig = GoRouter(
-  initialLocation: Routes.homeBase,
+  initialLocation: Routes.login,
   routes: [
     GoRoute(
       name: Routes.splash,
@@ -42,6 +44,11 @@ final routerConfig = GoRouter(
       path: Routes.addRoutine,
       name: Routes.addRoutine,
       builder: (context, state) => AddRoutineScreen(),
+    ),
+    GoRoute(
+      path: Routes.recordWorkout,
+      name: Routes.recordWorkout,
+      builder: (context, state) => RecordWorkoutScreen(),
     ),
   ],
 );

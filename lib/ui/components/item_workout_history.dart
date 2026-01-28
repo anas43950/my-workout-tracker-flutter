@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
-class ItemWorkoutRecord extends StatelessWidget {
-  const ItemWorkoutRecord({super.key});
+class ItemWorkoutHistory extends StatelessWidget {
+  const ItemWorkoutHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,8 @@ class ItemWorkoutRecord extends StatelessWidget {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-                itemBuilder: (_, i) => _ItemWorkoutRecordExercise(workoutName: workouts[i], index: i),
-                separatorBuilder: (_, i) => Divider(thickness: 0.0, height: 0),
+                itemBuilder: (_, i) => _ItemWorkoutHistoryExercise(workoutName: workouts[i], index: i),
+                separatorBuilder: (_, i) => Divider(height: 0),
                 itemCount: workouts.length,
               ),
             ],
@@ -58,17 +58,17 @@ class ItemWorkoutRecord extends StatelessWidget {
   }
 }
 
-class _ItemWorkoutRecordExercise extends StatefulWidget {
+class _ItemWorkoutHistoryExercise extends StatefulWidget {
   final String workoutName;
   final int index;
 
-  const _ItemWorkoutRecordExercise({required this.workoutName, required this.index});
+  const _ItemWorkoutHistoryExercise({required this.workoutName, required this.index});
 
   @override
-  State<_ItemWorkoutRecordExercise> createState() => _ItemWorkoutRecordExerciseState();
+  State<_ItemWorkoutHistoryExercise> createState() => _ItemWorkoutHistoryExerciseState();
 }
 
-class _ItemWorkoutRecordExerciseState extends State<_ItemWorkoutRecordExercise> {
+class _ItemWorkoutHistoryExerciseState extends State<_ItemWorkoutHistoryExercise> {
   bool expanded = false;
   final duration = Duration(milliseconds: 300);
 

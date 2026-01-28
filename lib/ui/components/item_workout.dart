@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/ui/components/clickable_text.dart';
 
 class ItemWorkout extends StatelessWidget {
@@ -15,10 +14,19 @@ class ItemWorkout extends StatelessWidget {
       ),
       padding: EdgeInsets.all(12),
       child: Row(
+        spacing: 10,
         children: [
           Expanded(
-            child: Text(
-              "Flat Bench Press",
+            child: Row(
+              spacing: 10,
+              children: [
+                Text(
+                  "Flat Bench Press",
+                ),
+                Text(
+                  "- 3 x 10-12",
+                ),
+              ],
             ),
           ),
           ClickableText(
@@ -26,7 +34,7 @@ class ItemWorkout extends StatelessWidget {
             text: "Delete",
             onTap: () {},
           ),
-          10.width,
+
           ClickableText(
             text: "Edit",
             onTap: () {},

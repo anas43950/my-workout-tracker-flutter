@@ -110,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   child: Text(
                     "Login",
-                    style: AppTextStyles.subHeading.copyWith(decoration: TextDecoration.underline),
+                    style: AppTextStyles.bodyBold.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),
               ],

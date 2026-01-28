@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/ui/theme/colors.dart';
 import 'package:workout_tracker/ui/theme/dimensions.dart';
-import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 final appTheme = ThemeData(
   scaffoldBackgroundColor: white,
@@ -38,6 +38,8 @@ final appTheme = ThemeData(
       textStyle: AppTextStyles.labelMedium.copyWith(
         fontFamily: GoogleFonts.redHatDisplay().fontFamily,
       ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.inputFieldsBorderRadius)),
     ),
   ),
+  dividerTheme: DividerThemeData(thickness: 0.0),
 );
