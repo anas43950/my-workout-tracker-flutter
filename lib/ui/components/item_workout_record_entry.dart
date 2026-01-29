@@ -1,6 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide black, white;
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class ItemWorkoutRecordEntry extends StatelessWidget {
@@ -42,7 +42,9 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                         children: [
                           Text(
                             "Last log",
-                            style: AppTextStyles.subHeading,
+                            style: AppTextStyles.subHeading.copyWith(
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                           Column(
                             children: [
@@ -68,7 +70,9 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                     children: [
                       Text(
                         "Today's progress",
-                        style: AppTextStyles.subHeading,
+                        style: AppTextStyles.subHeading.copyWith(
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                       Text("50 kgs - 10 reps"),
                       Text("50 kgs - 10 reps"),
@@ -82,7 +86,7 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
           Divider(height: 40),
           Text(
             "New set entry",
-            style: AppTextStyles.bodyBold,
+            style: AppTextStyles.bodyMedium,
             textAlign: TextAlign.center,
           ),
           15.height,

@@ -5,8 +5,15 @@ import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_workout_record_entry.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
-class RecordWorkoutScreen extends StatelessWidget {
+class RecordWorkoutScreen extends StatefulWidget {
   const RecordWorkoutScreen({super.key});
+
+  @override
+  State<RecordWorkoutScreen> createState() => _RecordWorkoutScreenState();
+}
+
+class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
+  final pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +49,8 @@ class RecordWorkoutScreen extends StatelessWidget {
           30.height,
           Expanded(
             child: PageView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              controller: pageController,
               itemBuilder: (_, i) => ItemWorkoutRecordEntry(),
             ),
           ),
@@ -52,7 +61,12 @@ class RecordWorkoutScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      pageController.previousPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.linearToEaseOut,
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.black,
                       backgroundColor: lightGrey,
@@ -62,7 +76,12 @@ class RecordWorkoutScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      pageController.nextPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.linearToEaseOut,
+                      );
+                    },
                     child: Text("Next"),
                   ),
                 ),

@@ -7,16 +7,15 @@ class AppTextStyles {
   static final heading = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
-    color: black
+    color: black,
   );
 
   static final subHeading = TextStyle(
-      fontSize: 18,
-      color: black
+    fontSize: 18,
+    color: black,
   );
-  static final bodyBold = TextStyle(
-    fontWeight: FontWeight.bold,
-  );
+
+  static final label = TextStyle(fontSize: 15);
 
   static final labelMedium = TextStyle(
     fontSize: 16,

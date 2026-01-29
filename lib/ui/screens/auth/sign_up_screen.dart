@@ -41,9 +41,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              "Create an account",
-              style: AppTextStyles.heading,
+              "No account? No worries!",
+              style: AppTextStyles.heading.copyWith(fontSize: 30),
               // textAlign: TextAlign.center,
+            ),
+            5.height,
+            Text(
+              "Enter your details to get started.",
+              style: AppTextStyles.label.copyWith(color: grey),
             ),
             20.height,
             TextFormField(
@@ -110,7 +115,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   child: Text(
                     "Login",
-                    style: AppTextStyles.bodyBold.copyWith(decoration: TextDecoration.underline),
+                    style: AppTextStyles.bodyMedium.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),
               ],

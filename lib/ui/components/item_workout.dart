@@ -24,7 +24,7 @@ class ItemWorkout extends StatelessWidget {
                   "Flat Bench Press",
                 ),
                 Text(
-                  "- 3 x 10-12",
+                  " ( 3 x 10-12 )",
                 ),
               ],
             ),

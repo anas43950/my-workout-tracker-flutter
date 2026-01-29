@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -29,8 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              "Login to continue",
-              style: AppTextStyles.heading,
+              "Welcome back!",
+              style: AppTextStyles.heading.copyWith(fontSize: 30),
+            ),
+            5.height,
+            Text(
+              "Enter your email and password.",
+              style: AppTextStyles.label.copyWith(color: grey),
             ),
             20.height,
             TextFormField(
@@ -61,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 return;
                 if (formKey.currentState?.validate() == true) {}
               },
-              child: Text("Login"),
+              child: true ? CupertinoActivityIndicator(color: white) : Text("Login"),
             ),
             30.height,
             Row(
@@ -75,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text(
                     "Sign Up",
-                    style: AppTextStyles.bodyBold.copyWith(decoration: TextDecoration.underline),
+                    style: AppTextStyles.bodyMedium.copyWith(decoration: TextDecoration.underline),
                   ),
                 ),
               ],
