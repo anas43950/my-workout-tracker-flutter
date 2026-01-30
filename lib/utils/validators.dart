@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class Validators {
@@ -10,8 +9,6 @@ class Validators {
     }
     return null;
   }
-
-
 
   static String? emailValidator(String? value) {
     if (value?.trim().isEmpty == true) {

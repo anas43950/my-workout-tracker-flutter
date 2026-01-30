@@ -1,10 +1,14 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:workout_tracker/ui/screens/main/workout_history_screen.dart';
+import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
+import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/screens/main/routines_screen.dart';
+import 'package:workout_tracker/ui/screens/main/workout_history_screen.dart';
 import 'package:workout_tracker/ui/screens/main/workouts_screen.dart';
+import 'package:workout_tracker/utils/extensions.dart';
 
 class HomeBaseScreen extends StatefulWidget {
   const HomeBaseScreen({super.key});
@@ -20,11 +24,18 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _buildBottomNavigationBar((index) => setState(() => selectedIndex = index), selectedIndex),
-      body: [
-        RoutinesScreen(),
-        WorkoutsScreen(),
-        WorkoutHistoryScreen(),
-      ][selectedIndex],
+      body: BlocListener<AuthenticationCubit, AuthenticationState>(
+        listener: (context, state) {
+          if (state is LoggedOut) {
+            context.clearStackAndNavigate(Routes.login);
+          }
+        },
+        child: [
+          RoutinesScreen(),
+          WorkoutsScreen(),
+          WorkoutHistoryScreen(),
+        ][selectedIndex],
+      ),
     );
   }
 }

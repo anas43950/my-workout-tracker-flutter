@@ -5,6 +5,7 @@ import 'package:workout_tracker/ui/screens/auth/sign_up_screen.dart';
 import 'package:workout_tracker/ui/screens/main/home_base_screen.dart';
 import 'package:workout_tracker/ui/screens/record_workout_screen.dart';
 import 'package:workout_tracker/ui/screens/splash_screen.dart';
+import 'package:workout_tracker/utils/constants.dart';
 
 class Routes {
   Routes._();
@@ -18,7 +19,8 @@ class Routes {
 }
 
 final routerConfig = GoRouter(
-  initialLocation: Routes.login,
+  navigatorKey: Constants.navigatorKey,
+  initialLocation: Routes.splash,
   routes: [
     GoRoute(
       name: Routes.splash,

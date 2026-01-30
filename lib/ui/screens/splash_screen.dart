@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
+import 'package:workout_tracker/utils/constants.dart';
+import 'package:workout_tracker/utils/shared_preferences_utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,7 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _timer() {
     timer ??= Timer(const Duration(seconds: 1), () {
-      context.goNamed(Routes.login);
+      if (SharedPrefUtils.getString(AppStrings.token) != null) {
+        context.goNamed(Routes.homeBase);
+      } else {
+        context.goNamed(Routes.login);
+      }
     });
   }
 
