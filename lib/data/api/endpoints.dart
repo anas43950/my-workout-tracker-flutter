@@ -7,5 +7,6 @@ class ApiEndpoints {
   static final login = 'login';
   static final addWorkout = 'workouts/add';
   static final updateWorkout = 'workouts/edit';
+  static final deleteWorkout = 'workouts/delete';
   static final getWorkouts = 'workouts/';
 }

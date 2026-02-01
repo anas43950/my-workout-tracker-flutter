@@ -43,4 +43,7 @@ final appTheme = ThemeData(
   ),
   dividerTheme: DividerThemeData(thickness: 0.0),
   progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.white),
+  dialogTheme: DialogThemeData(
+    backgroundColor: white,
+  ),
 );

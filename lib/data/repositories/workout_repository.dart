@@ -19,6 +19,13 @@ class WorkoutRepository {
     return response['data'];
   }
 
+  Future<void> delete(int id) async {
+    final response = await ApiService.delete(
+      endpoint: "${ApiEndpoints.deleteWorkout}/$id",
+    );
+    return response['data'];
+  }
+
   Future<List<dynamic>> fetchWorkouts() async {
     final response = await ApiService.get(
       endpoint: ApiEndpoints.getWorkouts,

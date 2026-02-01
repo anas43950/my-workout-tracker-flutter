@@ -8,4 +8,11 @@ extension GoRouterExtension on BuildContext {
     }
     pushReplacement(location);
   }
+
+  void dialog(Widget dialog) {
+    showDialog(
+      context: this,
+      builder: (context) => dialog,
+    );
+  }
 }

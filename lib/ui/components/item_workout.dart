@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/ui/components/clickable_text.dart';
 
-import 'bottom_sheets/bottom_sheet_add_workout.dart';
-
 class ItemWorkout extends StatelessWidget {
+  final VoidCallback onEditPressed;
+  final VoidCallback onDeletePressed;
   final Workout workout;
 
-  const ItemWorkout({super.key, required this.workout});
+  const ItemWorkout({
+    super.key,
+    required this.workout,
+    required this.onEditPressed,
+    required this.onDeletePressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +37,11 @@ class ItemWorkout extends StatelessWidget {
           ClickableText(
             textColor: Colors.red,
             text: "Delete",
-            onTap: () {},
+            onTap: onDeletePressed,
           ),
-
           ClickableText(
             text: "Edit",
-            onTap: () {
-              showModalBottomSheet(
-                scrollControlDisabledMaxHeightRatio: 9 / 15.5,
-                context: context,
-                builder: (_) => BottomSheetAddWorkout(workoutForEdit: workout),
-              );
-            },
+            onTap: onEditPressed,
           ),
         ],
       ),

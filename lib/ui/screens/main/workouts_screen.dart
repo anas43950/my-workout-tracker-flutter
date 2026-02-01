@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/workout/workouts_cubit.dart';
 import 'package:workout_tracker/data/models/workout.dart';
-import 'package:workout_tracker/ui/components/bottom_sheets/bottom_sheet_add_workout.dart';
+import 'package:workout_tracker/ui/bottom_sheets/bottom_sheet_add_workout.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_workout.dart';
+import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
+import 'package:workout_tracker/utils/extensions.dart';
+import 'package:workout_tracker/utils/helpers.dart';
 
 class WorkoutsScreen extends StatefulWidget {
   const WorkoutsScreen({super.key});
@@ -63,6 +66,12 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                     () => workouts[workouts.indexWhere((element) => element.id == state.workout.id)] = state.workout,
                   );
                 }
+                if (state is DeleteWorkoutSuccess) {
+                  setState(() => workouts.removeWhere((e) => e.id == state.id));
+                }
+                if (state is DeleteWorkoutFail) {
+                  showErrorSnackBar(context, state.message);
+                }
               },
               buildWhen: (pState, cState) {
                 return cState is FetchWorkoutsInProgress ||
@@ -79,7 +88,31 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                   return workouts.isEmpty
                       ? Center(child: Text("No workouts added yet"))
                       : ListView.builder(
-                          itemBuilder: (_, i) => ItemWorkout(workout: workouts[i]),
+                          itemBuilder: (_, i) {
+                            final workout = workouts[i];
+                            return ItemWorkout(
+                              workout: workout,
+                              onEditPressed: () {
+                                showModalBottomSheet(
+                                  scrollControlDisabledMaxHeightRatio: 9 / 15.5,
+                                  context: context,
+                                  builder: (_) => BottomSheetAddWorkout(workoutForEdit: workout),
+                                );
+                              },
+                              onDeletePressed: () {
+                                context.dialog(
+                                  ConfirmationDialog(
+                                    title: "Delete this workout?",
+                                    message: "This workout and it's history will be permanently deleted",
+                                    onConfirmed: () {
+                                      context.pop();
+                                      context.read<WorkoutsCubit>().deleteWorkout(id: workout.id);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
                           itemCount: workouts.length,
                         );
                 }

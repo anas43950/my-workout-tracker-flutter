@@ -7,8 +7,10 @@ import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_routine.dart';
+import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/constants.dart';
+import 'package:workout_tracker/utils/extensions.dart';
 
 class RoutinesScreen extends StatelessWidget {
   const RoutinesScreen({super.key});
@@ -43,7 +45,15 @@ class RoutinesScreen extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  context.read<AuthenticationCubit>().logout();
+                  context.dialog(
+                    ConfirmationDialog(
+                      title: "Logout",
+                      message: "Are you sure you want to logout?",
+                      onConfirmed: () {
+                        context.read<AuthenticationCubit>().logout();
+                      },
+                    ),
+                  );
                 },
                 icon: Icon(FluentIcons.sign_out_24_regular),
               ),

@@ -48,6 +48,20 @@ class FetchWorkoutsFail extends WorkoutsState {
   FetchWorkoutsFail(this.message);
 }
 
+class DeleteWorkoutInProgress extends WorkoutsState {}
+
+class DeleteWorkoutSuccess extends WorkoutsState {
+  int id;
+
+  DeleteWorkoutSuccess(this.id);
+}
+
+class DeleteWorkoutFail extends WorkoutsState {
+  String message;
+
+  DeleteWorkoutFail(this.message);
+}
+
 class WorkoutsCubit extends Cubit<WorkoutsState> {
   WorkoutsCubit() : super(WorkoutsInit());
 
@@ -105,10 +119,21 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
       final result = await WorkoutRepository().updateWorkout(workout);
       emit(UpdateWorkoutSuccess(Workout.fromJson(result)));
     } on TypeError catch (e, st) {
-
       emit(UpdateWorkoutFail(e.toString()));
     } catch (e) {
       emit(UpdateWorkoutFail(e.toString()));
+    }
+  }
+
+  Future<void> deleteWorkout({required int id}) async {
+    emit(DeleteWorkoutInProgress());
+    try {
+      final result = await WorkoutRepository().delete(id);
+      emit(DeleteWorkoutSuccess(id));
+    } on TypeError catch (e, st) {
+      emit(DeleteWorkoutFail(e.toString()));
+    } catch (e) {
+      emit(DeleteWorkoutFail(e.toString()));
     }
   }
 }

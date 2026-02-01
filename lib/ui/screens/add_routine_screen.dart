@@ -11,6 +11,7 @@ class AddRoutineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: "Select workouts for Sunday routine",
+      showBackBtn: true,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

@@ -127,6 +127,41 @@ class ApiService {
       throw ApiException(st.toString());
     }
   }
+
+  static Future<Map<String, dynamic>> delete({
+    required String endpoint,
+    Map<String, dynamic>? queryParameters,
+    bool? useBaseUrl,
+  }) async {
+    try {
+      final response = await _dio.delete(
+        ApiEndpoints.baseUrl + endpoint,
+        queryParameters: queryParameters,
+        options: Options(headers: headers()),
+      );
+
+      if (response.data['error'] == true) {
+        throw ApiException(response.data['message'].toString());
+      }
+      return Map.from(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        _handleUnauthenticated();
+      }
+      if (e.response?.statusCode == 503) {
+        throw "server-not-available";
+      }
+
+      throw ApiException(
+        e.error is SocketException ? "no-internet" : "Something went wrong with error ${e.response?.statusCode}",
+      );
+    } on ApiException catch (e) {
+      throw ApiException(e.errorMessage);
+    } catch (e, st) {
+      throw ApiException(st.toString());
+    }
+  }
+
 }
 
 class ApiException implements Exception {
