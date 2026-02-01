@@ -64,7 +64,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                validator: (pass) => Validators.passValidator(pass),
+                validator: (pass) => Validators.lengthValidator(
+                  pass,
+                  Constants.MIN_PASS_LENGTH,
+                  "Password should be at least ${Constants.MIN_PASS_LENGTH} characters",
+                ),
                 obscureText: !showPassword,
               ),
               30.height,

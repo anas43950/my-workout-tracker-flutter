@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class TextFieldWithLabel extends StatelessWidget {
   final String label;
   final String? hintText;
+  final TextEditingController? controller;
+  final bool? allowDigitsOnly;
+  final String? Function(String? value)? validator;
 
-  const TextFieldWithLabel({super.key, required this.label, this.hintText});
+  const TextFieldWithLabel({
+    super.key,
+    required this.label,
+    this.hintText,
+    this.controller,
+    this.allowDigitsOnly,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +30,11 @@ class TextFieldWithLabel extends StatelessWidget {
             style: AppTextStyles.bodyMedium,
           ),
         ),
-        TextFormField(
-          decoration: InputDecoration(hintText: hintText),
+        CustomTextField(
+          controller: controller,
+          hintText: hintText,
+          allowDigitsOnly: allowDigitsOnly,
+          validator: validator,
         ),
       ],
     );

@@ -6,7 +6,8 @@ const weekdaysFull = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'F
 class Constants {
   Constants._();
 
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final int MIN_PASS_LENGTH = 6;
 }
 
 class AppStrings {

@@ -62,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(hintText: "Name"),
-                validator: (name) => Validators.nameValidator(name),
+                validator: (name) => Validators.emptyValidator(name, "Enter your name"),
               ),
               20.height,
               TextFormField(
@@ -83,7 +83,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                 ),
-                validator: (pass) => Validators.passValidator(pass),
+                validator: (pass) => Validators.lengthValidator(
+                  pass,
+                  Constants.MIN_PASS_LENGTH,
+                  "Password should be at least ${Constants.MIN_PASS_LENGTH} characters",
+                ),
                 obscureText: !showPassword,
               ),
               20.height,

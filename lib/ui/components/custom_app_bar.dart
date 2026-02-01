@@ -7,14 +7,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? titleWidget;
   final String? title;
   final bool? centerTitle;
-  final bool showBackBtn;
+  final bool? showBackBtn;
   final height = 56.0;
 
   CustomAppBar({
     super.key,
     this.title,
     this.centerTitle,
-    this.showBackBtn = false,
+    this.showBackBtn,
     this.titleWidget,
   }) {
     if (title != null && titleWidget != null) {
@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: SizedBox(
         height: height,
         child: CenteredTriWidget(
-          leading: showBackBtn ? CustomBackButton() : null,
+          leading: showBackBtn == true ? CustomBackButton() : null,
           center: titleWidget ?? (title != null ? Text(title!, style: TextStyle(fontSize: 16)) : null),
         ),
       ),

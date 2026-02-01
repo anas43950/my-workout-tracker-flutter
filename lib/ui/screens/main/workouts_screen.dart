@@ -1,12 +1,28 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:workout_tracker/data/cubits/workout/workouts_cubit.dart';
+import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/ui/components/bottom_sheets/bottom_sheet_add_workout.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_workout.dart';
 
-class WorkoutsScreen extends StatelessWidget {
+class WorkoutsScreen extends StatefulWidget {
   const WorkoutsScreen({super.key});
+
+  @override
+  State<WorkoutsScreen> createState() => _WorkoutsScreenState();
+}
+
+class _WorkoutsScreenState extends State<WorkoutsScreen> {
+  List<Workout> workouts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<WorkoutsCubit>().fetchWorkouts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +30,7 @@ class WorkoutsScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-            isScrollControlled: true,
+            scrollControlDisabledMaxHeightRatio: 9 / 15.5,
             context: context,
             builder: (_) => BottomSheetAddWorkout(),
           );
@@ -37,9 +53,38 @@ class WorkoutsScreen extends StatelessWidget {
           ),
           Divider(height: 40),
           Expanded(
-            child: ListView.builder(
-              itemBuilder: (_, i) => ItemWorkout(),
-              itemCount: 10,
+            child: BlocConsumer<WorkoutsCubit, WorkoutsState>(
+              listener: (context, state) {
+                if (state is AddWorkoutSuccess) {
+                  setState(() => workouts.add(state.workout));
+                }
+                if (state is UpdateWorkoutSuccess) {
+                  setState(
+                    () => workouts[workouts.indexWhere((element) => element.id == state.workout.id)] = state.workout,
+                  );
+                }
+              },
+              buildWhen: (pState, cState) {
+                return cState is FetchWorkoutsInProgress ||
+                    cState is FetchWorkoutsSuccess ||
+                    cState is FetchWorkoutsFail;
+              },
+              builder: (context, state) {
+                if (state is FetchWorkoutsInProgress) {
+                  return Loader();
+                } else if (state is FetchWorkoutsFail) {
+                  return Text(state.message);
+                } else if (state is FetchWorkoutsSuccess) {
+                  workouts = state.workouts;
+                  return workouts.isEmpty
+                      ? Center(child: Text("No workouts added yet"))
+                      : ListView.builder(
+                          itemBuilder: (_, i) => ItemWorkout(workout: workouts[i]),
+                          itemCount: workouts.length,
+                        );
+                }
+                return Container();
+              },
             ),
           ),
         ],

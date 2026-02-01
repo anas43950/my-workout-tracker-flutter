@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:workout_tracker/ui/components/custom_app_bar.dart';
 import 'package:workout_tracker/ui/theme/dimensions.dart';
 
@@ -11,6 +10,7 @@ class CustomScaffold extends StatelessWidget {
   final String? title;
   final PreferredSizeWidget? appBar;
   final EdgeInsetsGeometry? padding;
+  final bool? showBackBtn;
 
   CustomScaffold({
     super.key,
@@ -21,6 +21,7 @@ class CustomScaffold extends StatelessWidget {
     this.title,
     this.appBar,
     this.padding,
+    this.showBackBtn,
   }) {
     if (title != null && appBar != null) {
       throw Exception("Can't pass both title and appBar");
@@ -29,14 +30,13 @@ class CustomScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool canPop = context.canPop();
     return Scaffold(
       appBar:
           appBar ??
           (title != null
               ? CustomAppBar(
                   title: title!,
-                  showBackBtn: canPop,
+                  showBackBtn: showBackBtn,
                 )
               : null),
       floatingActionButton: floatingActionButton,

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/ui/components/clickable_text.dart';
 
+import 'bottom_sheets/bottom_sheet_add_workout.dart';
+
 class ItemWorkout extends StatelessWidget {
-  const ItemWorkout({super.key});
+  final Workout workout;
+
+  const ItemWorkout({super.key, required this.workout});
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +22,12 @@ class ItemWorkout extends StatelessWidget {
         spacing: 10,
         children: [
           Expanded(
-            child: Row(
-              spacing: 10,
-              children: [
-                Text(
-                  "Flat Bench Press",
-                ),
-                Text(
-                  " ( 3 x 10-12 )",
-                ),
-              ],
+            child: Text(
+              workout.name,
             ),
+          ),
+          Text(
+            " ( ${workout.setsData} )",
           ),
           ClickableText(
             textColor: Colors.red,
@@ -37,7 +37,13 @@ class ItemWorkout extends StatelessWidget {
 
           ClickableText(
             text: "Edit",
-            onTap: () {},
+            onTap: () {
+              showModalBottomSheet(
+                scrollControlDisabledMaxHeightRatio: 9 / 15.5,
+                context: context,
+                builder: (_) => BottomSheetAddWorkout(workoutForEdit: workout),
+              );
+            },
           ),
         ],
       ),

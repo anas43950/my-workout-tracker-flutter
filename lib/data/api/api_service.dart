@@ -64,16 +64,12 @@ class ApiService {
       );
 
       var resp = response.data;
-      print("data type: ${resp.runtimeType}");
       if (resp['errors'] ?? false) {
         throw ApiException(resp['message'].toString());
       }
 
       return Map.from(resp);
     } on DioException catch (e, st) {
-      print(e.toString());
-      print(st.toString());
-
       if (e.response?.statusCode == 401) {
         _handleUnauthenticated();
       }
@@ -95,6 +91,40 @@ class ApiService {
       throw ValidationException(e.errorMessage);
     } catch (e) {
       throw ApiException(e.toString());
+    }
+  }
+
+  static Future<Map<String, dynamic>> get({
+    required String endpoint,
+    Map<String, dynamic>? queryParameters,
+    bool? useBaseUrl,
+    bool addContentLanguage = true,
+  }) async {
+    try {
+      final response = await _dio.get(
+        ApiEndpoints.baseUrl + endpoint,
+        queryParameters: queryParameters,
+        options: Options(headers: headers()),
+      );
+
+      if (response.data['error'] == true) {
+        throw ApiException(response.data['message'].toString());
+      }
+      return Map.from(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        _handleUnauthenticated();
+      }
+      if (e.response?.statusCode == 503) {
+        throw "server-not-available";
+      }
+      throw ApiException(
+        e.error is SocketException ? "no-internet" : "Something went wrong with error ${e.response?.statusCode}",
+      );
+    } on ApiException catch (e) {
+      throw ApiException(e.errorMessage);
+    } catch (e, st) {
+      throw ApiException(st.toString());
     }
   }
 }
