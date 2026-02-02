@@ -32,7 +32,7 @@ class ItemRoutine extends StatelessWidget {
             ClickableText(
               text: "Add",
               onTap: () {
-                context.pushNamed(Routes.addRoutine);
+                context.pushNamed(Routes.selectWorkoutsForRoutine);
               },
             )
           else ...[

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
+import 'package:workout_tracker/data/cubits/workout/workouts_list_cubit.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/screens/main/routines_screen.dart';
 import 'package:workout_tracker/ui/screens/main/workout_history_screen.dart';
@@ -19,6 +20,14 @@ class HomeBaseScreen extends StatefulWidget {
 
 class _HomeBaseScreenState extends State<HomeBaseScreen> {
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<WorkoutsListCubit>()
+        .fetchWorkouts(); // Fetching here so it will be called only once, when we navigate to this screen
+  }
 
   @override
   Widget build(BuildContext context) {

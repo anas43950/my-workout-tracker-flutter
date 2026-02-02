@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ItemSelectWorkout extends StatelessWidget {
+  final String name;
   final bool selected;
   final Function(bool value) onSelectionChanged;
 
-  const ItemSelectWorkout({super.key, required this.selected, required this.onSelectionChanged});
+  const ItemSelectWorkout({super.key, required this.selected, required this.onSelectionChanged, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,11 @@ class ItemSelectWorkout extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
       ),
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              "Flat Bench Press",
-            ),
+            child: Text(name),
           ),
           Checkbox(
             shape: CircleBorder(),

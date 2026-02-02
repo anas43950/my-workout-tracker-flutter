@@ -2,7 +2,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:workout_tracker/data/cubits/workout/workouts_cubit.dart';
+import 'package:workout_tracker/data/cubits/workout/manage_workout_cubit.dart';
+import 'package:workout_tracker/data/cubits/workout/workouts_list_cubit.dart';
 import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/ui/bottom_sheets/bottom_sheet_add_workout.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
@@ -20,12 +21,6 @@ class WorkoutsScreen extends StatefulWidget {
 
 class _WorkoutsScreenState extends State<WorkoutsScreen> {
   List<Workout> workouts = [];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<WorkoutsCubit>().fetchWorkouts();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,68 +51,65 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
           ),
           Divider(height: 40),
           Expanded(
-            child: BlocConsumer<WorkoutsCubit, WorkoutsState>(
+            child: BlocListener<ManageWorkoutCubit, ManageWorkoutState>(
               listener: (context, state) {
-                if (state is AddWorkoutSuccess) {
-                  setState(() => workouts.add(state.workout));
-                }
-                if (state is UpdateWorkoutSuccess) {
-                  setState(
-                    () => workouts[workouts.indexWhere((element) => element.id == state.workout.id)] = state.workout,
-                  );
-                }
-                if (state is DeleteWorkoutSuccess) {
-                  setState(() => workouts.removeWhere((e) => e.id == state.id));
-                }
+                // if (state is AddWorkoutSuccess) {
+                //   setState(() => workouts.add(state.workout));
+                // }
+                // if (state is UpdateWorkoutSuccess) {
+                //   setState(
+                //     () => workouts[workouts.indexWhere((element) => element.id == state.workout.id)] = state.workout,
+                //   );
+                // }
+                // if (state is DeleteWorkoutSuccess) {
+                //   // setState(() => workouts.removeWhere((e) => e.id == state.id));
+                // }
                 if (state is DeleteWorkoutFail) {
                   showErrorSnackBar(context, state.message);
                 }
               },
-              buildWhen: (pState, cState) {
-                return cState is FetchWorkoutsInProgress ||
-                    cState is FetchWorkoutsSuccess ||
-                    cState is FetchWorkoutsFail;
-              },
-              builder: (context, state) {
-                if (state is FetchWorkoutsInProgress) {
-                  return Loader();
-                } else if (state is FetchWorkoutsFail) {
-                  return Text(state.message);
-                } else if (state is FetchWorkoutsSuccess) {
-                  workouts = state.workouts;
-                  return workouts.isEmpty
-                      ? Center(child: Text("No workouts added yet"))
-                      : ListView.builder(
-                          itemBuilder: (_, i) {
-                            final workout = workouts[i];
-                            return ItemWorkout(
-                              workout: workout,
-                              onEditPressed: () {
-                                showModalBottomSheet(
-                                  scrollControlDisabledMaxHeightRatio: 9 / 15.5,
-                                  context: context,
-                                  builder: (_) => BottomSheetAddWorkout(workoutForEdit: workout),
-                                );
-                              },
-                              onDeletePressed: () {
-                                context.dialog(
-                                  ConfirmationDialog(
-                                    title: "Delete this workout?",
-                                    message: "This workout and it's history will be permanently deleted",
-                                    onConfirmed: () {
-                                      context.pop();
-                                      context.read<WorkoutsCubit>().deleteWorkout(id: workout.id);
-                                    },
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          itemCount: workouts.length,
-                        );
-                }
-                return Container();
-              },
+              child: BlocBuilder<WorkoutsListCubit, WorkoutsListState>(
+                builder: (context, state) {
+                  if (state is FetchWorkoutsInProgress) {
+                    return Loader();
+                  } else if (state is FetchWorkoutsFail) {
+                    return Text(state.message);
+                  } else if (state is FetchWorkoutsSuccess) {
+                    workouts = state.workouts;
+                    return workouts.isEmpty
+                        ? Center(child: Text("No workouts added yet"))
+                        : ListView.builder(
+                            itemBuilder: (_, i) {
+                              final workout = workouts[i];
+                              return ItemWorkout(
+                                workout: workout,
+                                onEditPressed: () {
+                                  showModalBottomSheet(
+                                    scrollControlDisabledMaxHeightRatio: 9 / 15.5,
+                                    context: context,
+                                    builder: (_) => BottomSheetAddWorkout(workoutForEdit: workout),
+                                  );
+                                },
+                                onDeletePressed: () {
+                                  context.dialog(
+                                    ConfirmationDialog(
+                                      title: "Delete this workout?",
+                                      message: "This workout and it's history will be permanently deleted",
+                                      onConfirmed: () {
+                                        context.pop();
+                                        context.read<ManageWorkoutCubit>().deleteWorkout(id: workout.id);
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            itemCount: workouts.length,
+                          );
+                  }
+                  return Container();
+                },
+              ),
             ),
           ),
         ],

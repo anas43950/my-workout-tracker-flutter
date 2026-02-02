@@ -2,79 +2,55 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/data/repositories/workout_repository.dart';
 
-abstract class WorkoutsState {}
+abstract class ManageWorkoutState {}
 
-class WorkoutsInit extends WorkoutsState {}
+class ManageWorkoutsInit extends ManageWorkoutState {}
 
-class AddWorkoutInProgress extends WorkoutsState {}
+class AddWorkoutInProgress extends ManageWorkoutState {}
 
-class AddWorkoutSuccess extends WorkoutsState {
+class AddWorkoutSuccess extends ManageWorkoutState {
   Workout workout;
 
   AddWorkoutSuccess(this.workout);
 }
 
-class AddWorkoutFail extends WorkoutsState {
+class AddWorkoutFail extends ManageWorkoutState {
   String message;
 
   AddWorkoutFail(this.message);
 }
 
-class UpdateWorkoutInProgress extends WorkoutsState {}
+class UpdateWorkoutInProgress extends ManageWorkoutState {}
 
-class UpdateWorkoutSuccess extends WorkoutsState {
+class UpdateWorkoutSuccess extends ManageWorkoutState {
   Workout workout;
 
   UpdateWorkoutSuccess(this.workout);
 }
 
-class UpdateWorkoutFail extends WorkoutsState {
+class UpdateWorkoutFail extends ManageWorkoutState {
   String message;
 
   UpdateWorkoutFail(this.message);
 }
 
-class FetchWorkoutsInProgress extends WorkoutsState {}
+class DeleteWorkoutInProgress extends ManageWorkoutState {}
 
-class FetchWorkoutsSuccess extends WorkoutsState {
-  List<Workout> workouts;
-
-  FetchWorkoutsSuccess(this.workouts);
-}
-
-class FetchWorkoutsFail extends WorkoutsState {
-  String message;
-
-  FetchWorkoutsFail(this.message);
-}
-
-class DeleteWorkoutInProgress extends WorkoutsState {}
-
-class DeleteWorkoutSuccess extends WorkoutsState {
+class DeleteWorkoutSuccess extends ManageWorkoutState {
   int id;
 
   DeleteWorkoutSuccess(this.id);
 }
 
-class DeleteWorkoutFail extends WorkoutsState {
+class DeleteWorkoutFail extends ManageWorkoutState {
   String message;
 
   DeleteWorkoutFail(this.message);
 }
 
-class WorkoutsCubit extends Cubit<WorkoutsState> {
-  WorkoutsCubit() : super(WorkoutsInit());
-
-  Future<void> fetchWorkouts() async {
-    emit(FetchWorkoutsInProgress());
-    try {
-      final result = await WorkoutRepository().fetchWorkouts();
-      final workouts = result.map<Workout>((e) => Workout.fromJson(e)).toList();
-      emit(FetchWorkoutsSuccess(workouts));
-    } catch (e) {
-      emit(FetchWorkoutsFail(e.toString()));
-    }
-  }
+class ManageWorkoutCubit extends Cubit<ManageWorkoutState> {
+  final WorkoutRepository _workoutRepository = WorkoutRepository();
+  ManageWorkoutCubit() : super(ManageWorkoutsInit());
 
   Future<void> addWorkout({
     required String name,
@@ -91,8 +67,8 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
         repRangeFrom: repRangeFrom,
         repRangeTo: repRangeTo,
       );
-      final result = await WorkoutRepository().addWorkout(workout);
-      emit(AddWorkoutSuccess(Workout.fromJson(result)));
+      final addedWorkout = await _workoutRepository.addWorkout(workout);
+      emit(AddWorkoutSuccess(addedWorkout));
     } on TypeError catch (e, st) {
       emit(AddWorkoutFail(e.toString()));
     } catch (e) {
@@ -116,8 +92,8 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
         repRangeFrom: repRangeFrom,
         repRangeTo: repRangeTo,
       );
-      final result = await WorkoutRepository().updateWorkout(workout);
-      emit(UpdateWorkoutSuccess(Workout.fromJson(result)));
+      final updatedWorkout = await _workoutRepository.updateWorkout(workout);
+      emit(UpdateWorkoutSuccess(updatedWorkout));
     } on TypeError catch (e, st) {
       emit(UpdateWorkoutFail(e.toString()));
     } catch (e) {
@@ -128,7 +104,7 @@ class WorkoutsCubit extends Cubit<WorkoutsState> {
   Future<void> deleteWorkout({required int id}) async {
     emit(DeleteWorkoutInProgress());
     try {
-      final result = await WorkoutRepository().delete(id);
+      final result = await _workoutRepository.delete(id);
       emit(DeleteWorkoutSuccess(id));
     } on TypeError catch (e, st) {
       emit(DeleteWorkoutFail(e.toString()));

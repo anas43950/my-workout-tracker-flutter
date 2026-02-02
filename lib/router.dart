@@ -14,7 +14,7 @@ class Routes {
   static const splash = '/splash';
   static const login = '/login';
   static const signup = '/signup';
-  static const addRoutine = '/add-routine';
+  static const selectWorkoutsForRoutine = '/select-workouts-for-routine';
   static const recordWorkout = '/record-workout';
 }
 
@@ -43,9 +43,9 @@ final routerConfig = GoRouter(
       builder: (context, state) => HomeBaseScreen(),
     ),
     GoRoute(
-      path: Routes.addRoutine,
-      name: Routes.addRoutine,
-      builder: (context, state) => AddRoutineScreen(),
+      path: Routes.selectWorkoutsForRoutine,
+      name: Routes.selectWorkoutsForRoutine,
+      builder: (context, state) => SelectWorkoutsForRoutineScreen(),
     ),
     GoRoute(
       path: Routes.recordWorkout,

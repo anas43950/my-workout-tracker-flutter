@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:workout_tracker/data/cubits/workout/workouts_cubit.dart';
+import 'package:workout_tracker/data/cubits/workout/manage_workout_cubit.dart';
 import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/components/loader.dart';
@@ -143,7 +143,7 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
                   ],
                 ),
               25.height,
-              BlocConsumer<WorkoutsCubit, WorkoutsState>(
+              BlocConsumer<ManageWorkoutCubit, ManageWorkoutState>(
                 listener: (context, state) {
                   if (state is AddWorkoutSuccess) {
                     showSuccessSnackBar(context, "Workout added");
@@ -200,7 +200,7 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
         return;
       }
       if (isEditing) {
-        context.read<WorkoutsCubit>().updateWorkout(
+        context.read<ManageWorkoutCubit>().updateWorkout(
           id: workoutForEdit!.id,
           name: name,
           sets: sets,
@@ -208,7 +208,7 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
           repRangeTo: repRangeTo,
         );
       } else {
-        context.read<WorkoutsCubit>().addWorkout(
+        context.read<ManageWorkoutCubit>().addWorkout(
           name: name,
           sets: sets,
           repRangeFrom: repRangeFrom,
