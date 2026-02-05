@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
 import 'package:workout_tracker/data/cubits/auth/login_cubit.dart';
 import 'package:workout_tracker/data/cubits/auth/register_cubit.dart';
+import 'package:workout_tracker/data/cubits/routines/manage_routine_cubit.dart';
+import 'package:workout_tracker/data/cubits/routines/routines_list_cubit.dart';
 import 'package:workout_tracker/data/cubits/workout/manage_workout_cubit.dart';
 import 'package:workout_tracker/data/cubits/workout/workouts_list_cubit.dart';
 
@@ -12,5 +14,7 @@ class RegisterCubits {
     BlocProvider<AuthenticationCubit>(create: (context) => AuthenticationCubit()),
     BlocProvider<ManageWorkoutCubit>(create: (context) => ManageWorkoutCubit()),
     BlocProvider<WorkoutsListCubit>(create: (context) => WorkoutsListCubit()),
+    BlocProvider<ManageRoutineCubit>(create: (context) => ManageRoutineCubit()),
+    BlocProvider<RoutinesListCubit>(create: (context) => RoutinesListCubit()),
   ];
 }

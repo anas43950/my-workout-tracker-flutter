@@ -1,15 +1,20 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/workout/workouts_list_cubit.dart';
+import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/data/models/workout.dart';
+import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_select_workout.dart';
-import 'package:workout_tracker/utils/logger.dart';
 
 class SelectWorkoutsForRoutineScreen extends StatefulWidget {
-  const SelectWorkoutsForRoutineScreen({super.key});
+  final String name;
+  final Routine? routineForEdit;
+
+  const SelectWorkoutsForRoutineScreen({super.key, required this.name, this.routineForEdit});
 
   @override
   State<SelectWorkoutsForRoutineScreen> createState() => _SelectWorkoutsForRoutineScreenState();
@@ -38,7 +43,6 @@ class _SelectWorkoutsForRoutineScreenState extends State<SelectWorkoutsForRoutin
               contentPadding: EdgeInsets.all(10),
             ),
           ),
-          // Divider(height: 50),
           15.height,
           Expanded(
             child: BlocBuilder<WorkoutsListCubit, WorkoutsListState>(
@@ -71,7 +75,16 @@ class _SelectWorkoutsForRoutineScreenState extends State<SelectWorkoutsForRoutin
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pushNamed(
+                  Routes.rearrangeWorkoutRoutines,
+                  extra: {
+                    "name": widget.name,
+                    "workouts": selectedWorkouts,
+                    "routineForEditId": widget.routineForEdit?.id,
+                  },
+                );
+              },
               child: Text("Next"),
             ),
           ),

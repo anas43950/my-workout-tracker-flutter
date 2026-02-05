@@ -1,16 +1,20 @@
+import 'package:collection/collection.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
+import 'package:workout_tracker/data/cubits/routines/routines_list_cubit.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_routine.dart';
+import 'package:workout_tracker/ui/components/loader.dart';
 import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/constants.dart';
 import 'package:workout_tracker/utils/extensions.dart';
+import 'package:workout_tracker/utils/logger.dart';
 
 class RoutinesScreen extends StatelessWidget {
   const RoutinesScreen({super.key});
@@ -65,15 +69,36 @@ class RoutinesScreen extends StatelessWidget {
             style: AppTextStyles.bodySmall,
           ),
           20.height,
-          Expanded(
-            child: ListView.separated(
-              itemBuilder: (_, i) => ItemRoutine(index: i),
-              separatorBuilder: (_, i) => Divider(
-                height: 25,
-                thickness: 0.1,
-              ),
-              itemCount: weekdaysFull.length,
-            ),
+          BlocBuilder<RoutinesListCubit, RoutinesListState>(
+            builder: (context, state) {
+              if (state is FetchRoutinesInProgress) {
+                return CustomLoader();
+              }
+              if (state is FetchRoutinesFail) {
+                return Text(state.message);
+              }
+              if (state is FetchRoutinesSuccess) {
+                final routines = state.routines;
+                return Expanded(
+                  child: ListView.separated(
+                    itemBuilder: (_, i) {
+                      final name = weekdaysFull[i];
+                      final routine = routines.firstWhereOrNull((element) => element.name == name);
+                      return ItemRoutine(
+                        name: name,
+                        routine: routine,
+                      );
+                    },
+                    separatorBuilder: (_, i) => Divider(
+                      height: 25,
+                      thickness: 0.1,
+                    ),
+                    itemCount: weekdaysFull.length,
+                  ),
+                );
+              }
+              return Container();
+            },
           ),
         ],
       ),

@@ -65,7 +65,7 @@ class ApiService {
 
       var resp = response.data;
       if (resp['errors'] ?? false) {
-        throw ApiException(resp['message'].toString());
+        throw ApiException(response.statusCode, resp['message'].toString());
       }
 
       return Map.from(resp);
@@ -83,14 +83,15 @@ class ApiService {
       }
 
       throw ApiException(
+        e.response?.statusCode,
         e.error is SocketException ? "no-internet" : "Something went wrong with error ${e.response?.statusCode}",
       );
     } on ApiException catch (e) {
-      throw ApiException(e.errorMessage);
+      throw ApiException(e.errorCode, e.errorMessage);
     } on ValidationException catch (e) {
       throw ValidationException(e.errorMessage);
     } catch (e) {
-      throw ApiException(e.toString());
+      throw ApiException(null, e.toString());
     }
   }
 
@@ -108,7 +109,7 @@ class ApiService {
       );
 
       if (response.data['error'] == true) {
-        throw ApiException(response.data['message'].toString());
+        throw ApiException(response.statusCode, response.data['message'].toString());
       }
       return Map.from(response.data);
     } on DioException catch (e) {
@@ -119,12 +120,13 @@ class ApiService {
         throw "server-not-available";
       }
       throw ApiException(
+        e.response?.statusCode,
         e.error is SocketException ? "no-internet" : "Something went wrong with error ${e.response?.statusCode}",
       );
     } on ApiException catch (e) {
-      throw ApiException(e.errorMessage);
+      throw ApiException(e.errorCode, e.errorMessage);
     } catch (e, st) {
-      throw ApiException(st.toString());
+      throw ApiException(null, st.toString());
     }
   }
 
@@ -141,7 +143,7 @@ class ApiService {
       );
 
       if (response.data['error'] == true) {
-        throw ApiException(response.data['message'].toString());
+        throw ApiException(response.statusCode, response.data['message'].toString());
       }
       return Map.from(response.data);
     } on DioException catch (e) {
@@ -153,21 +155,22 @@ class ApiService {
       }
 
       throw ApiException(
+        e.response?.statusCode,
         e.error is SocketException ? "no-internet" : "Something went wrong with error ${e.response?.statusCode}",
       );
     } on ApiException catch (e) {
-      throw ApiException(e.errorMessage);
+      throw ApiException(e.errorCode, e.errorMessage);
     } catch (e, st) {
-      throw ApiException(st.toString());
+      throw ApiException(null, st.toString());
     }
   }
-
 }
 
 class ApiException implements Exception {
-  ApiException(this.errorMessage);
-
   dynamic errorMessage;
+  int? errorCode;
+
+  ApiException(this.errorCode, this.errorMessage);
 
   @override
   String toString() {

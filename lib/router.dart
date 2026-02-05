@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
-import 'package:workout_tracker/ui/screens/add_routine_screen.dart';
+import 'package:workout_tracker/data/models/routine.dart';
+import 'package:workout_tracker/ui/screens/add_routine/rearrange_routine_workouts_screen.dart';
+import 'package:workout_tracker/ui/screens/add_routine/select_workouts_for_routine_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/login_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/sign_up_screen.dart';
 import 'package:workout_tracker/ui/screens/main/home_base_screen.dart';
@@ -15,6 +17,7 @@ class Routes {
   static const login = '/login';
   static const signup = '/signup';
   static const selectWorkoutsForRoutine = '/select-workouts-for-routine';
+  static const rearrangeWorkoutRoutines = '/rearrange-workout-routines';
   static const recordWorkout = '/record-workout';
 }
 
@@ -45,7 +48,25 @@ final routerConfig = GoRouter(
     GoRoute(
       path: Routes.selectWorkoutsForRoutine,
       name: Routes.selectWorkoutsForRoutine,
-      builder: (context, state) => SelectWorkoutsForRoutineScreen(),
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        return SelectWorkoutsForRoutineScreen(
+          name: data['name'],
+          routineForEdit: data['routineForEdit'],
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.rearrangeWorkoutRoutines,
+      name: Routes.rearrangeWorkoutRoutines,
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        return RearrangeRoutineWorkoutsScreen(
+          name: data["name"],
+          selectedWorkouts: data["workouts"],
+          routineForEditId: data["routineForEditId"],
+        );
+      },
     ),
     GoRoute(
       path: Routes.recordWorkout,

@@ -1,5 +1,3 @@
-
-
 class Workout {
   final int id;
   final String name;
