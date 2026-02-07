@@ -7,32 +7,18 @@ abstract class ManageRoutineState {}
 
 class ManageRoutinesInit extends ManageRoutineState {}
 
-class AddRoutineInProgress extends ManageRoutineState {}
+class SaveRoutineInProgress extends ManageRoutineState {}
 
-class AddRoutineSuccess extends ManageRoutineState {
+class SaveRoutineSuccess extends ManageRoutineState {
   Routine routine;
 
-  AddRoutineSuccess(this.routine);
+  SaveRoutineSuccess(this.routine);
 }
 
-class AddRoutineFail extends ManageRoutineState {
+class SaveRoutineFail extends ManageRoutineState {
   String message;
 
-  AddRoutineFail(this.message);
-}
-
-class UpdateRoutineInProgress extends ManageRoutineState {}
-
-class UpdateRoutineSuccess extends ManageRoutineState {
-  Routine routine;
-
-  UpdateRoutineSuccess(this.routine);
-}
-
-class UpdateRoutineFail extends ManageRoutineState {
-  String message;
-
-  UpdateRoutineFail(this.message);
+  SaveRoutineFail(this.message);
 }
 
 class DeleteRoutineInProgress extends ManageRoutineState {}
@@ -58,7 +44,7 @@ class ManageRoutineCubit extends Cubit<ManageRoutineState> {
     required String name,
     required List<Workout> workouts,
   }) async {
-    emit(AddRoutineInProgress());
+    emit(SaveRoutineInProgress());
     try {
       final routine = Routine(
         id: -1,
@@ -66,11 +52,11 @@ class ManageRoutineCubit extends Cubit<ManageRoutineState> {
         workouts: workouts,
       );
       final addedRoutine = await _routineRepository.addRoutine(routine);
-      emit(AddRoutineSuccess(addedRoutine));
+      emit(SaveRoutineSuccess(addedRoutine));
     } on TypeError catch (e, st) {
-      emit(AddRoutineFail(e.toString()));
+      emit(SaveRoutineFail(e.toString()));
     } catch (e) {
-      emit(AddRoutineFail(e.toString()));
+      emit(SaveRoutineFail(e.toString()));
     }
   }
 
@@ -79,7 +65,7 @@ class ManageRoutineCubit extends Cubit<ManageRoutineState> {
     required String name,
     required List<Workout> workouts,
   }) async {
-    emit(UpdateRoutineInProgress());
+    emit(SaveRoutineInProgress());
     try {
       final routine = Routine(
         id: id,
@@ -87,11 +73,11 @@ class ManageRoutineCubit extends Cubit<ManageRoutineState> {
         workouts: workouts,
       );
       final updatedRoutine = await _routineRepository.updateRoutine(routine);
-      emit(UpdateRoutineSuccess(updatedRoutine));
+      emit(SaveRoutineSuccess(updatedRoutine));
     } on TypeError catch (e, st) {
-      emit(UpdateRoutineFail(e.toString()));
+      emit(SaveRoutineFail(e.toString()));
     } catch (e) {
-      emit(UpdateRoutineFail(e.toString()));
+      emit(SaveRoutineFail(e.toString()));
     }
   }
 

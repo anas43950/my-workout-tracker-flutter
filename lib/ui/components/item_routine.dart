@@ -67,7 +67,12 @@ class ItemRoutine extends StatelessWidget {
             10.width,
             ClickableText(
               text: "View",
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(
+                  Routes.viewRoutine,
+                  extra: routine,
+                );
+              },
             ),
           ],
         ],

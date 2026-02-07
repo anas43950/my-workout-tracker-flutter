@@ -3,15 +3,17 @@ import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/ui/components/clickable_text.dart';
 
 class ItemWorkout extends StatelessWidget {
-  final VoidCallback onEditPressed;
-  final VoidCallback onDeletePressed;
+  final VoidCallback? onEditPressed;
+  final VoidCallback? onDeletePressed;
   final Workout workout;
+  final bool showButtons;
 
   const ItemWorkout({
     super.key,
     required this.workout,
-    required this.onEditPressed,
-    required this.onDeletePressed,
+    this.onEditPressed,
+    this.onDeletePressed,
+    this.showButtons = true,
   });
 
   @override
@@ -34,15 +36,17 @@ class ItemWorkout extends StatelessWidget {
           Text(
             " ( ${workout.setsData} )",
           ),
-          ClickableText(
-            textColor: Colors.red,
-            text: "Delete",
-            onTap: onDeletePressed,
-          ),
-          ClickableText(
-            text: "Edit",
-            onTap: onEditPressed,
-          ),
+          if (showButtons) ...[
+            ClickableText(
+              textColor: Colors.red,
+              text: "Delete",
+              onTap: onDeletePressed,
+            ),
+            ClickableText(
+              text: "Edit",
+              onTap: onEditPressed,
+            ),
+          ],
         ],
       ),
     );

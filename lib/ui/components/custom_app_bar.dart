@@ -5,6 +5,7 @@ import 'custom_back_button.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? titleWidget;
+  final Widget? trailing;
   final String? title;
   final bool? centerTitle;
   final bool? showBackBtn;
@@ -16,6 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle,
     this.showBackBtn,
     this.titleWidget,
+    this.trailing,
   }) {
     if (title != null && titleWidget != null) {
       throw Exception("Can't pass both title and customTitleWidget");
@@ -30,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: CenteredTriWidget(
           leading: showBackBtn == true ? CustomBackButton() : null,
           center: titleWidget ?? (title != null ? Text(title!, style: TextStyle(fontSize: 16)) : null),
+          trailing: trailing,
         ),
       ),
     );

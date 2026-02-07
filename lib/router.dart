@@ -7,6 +7,7 @@ import 'package:workout_tracker/ui/screens/auth/sign_up_screen.dart';
 import 'package:workout_tracker/ui/screens/main/home_base_screen.dart';
 import 'package:workout_tracker/ui/screens/record_workout_screen.dart';
 import 'package:workout_tracker/ui/screens/splash_screen.dart';
+import 'package:workout_tracker/ui/screens/view_routine.dart';
 import 'package:workout_tracker/utils/constants.dart';
 
 class Routes {
@@ -18,6 +19,7 @@ class Routes {
   static const signup = '/signup';
   static const selectWorkoutsForRoutine = '/select-workouts-for-routine';
   static const rearrangeWorkoutRoutines = '/rearrange-workout-routines';
+  static const viewRoutine = '/view-routine';
   static const recordWorkout = '/record-workout';
 }
 
@@ -67,6 +69,13 @@ final routerConfig = GoRouter(
           routineForEditId: data["routineForEditId"],
         );
       },
+    ),
+    GoRoute(
+      path: Routes.viewRoutine,
+      name: Routes.viewRoutine,
+      builder: (context, state) => ViewRoutine(
+        routine: state.extra as Routine,
+      ),
     ),
     GoRoute(
       path: Routes.recordWorkout,

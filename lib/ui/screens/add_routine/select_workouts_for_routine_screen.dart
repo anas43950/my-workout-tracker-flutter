@@ -21,8 +21,15 @@ class SelectWorkoutsForRoutineScreen extends StatefulWidget {
 }
 
 class _SelectWorkoutsForRoutineScreenState extends State<SelectWorkoutsForRoutineScreen> {
-  List<Workout> allWorkouts = [];
   List<Workout> selectedWorkouts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.routineForEdit != null) {
+      selectedWorkouts.addAll(widget.routineForEdit!.workouts);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +60,13 @@ class _SelectWorkoutsForRoutineScreenState extends State<SelectWorkoutsForRoutin
                       final workout = state.workouts[i];
                       return ItemSelectWorkout(
                         name: workout.name,
-                        selected: selectedWorkouts.contains(workout),
+                        selected: selectedWorkouts.any((e) => e.id == workout.id),
                         onSelectionChanged: (bool value) {
                           setState(() {
                             if (value) {
                               selectedWorkouts.add(workout);
                             } else {
-                              selectedWorkouts.remove(workout);
+                              selectedWorkouts.removeWhere((e) => e.id == workout.id);
                             }
                           });
                         },

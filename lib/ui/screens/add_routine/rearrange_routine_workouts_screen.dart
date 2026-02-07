@@ -27,11 +27,13 @@ class RearrangeRoutineWorkoutsScreen extends StatefulWidget {
 
 class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkoutsScreen> {
   late final List<Workout> rearrangedWorkouts;
+  late final bool isEditing;
 
   @override
   void initState() {
     super.initState();
     rearrangedWorkouts = widget.selectedWorkouts;
+    isEditing = widget.routineForEditId != null;
   }
 
   @override
@@ -42,12 +44,12 @@ class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkout
       padding: EdgeInsets.all(20),
       body: BlocConsumer<ManageRoutineCubit, ManageRoutineState>(
         listener: (context, state) {
-          if (state is AddRoutineSuccess) {
+          if (state is SaveRoutineSuccess) {
             while (context.canPop()) {
               context.pop();
             }
           }
-          if (state is AddRoutineFail) {
+          if (state is SaveRoutineFail) {
             showErrorSnackBar(context, state.message);
           }
         },
@@ -83,13 +85,21 @@ class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkout
               ),
               ElevatedButton(
                 onPressed: () {
-                  if (state is AddRoutineInProgress) return;
-                  context.read<ManageRoutineCubit>().addRoutine(
-                    name: widget.name,
-                    workouts: rearrangedWorkouts,
-                  );
+                  if (state is SaveRoutineInProgress) return;
+                  if (isEditing) {
+                    context.read<ManageRoutineCubit>().updateRoutine(
+                      id: widget.routineForEditId!,
+                      workouts: rearrangedWorkouts,
+                      name: widget.name,
+                    );
+                  } else {
+                    context.read<ManageRoutineCubit>().addRoutine(
+                      name: widget.name,
+                      workouts: rearrangedWorkouts,
+                    );
+                  }
                 },
-                child: state is AddRoutineInProgress ? CustomLoader() : Text("Done"),
+                child: state is SaveRoutineInProgress ? CustomLoader() : Text("Done"),
               ),
             ],
           );

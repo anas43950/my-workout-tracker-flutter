@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ClickableText extends StatelessWidget {
   final String text;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final Color? textColor;
 
   const ClickableText({super.key, required this.text, required this.onTap, this.textColor});
