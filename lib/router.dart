@@ -80,7 +80,12 @@ final routerConfig = GoRouter(
     GoRoute(
       path: Routes.recordWorkout,
       name: Routes.recordWorkout,
-      builder: (context, state) => RecordWorkoutScreen(),
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        return RecordWorkoutScreen(
+          routine: data['routine'],
+        );
+      },
     ),
   ],
 );

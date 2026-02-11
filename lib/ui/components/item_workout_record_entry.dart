@@ -1,11 +1,17 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart' hide black, white;
+import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class ItemWorkoutRecordEntry extends StatelessWidget {
+  final int index;
+  final Workout workout;
+
   const ItemWorkoutRecordEntry({
     super.key,
+    required this.workout,
+    required this.index,
   });
 
   @override
@@ -18,16 +24,16 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "1 - Flat Bench Press",
-                style: AppTextStyles.heading,
+                "${index + 1} - ${workout.name}",
+                style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
               ),
               Text(
-                "3 x 8-12",
-                style: AppTextStyles.heading,
+                workout.setsData,
+                style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
               ),
             ],
           ),
-          Divider(height: 40),
+          Divider(height: 35),
           IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,9 +48,7 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                         children: [
                           Text(
                             "Last log",
-                            style: AppTextStyles.subHeading.copyWith(
-                              fontStyle: FontStyle.italic,
-                            ),
+                            style: AppTextStyles.label,
                           ),
                           Column(
                             children: [
@@ -56,6 +60,7 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                           ),
                         ],
                       ),
+                      5.height,
                       Text("50 kgs - 10 reps"),
                       Text("50 kgs - 10 reps"),
                       Text("50 kgs - 10 reps"),
@@ -70,10 +75,9 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                     children: [
                       Text(
                         "Today's progress",
-                        style: AppTextStyles.subHeading.copyWith(
-                          fontStyle: FontStyle.italic,
-                        ),
+                        style: AppTextStyles.label,
                       ),
+                      5.height,
                       Text("50 kgs - 10 reps"),
                       Text("50 kgs - 10 reps"),
                       Text("50 kgs - 10 reps"),

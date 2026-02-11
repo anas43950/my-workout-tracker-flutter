@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/data/repositories/routine_repository.dart';
@@ -41,6 +42,13 @@ class RoutinesListCubit extends Cubit<RoutinesListState> {
     } catch (e) {
       emit(FetchRoutinesFail(e.toString()));
     }
+  }
+
+  Routine? getRoutineForName(String name) {
+    if (state is FetchRoutinesSuccess) {
+      return (state as FetchRoutinesSuccess).routines.firstWhereOrNull((e) => e.name == name);
+    }
+    return null;
   }
 
   @override

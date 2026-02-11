@@ -2,19 +2,17 @@ import 'package:collection/collection.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
 import 'package:workout_tracker/data/cubits/routines/routines_list_cubit.dart';
-import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_routine.dart';
 import 'package:workout_tracker/ui/components/loader.dart';
 import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
+import 'package:workout_tracker/ui/dialogs/dialog_select_routine.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/constants.dart';
 import 'package:workout_tracker/utils/extensions.dart';
-import 'package:workout_tracker/utils/logger.dart';
 
 class RoutinesScreen extends StatelessWidget {
   const RoutinesScreen({super.key});
@@ -24,7 +22,7 @@ class RoutinesScreen extends StatelessWidget {
     return CustomScaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          context.pushNamed(Routes.recordWorkout);
+          onStartWorkoutTap(context);
         },
         label: Row(
           children: [
@@ -82,7 +80,7 @@ class RoutinesScreen extends StatelessWidget {
                 return Expanded(
                   child: ListView.separated(
                     itemBuilder: (_, i) {
-                      final name = weekdaysFull[i];
+                      final name = weekdays[i];
                       final routine = routines.firstWhereOrNull((element) => element.name == name);
                       return ItemRoutine(
                         name: name,
@@ -93,7 +91,7 @@ class RoutinesScreen extends StatelessWidget {
                       height: 25,
                       thickness: 0.1,
                     ),
-                    itemCount: weekdaysFull.length,
+                    itemCount: weekdays.length,
                   ),
                 );
               }
@@ -103,5 +101,10 @@ class RoutinesScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void onStartWorkoutTap(BuildContext context) {
+    final routine = context.read<RoutinesListCubit>().getRoutineForName(todayWeekDay);
+    context.dialog(DialogSelectRoutine(selectedRoutine: routine));
   }
 }

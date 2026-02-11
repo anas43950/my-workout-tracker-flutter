@@ -35,6 +35,20 @@ class DeleteRoutineFail extends ManageRoutineState {
   DeleteRoutineFail(this.message);
 }
 
+class FetchRoutineForNameInProgress extends ManageRoutineState {}
+
+class FetchRoutineForNameSuccess extends ManageRoutineState {
+  Routine? routine;
+
+  FetchRoutineForNameSuccess(this.routine);
+}
+
+class FetchRoutineForNameFail extends ManageRoutineState {
+  String message;
+
+  FetchRoutineForNameFail(this.message);
+}
+
 class ManageRoutineCubit extends Cubit<ManageRoutineState> {
   final RoutineRepository _routineRepository = RoutineRepository();
 
@@ -90,6 +104,18 @@ class ManageRoutineCubit extends Cubit<ManageRoutineState> {
       emit(DeleteRoutineFail(e.toString()));
     } catch (e) {
       emit(DeleteRoutineFail(e.toString()));
+    }
+  }
+
+  Future<void> fetchRoutineForName({required String name}) async {
+    emit(FetchRoutineForNameInProgress());
+    try {
+      final routine = await _routineRepository.fetchRoutineForName(name);
+      emit(FetchRoutineForNameSuccess(routine));
+    } on TypeError catch (e, st) {
+      emit(FetchRoutineForNameFail(e.toString()));
+    } catch (e) {
+      emit(FetchRoutineForNameFail(e.toString()));
     }
   }
 }

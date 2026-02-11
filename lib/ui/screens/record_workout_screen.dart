@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/ui/components/custom_app_bar.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_workout_record_entry.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class RecordWorkoutScreen extends StatefulWidget {
-  const RecordWorkoutScreen({super.key});
+  final Routine routine;
+
+  const RecordWorkoutScreen({super.key, required this.routine});
 
   @override
   State<RecordWorkoutScreen> createState() => _RecordWorkoutScreenState();
@@ -14,6 +17,14 @@ class RecordWorkoutScreen extends StatefulWidget {
 
 class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   final pageController = PageController();
+  late Routine routine;
+
+  @override
+  void initState() {
+    super.initState();
+
+    routine = widget.routine;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +40,8 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              "Sunday",
-              style: AppTextStyles.bodyMedium,
-            ),
-            InkWell(
-              onTap: () {},
-              child: Text(
-                "Change",
-                style: TextStyle(color: Colors.blue),
-              ),
+              routine.name,
+              style: AppTextStyles.bodyMedium.copyWith(fontSize: 16),
             ),
           ],
         ),
@@ -46,12 +50,16 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          30.height,
+          25.height,
           Expanded(
             child: PageView.builder(
               physics: NeverScrollableScrollPhysics(),
               controller: pageController,
-              itemBuilder: (_, i) => ItemWorkoutRecordEntry(),
+              itemBuilder: (_, i) => ItemWorkoutRecordEntry(
+                workout: routine.workouts[i],
+                index: i,
+              ),
+              itemCount: routine.workouts.length,
             ),
           ),
           Padding(

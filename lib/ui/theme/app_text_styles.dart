@@ -10,12 +10,18 @@ class AppTextStyles {
     color: black,
   );
 
-  static final subHeading = TextStyle(
+  static final heading2 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: black,
+  );
+
+  static final heading3 = TextStyle(
     fontSize: 18,
     color: black,
   );
 
-  static final label = TextStyle(fontSize: 15);
+  static final label = TextStyle(fontSize: 16);
 
   static final labelMedium = TextStyle(
     fontSize: 16,

@@ -26,6 +26,14 @@ class RoutineRepository {
     _controller.add(_cache);
   }
 
+  Future<Routine> fetchRoutineForName(String name) async {
+    final response = await ApiService.get(
+      endpoint: ApiEndpoints.getRoutineByName,
+      queryParameters: {'name': name},
+    );
+    return Routine.fromJson(response['data']);
+  }
+
   Future<Routine> addRoutine(Routine routine) async {
     final response = await ApiService.post(
       endpoint: ApiEndpoints.addRoutine,

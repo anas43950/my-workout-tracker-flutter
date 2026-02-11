@@ -9,10 +9,11 @@ extension GoRouterExtension on BuildContext {
     pushReplacement(location);
   }
 
-  void dialog(Widget dialog) {
-    showDialog(
+  Future<dynamic> dialog(Widget dialog) async{
+    final result = await showDialog(
       context: this,
       builder: (context) => dialog,
     );
+    return result;
   }
 }
