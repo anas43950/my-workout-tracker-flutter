@@ -66,19 +66,20 @@ class _DialogSelectRoutineState extends State<DialogSelectRoutine> {
                       10.height,
                     ],
                   ),
-                  SmallButton(
-                    title: "Confirm",
-                    onPressed: () {
-                      if (selectedRoutine == null) return;
-                      context.pop();
-                      context.pushNamed(
-                        Routes.recordWorkout,
-                        extra: {
-                          'routine': selectedRoutine,
-                        },
-                      );
-                    },
-                  ),
+                  if (selectedRoutine != null)
+                    SmallButton(
+                      title: "Confirm",
+                      onPressed: () {
+                        if (selectedRoutine == null) return;
+                        context.pop();
+                        context.pushNamed(
+                          Routes.recordWorkout,
+                          extra: {
+                            'routine': selectedRoutine,
+                          },
+                        );
+                      },
+                    ),
                 ],
               ),
             );

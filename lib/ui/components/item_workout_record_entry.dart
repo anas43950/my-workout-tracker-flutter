@@ -2,16 +2,21 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart' hide black, white;
 import 'package:workout_tracker/data/models/workout.dart';
+import 'package:workout_tracker/data/models/workout_history_child.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class ItemWorkoutRecordEntry extends StatelessWidget {
   final int index;
   final Workout workout;
+  final WorkoutHistoryChild? lastHistoryChild;
+  final String? lastHistoryDate;
 
   const ItemWorkoutRecordEntry({
     super.key,
     required this.workout,
     required this.index,
+    this.lastHistoryChild,
+    this.lastHistoryDate,
   });
 
   @override
@@ -41,6 +46,7 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     spacing: 5,
                     children: [
                       Row(
@@ -50,20 +56,30 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                             "Last log",
                             style: AppTextStyles.label,
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                "Wed, 28 Jan",
-                                style: AppTextStyles.bodySmall.copyWith(decoration: TextDecoration.underline),
-                              ),
-                            ],
-                          ),
+                          if (lastHistoryDate != null)
+                            Text(
+                              lastHistoryDate!,
+                              style: AppTextStyles.bodySmall.copyWith(decoration: TextDecoration.underline),
+                            ),
                         ],
                       ),
                       5.height,
-                      Text("50 kgs - 10 reps"),
-                      Text("50 kgs - 10 reps"),
-                      Text("50 kgs - 10 reps"),
+                      if (lastHistoryChild == null)
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              lastHistoryDate == null ? "No history found" : "Not Found",
+                              // If last history date is null, it means there is no workout history for the selected routine's day
+                              // Else if only last history child is null, it means there is a history, but no history child for the current workout
+                              style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                        )
+                      else ...[
+                        Text("50 kgs - 10 reps"),
+                        Text("50 kgs - 10 reps"),
+                        Text("50 kgs - 10 reps"),
+                      ],
                     ],
                   ),
                 ),
