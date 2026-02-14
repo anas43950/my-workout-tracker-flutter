@@ -4,15 +4,15 @@ import 'package:workout_tracker/data/api/api_service.dart';
 import 'package:workout_tracker/data/api/endpoints.dart';
 import 'package:workout_tracker/data/models/routine.dart';
 
-class RoutineRepository {
+class RoutinesRepository {
   final _controller = StreamController<List<Routine>>();
   List<Routine> _cache = [];
-  static RoutineRepository? _instance;
+  static RoutinesRepository? _instance;
 
-  RoutineRepository._();
+  RoutinesRepository._();
 
-  factory RoutineRepository() {
-    _instance = _instance ?? RoutineRepository._();
+  factory RoutinesRepository() {
+    _instance = _instance ?? RoutinesRepository._();
     return _instance!;
   }
 
@@ -22,6 +22,7 @@ class RoutineRepository {
     final response = await ApiService.get(
       endpoint: ApiEndpoints.getRoutines,
     );
+
     _cache = response['data'].map<Routine>((e) => Routine.fromJson(e)).toList();
     _controller.add(_cache);
   }

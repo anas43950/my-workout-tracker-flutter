@@ -1,26 +1,26 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart' hide black, white;
-import 'package:workout_tracker/data/models/workout.dart';
-import 'package:workout_tracker/data/models/workout_history_child.dart';
-import 'package:workout_tracker/data/models/workout_history_set.dart';
+import 'package:workout_tracker/data/models/exercise.dart';
+import 'package:workout_tracker/data/models/workout_child.dart';
+import 'package:workout_tracker/data/models/workout_set.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
-class ItemWorkoutRecordEntry extends StatelessWidget {
+class RecordWorkoutPageViewItem extends StatelessWidget {
   final int index;
-  final Workout workout;
-  final WorkoutHistoryChild? lastHistoryChild;
-  final String? lastHistoryDate;
+  final Exercise exercise;
+  final WorkoutChild? lastWorkoutChild;
+  final String? lastWorkoutDate;
 
-  // If last history date is null, it means there is no workout history for the selected routine's day
-  // If last history date is not null, and only last history child is null, it means there is a history, but no history child for the current workout
+  // If workout date is null, it means there is no past workout for the selected routine's day
+  // If last workout date is not null, and only last workout child is null, it means there is a past workout, but no child for the current exercise
 
-  const ItemWorkoutRecordEntry({
+  const RecordWorkoutPageViewItem({
     super.key,
-    required this.workout,
+    required this.exercise,
     required this.index,
-    this.lastHistoryChild,
-    this.lastHistoryDate,
+    this.lastWorkoutChild,
+    this.lastWorkoutDate,
   });
 
   @override
@@ -33,11 +33,11 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${index + 1} - ${workout.name}",
+                "${index + 1} - ${exercise.name}",
                 style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
               ),
               Text(
-                workout.setsData,
+                exercise.setsData,
                 style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
               ),
             ],
@@ -60,19 +60,19 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                             "Last log",
                             style: AppTextStyles.label,
                           ),
-                          if (lastHistoryDate != null)
+                          if (lastWorkoutDate != null)
                             Text(
-                              lastHistoryDate!,
+                              lastWorkoutDate!,
                               style: AppTextStyles.bodySmall.copyWith(decoration: TextDecoration.underline),
                             ),
                         ],
                       ),
                       3.height,
-                      if (lastHistoryChild != null)
+                      if (lastWorkoutChild != null)
                         Expanded(
                           child: Center(
                             child: Text(
-                              lastHistoryDate == null ? "No history found" : "Not Found",
+                              lastWorkoutDate == null ? "No history found" : "Not Found",
                               style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
                             ),
                           ),
@@ -80,7 +80,7 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                       else
                         ...List.generate(
                           4,
-                          (i) => _ItemWorkoutLog(i, false, null),
+                          (i) => SizedBox(),
                         ),
                     ],
                   ),
@@ -98,7 +98,7 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
                       5.height,
                       ...List.generate(
                         4,
-                        (i) => _ItemWorkoutLog(i, i == 3, null),
+                        (i) => SizedBox(),
                       ),
                     ],
                   ),
@@ -183,13 +183,13 @@ class ItemWorkoutRecordEntry extends StatelessWidget {
   }
 }
 
-class _ItemWorkoutLog extends StatelessWidget {
+class _ItemWorkoutSet extends StatelessWidget {
   final int index;
   final bool showRemoveButton;
-  final WorkoutHistorySet set;
+  final WorkoutSet set;
   final VoidCallback? onRemoveTap;
 
-  const _ItemWorkoutLog(
+  const _ItemWorkoutSet(
     this.index,
     this.showRemoveButton,
     this.set,

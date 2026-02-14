@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ItemSelectWorkout extends StatelessWidget {
+class ItemSelectExercise extends StatelessWidget {
   final String name;
   final bool selected;
   final Function(bool value) onSelectionChanged;
 
-  const ItemSelectWorkout({super.key, required this.selected, required this.onSelectionChanged, required this.name});
+  const ItemSelectExercise({super.key, required this.selected, required this.onSelectionChanged, required this.name});
 
   @override
   Widget build(BuildContext context) {

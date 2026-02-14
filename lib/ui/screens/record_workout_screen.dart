@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/models/routine.dart';
-import 'package:workout_tracker/data/models/workout_history.dart';
+import 'package:workout_tracker/data/models/workout.dart';
+import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/ui/components/custom_app_bar.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
-import 'package:workout_tracker/ui/components/item_workout_record_entry.dart';
+import 'package:workout_tracker/ui/components/record_workout_page_view_item.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class RecordWorkoutScreen extends StatefulWidget {
@@ -19,7 +20,8 @@ class RecordWorkoutScreen extends StatefulWidget {
 class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   final pageController = PageController();
   late Routine routine;
-  late WorkoutHistory? lastHistory;
+  late Workout? lastHistory;
+  List<WorkoutChild> logs = [];
 
   @override
   void initState() {
@@ -57,11 +59,11 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
             child: PageView.builder(
               physics: NeverScrollableScrollPhysics(),
               controller: pageController,
-              itemBuilder: (_, i) => ItemWorkoutRecordEntry(
-                workout: routine.workouts[i],
+              itemBuilder: (_, i) => RecordWorkoutPageViewItem(
+                exercise: routine.exercises[i],
                 index: i,
               ),
-              itemCount: routine.workouts.length,
+              itemCount: routine.exercises.length,
             ),
           ),
           Padding(

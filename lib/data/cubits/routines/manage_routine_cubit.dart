@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/data/models/routine.dart';
-import 'package:workout_tracker/data/models/workout.dart';
-import 'package:workout_tracker/data/repositories/routine_repository.dart';
+import 'package:workout_tracker/data/models/exercise.dart';
+import 'package:workout_tracker/data/repositories/routines_repository.dart';
 
 abstract class ManageRoutineState {}
 
@@ -50,20 +50,20 @@ class FetchRoutineForNameFail extends ManageRoutineState {
 }
 
 class ManageRoutineCubit extends Cubit<ManageRoutineState> {
-  final RoutineRepository _routineRepository = RoutineRepository();
+  final RoutinesRepository _routineRepository = RoutinesRepository();
 
   ManageRoutineCubit() : super(ManageRoutinesInit());
 
   Future<void> addRoutine({
     required String name,
-    required List<Workout> workouts,
+    required List<Exercise> exercises,
   }) async {
     emit(SaveRoutineInProgress());
     try {
       final routine = Routine(
         id: -1,
         name: name,
-        workouts: workouts,
+        exercises: exercises,
       );
       final addedRoutine = await _routineRepository.addRoutine(routine);
       emit(SaveRoutineSuccess(addedRoutine));
@@ -77,14 +77,14 @@ class ManageRoutineCubit extends Cubit<ManageRoutineState> {
   Future<void> updateRoutine({
     required int id,
     required String name,
-    required List<Workout> workouts,
+    required List<Exercise> exercises,
   }) async {
     emit(SaveRoutineInProgress());
     try {
       final routine = Routine(
         id: id,
         name: name,
-        workouts: workouts,
+        exercises: exercises,
       );
       final updatedRoutine = await _routineRepository.updateRoutine(routine);
       emit(SaveRoutineSuccess(updatedRoutine));

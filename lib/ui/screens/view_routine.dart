@@ -5,7 +5,7 @@ import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_app_bar.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
-import 'package:workout_tracker/ui/components/item_workout.dart';
+import 'package:workout_tracker/ui/components/item_exercise.dart';
 
 class ViewRoutine extends StatelessWidget {
   final Routine routine;
@@ -23,7 +23,7 @@ class ViewRoutine extends StatelessWidget {
             IconButton(
               onPressed: () {
                 context.pushNamed(
-                  Routes.selectWorkoutsForRoutine,
+                  Routes.selectRoutineExercises,
                   extra: {
                     'name': routine.name,
                     'routineForEdit': routine,
@@ -39,11 +39,11 @@ class ViewRoutine extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-        itemBuilder: (_, i) => ItemWorkout(
-          workout: routine.workouts[i],
+        itemBuilder: (_, i) => ItemExercise(
+          exercise: routine.exercises[i],
           showButtons: false,
         ),
-        itemCount: routine.workouts.length,
+        itemCount: routine.exercises.length,
       ),
     );
   }

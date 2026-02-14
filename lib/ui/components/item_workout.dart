@@ -1,53 +1,118 @@
 import 'package:flutter/material.dart';
-import 'package:workout_tracker/data/models/workout.dart';
-import 'package:workout_tracker/ui/components/clickable_text.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class ItemWorkout extends StatelessWidget {
-  final VoidCallback? onEditPressed;
-  final VoidCallback? onDeletePressed;
-  final Workout workout;
-  final bool showButtons;
-
-  const ItemWorkout({
-    super.key,
-    required this.workout,
-    this.onEditPressed,
-    this.onDeletePressed,
-    this.showButtons = true,
-  });
+  const ItemWorkout({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      padding: EdgeInsets.all(12),
-      child: Row(
-        spacing: 10,
+    final exercises = [
+      "Flat Bench Press",
+      "Inclined Dumbbell Press",
+      "Declined Dumbbell Press",
+      "Pec Deck Fly",
+      "Low to High Cable Crossover",
+      "High to Low Cable Crossover",
+    ];
+    return Card(
+      color: Colors.white,
+      surfaceTintColor: Colors.white,
+      child: Column(
         children: [
-          Expanded(
-            child: Text(
-              workout.name,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Wed, 21 Jan 2026  -  Chest + Triceps",
+                  style: AppTextStyles.bodySmall,
+                ),
+                Text(
+                  "W - R",
+                  style: AppTextStyles.bodySmall,
+                ),
+              ],
             ),
           ),
-          Text(
-            " ( ${workout.setsData} )",
+          Divider(
+            height: 1,
           ),
-          if (showButtons) ...[
-            ClickableText(
-              textColor: Colors.red,
-              text: "Delete",
-              onTap: onDeletePressed,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+                itemBuilder: (_, i) => _WorkoutChild(exerciseName: exercises[i], index: i),
+                separatorBuilder: (_, i) => Divider(height: 0),
+                itemCount: exercises.length,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WorkoutChild extends StatefulWidget {
+  final String exerciseName;
+  final int index;
+
+  const _WorkoutChild({required this.exerciseName, required this.index});
+
+  @override
+  State<_WorkoutChild> createState() => _WorkoutChildState();
+}
+
+class _WorkoutChildState extends State<_WorkoutChild> {
+  bool expanded = false;
+  final duration = Duration(milliseconds: 300);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => setState(() => expanded = !expanded),
+      borderRadius: BorderRadius.circular(10),
+      child: AnimatedContainer(
+        duration: duration,
+        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        child: Row(
+          children: [
+            Text(
+              (widget.index + 1).toString(),
+              style: AppTextStyles.bodySmall,
             ),
-            ClickableText(
-              text: "Edit",
-              onTap: onEditPressed,
+            10.width,
+            Expanded(
+              child: Text(
+                widget.exerciseName,
+              ),
+            ),
+            AnimatedAlign(
+              duration: duration,
+              alignment: Alignment.centerRight,
+              heightFactor: expanded ? 1 : 0,
+              child: Column(
+                children: List.generate(
+                  3,
+                  (i) => AnimatedDefaultTextStyle(
+                    style: TextStyle(
+                      color: expanded ? Colors.black : Colors.transparent,
+                      fontSize: expanded ? 14 : 8,
+                      height: 1.5,
+                    ),
+                    duration: duration,
+                    child: Text("76 - 8"),
+                  ),
+                ),
+              ),
             ),
           ],
-        ],
+        ),
       ),
     );
   }

@@ -6,10 +6,10 @@ class ApiEndpoints {
   static final register = 'register';
   static final login = 'login';
 
-  static final getWorkouts = 'workouts/';
-  static final addWorkout = 'workouts/add';
-  static final updateWorkout = 'workouts/edit';
-  static final deleteWorkout = 'workouts/delete';
+  static final getExercises = 'exercises/';
+  static final addExercise = 'exercises/add';
+  static final updateExercise = 'exercises/edit';
+  static final deleteExercise = 'exercises/delete';
 
   static final getRoutines = 'routines/';
   static final getRoutineByName = 'routines/by-name';

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class ItemRearrangeWorkout extends StatelessWidget {
+class ItemRearrangeExercise extends StatelessWidget {
   final int index;
   final String name;
   final Widget trailing;
 
-  const ItemRearrangeWorkout({
+  const ItemRearrangeExercise({
     super.key,
     required this.name,
     required this.index,

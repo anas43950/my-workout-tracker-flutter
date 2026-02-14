@@ -5,11 +5,11 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
 import 'package:workout_tracker/data/cubits/routines/routines_list_cubit.dart';
-import 'package:workout_tracker/data/cubits/workout/workouts_list_cubit.dart';
+import 'package:workout_tracker/data/cubits/exercises/exercises_list_cubit.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/screens/main/routines_screen.dart';
-import 'package:workout_tracker/ui/screens/main/workout_history_screen.dart';
-import 'package:workout_tracker/ui/screens/main/workouts_screen.dart';
+import 'package:workout_tracker/ui/screens/main/workouts_history_screen.dart';
+import 'package:workout_tracker/ui/screens/main/exercises_screen.dart';
 import 'package:workout_tracker/utils/extensions.dart';
 
 class HomeBaseScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
   }
 
   void loadData() {
-    context.read<WorkoutsListCubit>().fetchWorkouts();
+    context.read<ExercisesListCubit>().fetchExercises();
     context.read<RoutinesListCubit>().fetchRoutines();
   }
 
@@ -45,8 +45,8 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
         },
         child: [
           RoutinesScreen(),
-          WorkoutsScreen(),
-          WorkoutHistoryScreen(),
+          ExercisesScreen(),
+          WorkoutsHistoryScreen(),
         ][selectedIndex],
       ),
     );
@@ -69,11 +69,11 @@ Widget _buildBottomNavigationBar(Function(int index) onTabChanged, int selectedI
       ),
       GButton(
         icon: selectedIndex == 2 ? FluentIcons.dumbbell_16_filled : FluentIcons.dumbbell_16_regular,
-        text: "Workouts",
+        text: "Exercises",
       ),
       GButton(
         icon: selectedIndex == 2 ? FluentIcons.history_16_filled : FluentIcons.history_16_regular,
-        text: "Workout History",
+        text: "Workouts History",
       ),
     ],
   );

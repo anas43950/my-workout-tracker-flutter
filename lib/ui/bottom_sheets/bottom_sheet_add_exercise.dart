@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:workout_tracker/data/cubits/workout/manage_workout_cubit.dart';
-import 'package:workout_tracker/data/models/workout.dart';
+import 'package:workout_tracker/data/cubits/exercises/manage_exercise_cubit.dart';
+import 'package:workout_tracker/data/models/exercise.dart';
 import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/components/loader.dart';
 import 'package:workout_tracker/ui/components/text_field_with_label.dart';
@@ -10,16 +10,16 @@ import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/helpers.dart';
 import 'package:workout_tracker/utils/validators.dart';
 
-class BottomSheetAddWorkout extends StatefulWidget {
-  final Workout? workoutForEdit;
+class BottomSheetAddExercise extends StatefulWidget {
+  final Exercise? exercise;
 
-  const BottomSheetAddWorkout({super.key, this.workoutForEdit});
+  const BottomSheetAddExercise({super.key, this.exercise});
 
   @override
-  State<BottomSheetAddWorkout> createState() => _BottomSheetAddWorkoutState();
+  State<BottomSheetAddExercise> createState() => _BottomSheetAddExerciseState();
 }
 
-class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
+class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
   final RANGE = "Range";
   final FIXED = "Fixed";
   late String repsType = RANGE;
@@ -28,22 +28,22 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
   final repsFromController = TextEditingController();
   final repsToController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
-  late final Workout? workoutForEdit;
+  late final Exercise? exerciseForEdit;
   late bool isEditing;
 
   @override
   void initState() {
     super.initState();
-    workoutForEdit = widget.workoutForEdit;
-    isEditing = workoutForEdit != null;
+    exerciseForEdit = widget.exercise;
+    isEditing = exerciseForEdit != null;
 
     if (isEditing) {
-      nameController.text = workoutForEdit!.name;
-      setsController.text = workoutForEdit!.sets.toString();
-      repsFromController.text = workoutForEdit!.repRangeFrom.toString();
-      repsToController.text = workoutForEdit!.repRangeTo.toString();
+      nameController.text = exerciseForEdit!.name;
+      setsController.text = exerciseForEdit!.sets.toString();
+      repsFromController.text = exerciseForEdit!.repRangeFrom.toString();
+      repsToController.text = exerciseForEdit!.repRangeTo.toString();
 
-      repsType = workoutForEdit!.hasFixedReps ? FIXED : RANGE;
+      repsType = exerciseForEdit!.hasFixedReps ? FIXED : RANGE;
     }
   }
 
@@ -60,7 +60,7 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                isEditing ? "Update Workout" : "Add Workout",
+                isEditing ? "Update Exercise" : "Add Exercise",
                 style: AppTextStyles.labelMedium,
                 textAlign: TextAlign.center,
               ),
@@ -68,9 +68,9 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
               20.height,
               TextFieldWithLabel(
                 label: 'Name',
-                hintText: 'Enter workout name...',
+                hintText: 'Enter exercise name...',
                 controller: nameController,
-                validator: (value) => Validators.emptyValidator(value, "Enter name for this workout"),
+                validator: (value) => Validators.emptyValidator(value, "Enter name for this exercise"),
               ),
               15.height,
               TextFieldWithLabel(
@@ -143,33 +143,33 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
                   ],
                 ),
               25.height,
-              BlocConsumer<ManageWorkoutCubit, ManageWorkoutState>(
+              BlocConsumer<ManageExerciseCubit, ManageExerciseState>(
                 listener: (context, state) {
-                  if (state is AddWorkoutSuccess) {
-                    showSuccessSnackBar(context, "Workout added");
+                  if (state is AddExerciseSuccess) {
+                    showSuccessSnackBar(context, "Exercise added");
                     nameController.clear();
                     setsController.clear();
                     repsFromController.clear();
                     repsToController.clear();
                   }
-                  if (state is AddWorkoutFail) {
+                  if (state is AddExerciseFail) {
                     showErrorSnackBar(context, state.message);
                   }
-                  if (state is UpdateWorkoutSuccess) {
-                    showSuccessSnackBar(context, "Workout updated");
+                  if (state is UpdateExerciseSuccess) {
+                    showSuccessSnackBar(context, "Exercises updated");
                     context.pop();
                   }
-                  if (state is UpdateWorkoutFail) {
+                  if (state is UpdateExerciseFail) {
                     showErrorSnackBar(context, state.message);
                   }
                 },
                 builder: (context, state) {
                   return ElevatedButton(
                     onPressed: () {
-                      if (state is AddWorkoutInProgress) return;
-                      onAddWorkoutTap();
+                      if (state is AddExerciseInProgress) return;
+                      onAddExerciseTap();
                     },
-                    child: state is AddWorkoutInProgress || state is UpdateWorkoutInProgress
+                    child: state is AddExerciseInProgress || state is UpdateExerciseInProgress
                         ? CustomLoader()
                         : Text(isEditing ? "Update" : "Add"),
                   );
@@ -182,7 +182,7 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
     );
   }
 
-  void onAddWorkoutTap() {
+  void onAddExerciseTap() {
     if (formKey.currentState?.validate() == true) {
       final name = nameController.text;
       final setsStr = setsController.text;
@@ -200,15 +200,15 @@ class _BottomSheetAddWorkoutState extends State<BottomSheetAddWorkout> {
         return;
       }
       if (isEditing) {
-        context.read<ManageWorkoutCubit>().updateWorkout(
-          id: workoutForEdit!.id,
+        context.read<ManageExerciseCubit>().updateExercise(
+          id: exerciseForEdit!.id,
           name: name,
           sets: sets,
           repRangeFrom: repRangeFrom,
           repRangeTo: repRangeTo,
         );
       } else {
-        context.read<ManageWorkoutCubit>().addWorkout(
+        context.read<ManageExerciseCubit>().addExercise(
           name: name,
           sets: sets,
           repRangeFrom: repRangeFrom,

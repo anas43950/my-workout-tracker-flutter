@@ -39,7 +39,7 @@ class ItemRoutine extends StatelessWidget {
               text: "Add",
               onTap: () {
                 context.pushNamed(
-                  Routes.selectWorkoutsForRoutine,
+                  Routes.selectRoutineExercises,
                   extra: {
                     'name': name,
                     'routineForEdit': routine,

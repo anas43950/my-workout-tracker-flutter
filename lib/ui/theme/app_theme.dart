@@ -29,7 +29,7 @@ final appTheme = ThemeData(
       borderSide: BorderSide.none,
     ),
   ),
-  floatingActionButtonTheme: FloatingActionButtonThemeData(foregroundColor: white, backgroundColor: black),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(foregroundColor: white, backgroundColor: Colors.redAccent),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: black,

@@ -3,45 +3,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:workout_tracker/data/cubits/workout/workouts_list_cubit.dart';
+import 'package:workout_tracker/data/cubits/exercises/exercises_list_cubit.dart';
 import 'package:workout_tracker/data/models/routine.dart';
-import 'package:workout_tracker/data/models/workout.dart';
+import 'package:workout_tracker/data/models/exercise.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
-import 'package:workout_tracker/ui/components/item_select_workout.dart';
+import 'package:workout_tracker/ui/components/item_select_exercise.dart';
 
-class SelectWorkoutsForRoutineScreen extends StatefulWidget {
+class SelectRoutineExercisesScreen extends StatefulWidget {
   final String name;
   final Routine? routineForEdit;
 
-  const SelectWorkoutsForRoutineScreen({super.key, required this.name, this.routineForEdit});
+  const SelectRoutineExercisesScreen({super.key, required this.name, this.routineForEdit});
 
   @override
-  State<SelectWorkoutsForRoutineScreen> createState() => _SelectWorkoutsForRoutineScreenState();
+  State<SelectRoutineExercisesScreen> createState() => _SelectRoutineExercisesScreenState();
 }
 
-class _SelectWorkoutsForRoutineScreenState extends State<SelectWorkoutsForRoutineScreen> {
-  List<Workout> selectedWorkouts = [];
+class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScreen> {
+  List<Exercise> selectedExercises = [];
 
   @override
   void initState() {
     super.initState();
     if (widget.routineForEdit != null) {
-      selectedWorkouts.addAll(widget.routineForEdit!.workouts);
+      selectedExercises.addAll(widget.routineForEdit!.exercises);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      title: "Select workouts for Sunday routine",
+      title: "Select exercises for Sunday routine",
       showBackBtn: true,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextField(
             decoration: InputDecoration(
-              hintText: "Search workouts...",
+              hintText: "Search exercises...",
               hintStyle: TextStyle(color: grey),
               prefixIcon: Icon(
                 FluentIcons.search_12_regular,
@@ -52,27 +52,27 @@ class _SelectWorkoutsForRoutineScreenState extends State<SelectWorkoutsForRoutin
           ),
           15.height,
           Expanded(
-            child: BlocBuilder<WorkoutsListCubit, WorkoutsListState>(
+            child: BlocBuilder<ExercisesListCubit, ExercisesListState>(
               builder: (context, state) {
-                if (state is FetchWorkoutsSuccess) {
+                if (state is FetchExercisesSuccess) {
                   return ListView.builder(
                     itemBuilder: (_, i) {
-                      final workout = state.workouts[i];
-                      return ItemSelectWorkout(
-                        name: workout.name,
-                        selected: selectedWorkouts.any((e) => e.id == workout.id),
+                      final exercise = state.exercises[i];
+                      return ItemSelectExercise(
+                        name: exercise.name,
+                        selected: selectedExercises.any((e) => e.id == exercise.id),
                         onSelectionChanged: (bool value) {
                           setState(() {
                             if (value) {
-                              selectedWorkouts.add(workout);
+                              selectedExercises.add(exercise);
                             } else {
-                              selectedWorkouts.removeWhere((e) => e.id == workout.id);
+                              selectedExercises.removeWhere((e) => e.id == exercise.id);
                             }
                           });
                         },
                       );
                     },
-                    itemCount: state.workouts.length,
+                    itemCount: state.exercises.length,
                   );
                 }
                 return SizedBox();
@@ -84,10 +84,10 @@ class _SelectWorkoutsForRoutineScreenState extends State<SelectWorkoutsForRoutin
             child: ElevatedButton(
               onPressed: () {
                 context.pushNamed(
-                  Routes.rearrangeWorkoutRoutines,
+                  Routes.rearrangeRoutineExercises,
                   extra: {
                     "name": widget.name,
-                    "workouts": selectedWorkouts,
+                    "exercises": selectedExercises,
                     "routineForEditId": widget.routineForEdit?.id,
                   },
                 );

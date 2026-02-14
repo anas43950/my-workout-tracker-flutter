@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:workout_tracker/data/models/routine.dart';
-import 'package:workout_tracker/ui/screens/add_routine/rearrange_routine_workouts_screen.dart';
-import 'package:workout_tracker/ui/screens/add_routine/select_workouts_for_routine_screen.dart';
+import 'package:workout_tracker/ui/screens/add_routine/rearrange_routine_exercises_screen.dart';
+import 'package:workout_tracker/ui/screens/add_routine/select_routine_exercises_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/login_screen.dart';
 import 'package:workout_tracker/ui/screens/auth/sign_up_screen.dart';
 import 'package:workout_tracker/ui/screens/main/home_base_screen.dart';
@@ -17,8 +17,8 @@ class Routes {
   static const splash = '/splash';
   static const login = '/login';
   static const signup = '/signup';
-  static const selectWorkoutsForRoutine = '/select-workouts-for-routine';
-  static const rearrangeWorkoutRoutines = '/rearrange-workout-routines';
+  static const selectRoutineExercises = '/select-routine-exercises';
+  static const rearrangeRoutineExercises = '/rearrange-routine-exercises';
   static const viewRoutine = '/view-routine';
   static const recordWorkout = '/record-workout';
 }
@@ -48,24 +48,24 @@ final routerConfig = GoRouter(
       builder: (context, state) => HomeBaseScreen(),
     ),
     GoRoute(
-      path: Routes.selectWorkoutsForRoutine,
-      name: Routes.selectWorkoutsForRoutine,
+      path: Routes.selectRoutineExercises,
+      name: Routes.selectRoutineExercises,
       builder: (context, state) {
         final data = state.extra as Map<String, dynamic>;
-        return SelectWorkoutsForRoutineScreen(
+        return SelectRoutineExercisesScreen(
           name: data['name'],
           routineForEdit: data['routineForEdit'],
         );
       },
     ),
     GoRoute(
-      path: Routes.rearrangeWorkoutRoutines,
-      name: Routes.rearrangeWorkoutRoutines,
+      path: Routes.rearrangeRoutineExercises,
+      name: Routes.rearrangeRoutineExercises,
       builder: (context, state) {
         final data = state.extra as Map<String, dynamic>;
-        return RearrangeRoutineWorkoutsScreen(
+        return RearrangeRoutineExercisesScreen(
           name: data["name"],
-          selectedWorkouts: data["workouts"],
+          selectedExercises: data["exercises"],
           routineForEditId: data["routineForEditId"],
         );
       },

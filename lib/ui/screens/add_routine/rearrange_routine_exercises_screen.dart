@@ -3,36 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:workout_tracker/data/cubits/routines/manage_routine_cubit.dart';
-import 'package:workout_tracker/data/models/workout.dart';
+import 'package:workout_tracker/data/models/exercise.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
-import 'package:workout_tracker/ui/components/item_rearrange_workout.dart';
+import 'package:workout_tracker/ui/components/item_rearrange_exercise.dart';
 import 'package:workout_tracker/ui/components/loader.dart';
 import 'package:workout_tracker/utils/helpers.dart';
 
-class RearrangeRoutineWorkoutsScreen extends StatefulWidget {
+class RearrangeRoutineExercisesScreen extends StatefulWidget {
   final String name;
-  final List<Workout> selectedWorkouts;
+  final List<Exercise> selectedExercises;
   final int? routineForEditId;
 
-  const RearrangeRoutineWorkoutsScreen({
+  const RearrangeRoutineExercisesScreen({
     super.key,
-    required this.selectedWorkouts,
+    required this.selectedExercises,
     required this.name,
     this.routineForEditId,
   });
 
   @override
-  State<RearrangeRoutineWorkoutsScreen> createState() => _RearrangeRoutineWorkoutsScreenState();
+  State<RearrangeRoutineExercisesScreen> createState() => _RearrangeRoutineExercisesScreenState();
 }
 
-class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkoutsScreen> {
-  late final List<Workout> rearrangedWorkouts;
+class _RearrangeRoutineExercisesScreenState extends State<RearrangeRoutineExercisesScreen> {
+  late final List<Exercise> rearrangedExercises;
   late final bool isEditing;
 
   @override
   void initState() {
     super.initState();
-    rearrangedWorkouts = widget.selectedWorkouts;
+    rearrangedExercises = widget.selectedExercises;
     isEditing = widget.routineForEditId != null;
   }
 
@@ -40,7 +40,7 @@ class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkout
   Widget build(BuildContext context) {
     return CustomScaffold(
       showBackBtn: true,
-      title: "Set the order of workouts",
+      title: "Set the order of exercises",
       padding: EdgeInsets.all(20),
       body: BlocConsumer<ManageRoutineCubit, ManageRoutineState>(
         listener: (context, state) {
@@ -66,13 +66,13 @@ class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkout
                       if (oldIndex < newIndex) {
                         newIndex -= 1;
                       }
-                      final item = rearrangedWorkouts.removeAt(oldIndex);
-                      rearrangedWorkouts.insert(newIndex, item);
+                      final item = rearrangedExercises.removeAt(oldIndex);
+                      rearrangedExercises.insert(newIndex, item);
                     });
                   },
-                  itemBuilder: (context, i) => ItemRearrangeWorkout(
+                  itemBuilder: (context, i) => ItemRearrangeExercise(
                     key: Key(i.toString()),
-                    name: rearrangedWorkouts[i].name,
+                    name: rearrangedExercises[i].name,
                     index: i,
                     trailing: ReorderableDragStartListener(
                       key: ValueKey<int>(i),
@@ -80,7 +80,7 @@ class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkout
                       child: Icon(FluentIcons.re_order_dots_vertical_16_regular),
                     ),
                   ),
-                  itemCount: rearrangedWorkouts.length,
+                  itemCount: rearrangedExercises.length,
                 ),
               ),
               ElevatedButton(
@@ -89,13 +89,13 @@ class _RearrangeRoutineWorkoutsScreenState extends State<RearrangeRoutineWorkout
                   if (isEditing) {
                     context.read<ManageRoutineCubit>().updateRoutine(
                       id: widget.routineForEditId!,
-                      workouts: rearrangedWorkouts,
+                      exercises: rearrangedExercises,
                       name: widget.name,
                     );
                   } else {
                     context.read<ManageRoutineCubit>().addRoutine(
                       name: widget.name,
-                      workouts: rearrangedWorkouts,
+                      exercises: rearrangedExercises,
                     );
                   }
                 },

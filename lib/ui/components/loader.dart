@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:workout_tracker/ui/theme/colors.dart';
 
 class CustomLoader extends StatelessWidget {
-  const CustomLoader({super.key});
+  final Color? color;
+
+  const CustomLoader({super.key, this.color});
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoActivityIndicator(color: white);
+    return CupertinoActivityIndicator(color: color ?? white);
   }
 }

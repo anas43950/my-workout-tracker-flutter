@@ -1,18 +1,18 @@
-class WorkoutHistorySet {
+class WorkoutSet {
   final int reps;
   final int weight;
   final int? dropSetReps;
   final int? dropSetWeight;
   final bool hasDropSet;
 
-  WorkoutHistorySet({
+  WorkoutSet({
     required this.reps,
     required this.weight,
     required this.dropSetReps,
     required this.dropSetWeight,
   }) : hasDropSet = dropSetReps != null && dropSetWeight != null;
 
-  factory WorkoutHistorySet.fromJson(Map<String, dynamic> json) => WorkoutHistorySet(
+  factory WorkoutSet.fromJson(Map<String, dynamic> json) => WorkoutSet(
     reps: json['reps'],
     weight: json['weight'],
     dropSetReps: json['drop_set_reps'],

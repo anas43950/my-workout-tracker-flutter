@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/data/models/routine.dart';
-import 'package:workout_tracker/data/repositories/routine_repository.dart';
+import 'package:workout_tracker/data/repositories/routines_repository.dart';
 
 abstract class RoutinesListState {}
 
@@ -24,11 +24,11 @@ class FetchRoutinesFail extends RoutinesListState {
 }
 
 class RoutinesListCubit extends Cubit<RoutinesListState> {
-  late final RoutineRepository _repository;
+  late final RoutinesRepository _repository;
   late final StreamSubscription _subscription;
 
   RoutinesListCubit() : super(FetchRoutinesInit()) {
-    _repository = RoutineRepository();
+    _repository = RoutinesRepository();
     _subscription = _repository.routinesStream.listen((routines) {
       emit(FetchRoutinesSuccess(routines));
     });
