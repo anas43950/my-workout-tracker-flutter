@@ -6,17 +6,32 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool? allowDigitsOnly;
   final String? Function(String? value)? validator;
+  final List<TextInputFormatter>? formatters;
+  final int? maxLines;
 
-  const CustomTextField({super.key, this.hintText, this.controller, this.allowDigitsOnly, this.validator});
+  CustomTextField({
+    super.key,
+    this.hintText,
+    this.controller,
+    this.allowDigitsOnly,
+    this.validator,
+    this.formatters,
+    this.maxLines,
+  }) {
+    if (allowDigitsOnly == true && formatters != null) {
+      throw ArgumentError("Cannot set both allowDigitsOnly and formatters");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLines,
       validator: validator,
       controller: controller,
       decoration: InputDecoration(hintText: hintText),
       keyboardType: allowDigitsOnly == true ? TextInputType.number : null,
-      inputFormatters: allowDigitsOnly == true ? [FilteringTextInputFormatter.digitsOnly] : null,
+      inputFormatters: allowDigitsOnly == true ? [FilteringTextInputFormatter.digitsOnly] : formatters,
     );
   }
 }

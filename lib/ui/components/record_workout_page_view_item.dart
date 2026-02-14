@@ -1,12 +1,18 @@
+import 'package:collection/collection.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart' hide black, white;
+import 'package:workout_tracker/data/cubits/workout_history/record_workout_cubit.dart';
 import 'package:workout_tracker/data/models/exercise.dart';
 import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/data/models/workout_set.dart';
+import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
+import 'package:workout_tracker/utils/validators.dart';
 
-class RecordWorkoutPageViewItem extends StatelessWidget {
+class RecordWorkoutPageViewItem extends StatefulWidget {
   final int index;
   final Exercise exercise;
   final WorkoutChild? lastWorkoutChild;
@@ -24,162 +30,231 @@ class RecordWorkoutPageViewItem extends StatelessWidget {
   });
 
   @override
+  State<RecordWorkoutPageViewItem> createState() => _RecordWorkoutPageViewItemState();
+}
+
+class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
+  final weightTextController = TextEditingController();
+  final repsTextController = TextEditingController();
+  final dWeightTextController = TextEditingController();
+  final dRepsTextController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  String? dWeightValidator(String? value) {
+    if (dRepsTextController.text.trim().isNotEmpty && value?.trim().isEmpty == true) {
+      return "Required";
+    }
+    return null;
+  }
+
+  String? dRepsValidator(String? value) {
+    if (dWeightTextController.text.trim().isNotEmpty && value?.trim().isEmpty == true) {
+      return "Required";
+    }
+    return null;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "${index + 1} - ${exercise.name}",
-                style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
-              ),
-              Text(
-                exercise.setsData,
-                style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-          Divider(height: 35),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 5,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Last log",
-                            style: AppTextStyles.label,
-                          ),
-                          if (lastWorkoutDate != null)
-                            Text(
-                              lastWorkoutDate!,
-                              style: AppTextStyles.bodySmall.copyWith(decoration: TextDecoration.underline),
-                            ),
-                        ],
-                      ),
-                      3.height,
-                      if (lastWorkoutChild != null)
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              lastWorkoutDate == null ? "No history found" : "Not Found",
-                              style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        )
-                      else
-                        ...List.generate(
-                          4,
-                          (i) => SizedBox(),
-                        ),
-                    ],
-                  ),
-                ),
-                VerticalDivider(),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 5,
+    return BlocBuilder<RecordWorkoutCubit, RecordWorkoutState>(
+      builder: (context, state) {
+        if (state is RecordWorkoutInProgress) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Today's progress",
-                        style: AppTextStyles.label,
+                        "${widget.index + 1} - ${widget.exercise.name}",
+                        style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
                       ),
-                      5.height,
-                      ...List.generate(
-                        4,
-                        (i) => SizedBox(),
+                      Text(
+                        widget.exercise.setsData,
+                        style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 40),
-          Row(
-            spacing: 15,
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      "Main working set",
-                      style: AppTextStyles.label,
-                      textAlign: TextAlign.center,
-                    ),
-                    10.height,
-                    Row(
-                      spacing: 15,
+                  Divider(height: 35),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(hintText: "Weight"),
-                            // validator: (email) => Validators.emailValidator(email),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 5,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Last log",
+                                    style: AppTextStyles.label,
+                                  ),
+                                  if (widget.lastWorkoutDate != null)
+                                    Text(
+                                      widget.lastWorkoutDate!,
+                                      style: AppTextStyles.bodySmall.copyWith(decoration: TextDecoration.underline),
+                                    ),
+                                ],
+                              ),
+                              3.height,
+                              if (widget.lastWorkoutChild != null)
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      widget.lastWorkoutDate == null ? "No history found" : "Not Found",
+                                      style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
+                                    ),
+                                  ),
+                                )
+                              else
+                                ...List.generate(
+                                  4,
+                                  (i) => SizedBox(),
+                                ),
+                            ],
                           ),
                         ),
+                        VerticalDivider(),
                         Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(hintText: "Reps"),
-                            // validator: (email) => Validators.emailValidator(email),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 5,
+                            children: [
+                              Text(
+                                "Today's progress",
+                                style: AppTextStyles.label,
+                              ),
+                              5.height,
+                              ...state.currentExerciseSetsCompleted.mapIndexed(
+                                (i, e) => _ItemWorkoutSet(
+                                  index: i,
+                                  showRemoveButton: i == state.currentExerciseSetsCompleted.length - 1,
+                                  set: e,
+                                  onRemoveTap: () => context.read<RecordWorkoutCubit>().removeLastSet(),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    30.height,
-                    Text(
-                      "Drop set (Optional)",
-                      style: AppTextStyles.label,
-                      textAlign: TextAlign.center,
-                    ),
-                    10.height,
-                    Row(
-                      spacing: 15,
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(hintText: "Weight"),
-                            // validator: (email) => Validators.emailValidator(email),
+                  ),
+                  Divider(height: 40),
+                  Row(
+                    spacing: 15,
+                    children: [
+                      Expanded(
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              Text(
+                                "Main working set",
+                                style: AppTextStyles.label,
+                                textAlign: TextAlign.center,
+                              ),
+                              10.height,
+                              Row(
+                                spacing: 15,
+                                children: [
+                                  Expanded(
+                                    child: CustomTextField(
+                                      hintText: "Weight (Kgs)",
+                                      controller: weightTextController,
+                                      validator: (value) => Validators.emptyValidator(value, "Required"),
+                                      formatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,3}'))],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: CustomTextField(
+                                      hintText: "Reps",
+                                      controller: repsTextController,
+                                      validator: (value) => Validators.emptyValidator(value, "Required"),
+                                      allowDigitsOnly: true,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              30.height,
+                              Text(
+                                "Drop set (Optional)",
+                                style: AppTextStyles.label,
+                                textAlign: TextAlign.center,
+                              ),
+                              10.height,
+                              Row(
+                                spacing: 15,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: CustomTextField(
+                                      hintText: "Weight (Kgs)",
+                                      validator: dWeightValidator,
+                                      controller: dWeightTextController,
+                                      formatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,3}'))],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: CustomTextField(
+                                      hintText: "Reps",
+                                      validator: dRepsValidator,
+                                      controller: dRepsTextController,
+                                      allowDigitsOnly: true,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(hintText: "Reps"),
-                            // validator: (email) => Validators.emailValidator(email),
-                          ),
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  15.height,
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: onEnterTap,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                      ),
+                      child: Text("Enter"),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          15.height,
-          Align(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
-              ),
-              child: Text("Enter"),
             ),
-          ),
-        ],
-      ),
+          );
+        }
+        return SizedBox();
+      },
     );
+  }
+
+  void onEnterTap() {
+    if (formKey.currentState!.validate()) {
+      final weight = double.parse(weightTextController.text);
+      final reps = int.parse(repsTextController.text);
+
+      final dWeight = double.tryParse(dWeightTextController.text);
+      final dReps = int.tryParse(dRepsTextController.text);
+
+      final set = WorkoutSet(
+        reps: reps,
+        weight: weight,
+        dropSetReps: dReps,
+        dropSetWeight: dWeight,
+      );
+
+      context.read<RecordWorkoutCubit>().addSet(set);
+    }
   }
 }
 
@@ -189,12 +264,13 @@ class _ItemWorkoutSet extends StatelessWidget {
   final WorkoutSet set;
   final VoidCallback? onRemoveTap;
 
-  const _ItemWorkoutSet(
-    this.index,
-    this.showRemoveButton,
-    this.set,
+  const _ItemWorkoutSet({
+    super.key,
+    required this.index,
+    required this.showRemoveButton,
+    required this.set,
     this.onRemoveTap,
-  );
+  });
 
   @override
   Widget build(BuildContext context) {

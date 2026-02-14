@@ -1,8 +1,10 @@
+import 'package:workout_tracker/utils/extensions.dart';
+
 class WorkoutSet {
   final int reps;
-  final int weight;
+  final double weight;
   final int? dropSetReps;
-  final int? dropSetWeight;
+  final double? dropSetWeight;
   final bool hasDropSet;
 
   WorkoutSet({
@@ -26,7 +28,7 @@ class WorkoutSet {
     "drop_set_weight": dropSetWeight,
   };
 
-  String get repsData => "$reps x $weight";
+  String get repsData => "$reps x ${weight.formatToString}";
 
-  String get dropSetRepsData => "$dropSetReps x $dropSetWeight";
+  String get dropSetRepsData => "$dropSetReps x ${dropSetWeight?.formatToString}";
 }

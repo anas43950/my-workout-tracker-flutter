@@ -6,6 +6,7 @@ import 'package:workout_tracker/data/cubits/exercises/exercises_list_cubit.dart'
 import 'package:workout_tracker/data/cubits/exercises/manage_exercise_cubit.dart';
 import 'package:workout_tracker/data/cubits/routines/manage_routine_cubit.dart';
 import 'package:workout_tracker/data/cubits/routines/routines_list_cubit.dart';
+import 'package:workout_tracker/data/cubits/workout_history/record_workout_cubit.dart';
 
 class RegisterCubits {
   List<BlocProvider> get providers => [
@@ -16,5 +17,6 @@ class RegisterCubits {
     BlocProvider<ExercisesListCubit>(create: (context) => ExercisesListCubit()),
     BlocProvider<ManageRoutineCubit>(create: (context) => ManageRoutineCubit()),
     BlocProvider<RoutinesListCubit>(create: (context) => RoutinesListCubit()),
+    BlocProvider<RecordWorkoutCubit>(create: (context) => RecordWorkoutCubit()),
   ];
 }
