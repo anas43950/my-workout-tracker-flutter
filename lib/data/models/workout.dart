@@ -22,6 +22,6 @@ class Workout {
 
   Map<String, dynamic> toJson() => {
     'note': note,
-    'logs': logs.map((e) => e.toJson()),
+    'logs': logs.map((e) => e.toJson()).toList(),
   };
 }

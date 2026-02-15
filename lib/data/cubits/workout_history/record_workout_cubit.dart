@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:workout_tracker/data/models/workout.dart';
 import 'package:workout_tracker/data/models/workout_child.dart';
@@ -10,26 +9,22 @@ class RecordWorkoutInit extends RecordWorkoutState {}
 
 class RecordWorkoutInProgress extends RecordWorkoutState {
   int currentExerciseId;
-  List<WorkoutChild> logsRecordedSoFar;
-  List<WorkoutSet> currentExerciseSetsCompleted;
+  Map<int, List<WorkoutSet>> setsData;
   RecordWorkoutEvent event;
 
   RecordWorkoutInProgress({
     required this.currentExerciseId,
-    required this.logsRecordedSoFar,
-    required this.currentExerciseSetsCompleted,
+    required this.setsData,
     required this.event,
   });
 
   RecordWorkoutInProgress copyWith({
     int? currentExerciseId,
-    List<WorkoutChild>? logsRecordedSoFar,
-    List<WorkoutSet>? currentExerciseSetsCompleted,
+    Map<int, List<WorkoutSet>>? setsData,
     RecordWorkoutEvent? event,
   }) => RecordWorkoutInProgress(
     currentExerciseId: currentExerciseId ?? this.currentExerciseId,
-    logsRecordedSoFar: logsRecordedSoFar ?? this.logsRecordedSoFar,
-    currentExerciseSetsCompleted: currentExerciseSetsCompleted ?? this.currentExerciseSetsCompleted,
+    setsData: setsData ?? this.setsData,
     event: event ?? this.event,
   );
 }
@@ -42,27 +37,21 @@ class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
       emit(
         RecordWorkoutInProgress(
           currentExerciseId: exerciseId,
-          logsRecordedSoFar: [],
-          currentExerciseSetsCompleted: [],
+          setsData: {exerciseId: []},
           event: RecordWorkoutEvent.reset,
         ),
       );
     }
     if (state is RecordWorkoutInProgress) {
       final data = state as RecordWorkoutInProgress;
-      final newLog = WorkoutChild(
-        exerciseId: data.currentExerciseId,
-        sets: data.currentExerciseSetsCompleted,
-        exerciseName: "",
-      );
-
-      final logsRecordedSoFar = data.logsRecordedSoFar;
-      logsRecordedSoFar.add(newLog);
+      if (!data.setsData.containsKey(exerciseId)) {
+        data.setsData[exerciseId] = [];
+      }
       emit(
         data.copyWith(
-          currentExerciseSetsCompleted:
-              data.logsRecordedSoFar.firstWhereOrNull((e) => e.exerciseId == exerciseId)?.sets ?? [],
-          logsRecordedSoFar: logsRecordedSoFar,
+          currentExerciseId: exerciseId,
+          setsData: data.setsData,
+          event: RecordWorkoutEvent.reset,
         ),
       );
     }
@@ -70,37 +59,39 @@ class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
 
   void addSet(WorkoutSet set) {
     if (state is RecordWorkoutInProgress) {
-      final newSets = (state as RecordWorkoutInProgress).currentExerciseSetsCompleted;
-      newSets.add(set);
-      emit(
-        (state as RecordWorkoutInProgress).copyWith(
-          currentExerciseSetsCompleted: newSets,
-          event: RecordWorkoutEvent.addSet,
-        ),
-      );
+      final data = (state as RecordWorkoutInProgress);
+      final setsData = data.setsData;
+
+      setsData[data.currentExerciseId]!.add(set);
+      emit(data.copyWith(setsData: setsData, event: RecordWorkoutEvent.addSet));
     }
   }
 
   void removeLastSet() {
     if (state is RecordWorkoutInProgress) {
-      final newSets = (state as RecordWorkoutInProgress).currentExerciseSetsCompleted;
-      if (newSets.isNotEmpty) {
-        newSets.removeLast();
-      }
-      emit(
-        (state as RecordWorkoutInProgress).copyWith(
-          currentExerciseSetsCompleted: newSets,
-          event: RecordWorkoutEvent.removeLastSet,
-        ),
-      );
+      final data = (state as RecordWorkoutInProgress);
+      final setsData = data.setsData;
+
+      setsData[data.currentExerciseId]?.removeLast();
+      emit(data.copyWith(setsData: setsData, event: RecordWorkoutEvent.removeLastSet));
     }
   }
 
-  Workout completeWorkout(String note) {
+  Workout completeWorkout(String? note) {
     final data = state as RecordWorkoutInProgress;
+    List<WorkoutChild> logs = [];
+    for (final set in data.setsData.entries) {
+      logs.add(
+        WorkoutChild(
+          exerciseId: set.key,
+          sets: set.value,
+          exerciseName: '',
+        ),
+      );
+    }
     return Workout(
       id: -1,
-      logs: data.logsRecordedSoFar,
+      logs: logs,
       note: note,
       createdAt: DateTime.now(),
     );

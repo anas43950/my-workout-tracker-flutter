@@ -10,6 +10,7 @@ import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/data/models/workout_set.dart';
 import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
+import 'package:workout_tracker/utils/logger.dart';
 import 'package:workout_tracker/utils/validators.dart';
 
 class RecordWorkoutPageViewItem extends StatefulWidget {
@@ -55,10 +56,19 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecordWorkoutCubit, RecordWorkoutState>(
+      buildWhen: (context, state) {
+        return state is RecordWorkoutInProgress && state.currentExerciseId == widget.exercise.id;
+      },
       builder: (context, state) {
         if (state is RecordWorkoutInProgress) {
+          logger.d("rebuilding ${widget.exercise.id}");
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -131,14 +141,15 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 style: AppTextStyles.label,
                               ),
                               5.height,
-                              ...state.currentExerciseSetsCompleted.mapIndexed(
-                                (i, e) => _ItemWorkoutSet(
-                                  index: i,
-                                  showRemoveButton: i == state.currentExerciseSetsCompleted.length - 1,
-                                  set: e,
-                                  onRemoveTap: () => context.read<RecordWorkoutCubit>().removeLastSet(),
-                                ),
-                              ),
+                              ...state.setsData[widget.exercise.id]!.mapIndexed(
+                                    (i, e) => _ItemWorkoutSet(
+                                      index: i,
+                                      showRemoveButton: i == state.setsData[widget.exercise.id]!.length - 1,
+                                      set: e,
+                                      onRemoveTap: () => context.read<RecordWorkoutCubit>().removeLastSet(),
+                                    ),
+                                  ) ??
+                                  [SizedBox()],
                             ],
                           ),
                         ),

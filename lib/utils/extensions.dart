@@ -21,3 +21,7 @@ extension CustomContextExtensions on BuildContext {
 extension DoubleExtensions on double {
   String get formatToString => this % 1 == 0 ? toInt().toString() : toString();
 }
+
+extension StringExtension on String {
+  String? get textOrNull => trim().isEmpty ? null : trim();
+}

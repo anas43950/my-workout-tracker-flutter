@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday','Sunday'];
 
-String get todayWeekDay => weekdays[DateTime.now().weekday];
+String get todayWeekDay => weekdays[DateTime.now().weekday - 1];
 
 class Constants {
   Constants._();

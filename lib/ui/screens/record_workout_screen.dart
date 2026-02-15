@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -11,6 +12,7 @@ import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/components/record_workout_page_view_item.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/extensions.dart';
+import 'package:workout_tracker/utils/logger.dart';
 
 class RecordWorkoutScreen extends StatefulWidget {
   final Routine routine;
@@ -24,7 +26,7 @@ class RecordWorkoutScreen extends StatefulWidget {
 class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   final pageController = PageController();
   late Routine routine;
-  late Workout? lastHistory;
+  Workout? lastHistory;
   List<WorkoutChild> logs = [];
   int currentExerciseIndex = 0;
 
@@ -68,12 +70,10 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
               itemBuilder: (_, i) => RecordWorkoutPageViewItem(
                 exercise: routine.exercises[i],
                 index: i,
+                lastWorkoutChild: lastHistory?.logs.firstWhereOrNull((e) => e.exerciseId == routine.exercises[i].id),
+                lastWorkoutDate: lastHistory?.createdAt.toIso8601String(),
               ),
               itemCount: routine.exercises.length,
-              onPageChanged: (index) {
-                context.read<RecordWorkoutCubit>().changeExercise(routine.exercises[index].id);
-                setState(() => currentExerciseIndex = index);
-              },
             ),
           ),
           Padding(
@@ -121,27 +121,37 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   }
 
   void changePage({required bool toNext}) {
+    late final int index;
+    if (toNext) {
+      index = pageController.page!.round() + 1;
+    } else {
+      index = pageController.page!.round() - 1;
+    }
+
+    context.read<RecordWorkoutCubit>().changeExercise(routine.exercises[index].id);
+    setState(() => currentExerciseIndex = index);
+
     final duration = const Duration(milliseconds: 400);
     final curve = Curves.linearToEaseOut;
-
-    if (toNext) {
-      pageController.nextPage(
-        duration: duration,
-        curve: curve,
-      );
-    } else {
-      pageController.previousPage(
-        duration: duration,
-        curve: curve,
-      );
-    }
+    pageController.animateToPage(
+      index,
+      curve: curve,
+      duration: duration,
+    );
   }
 }
 
-class DialogAddWorkoutNote extends StatelessWidget {
+class DialogAddWorkoutNote extends StatefulWidget {
   const DialogAddWorkoutNote({
     super.key,
   });
+
+  @override
+  State<DialogAddWorkoutNote> createState() => _DialogAddWorkoutNoteState();
+}
+
+class _DialogAddWorkoutNoteState extends State<DialogAddWorkoutNote> {
+  final textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -155,10 +165,12 @@ class DialogAddWorkoutNote extends StatelessWidget {
             CustomTextField(
               hintText: "Enter a note (optional)",
               maxLines: 3,
+              controller: textController,
             ),
             ElevatedButton(
               onPressed: () {
-
+                final workout = context.read<RecordWorkoutCubit>().completeWorkout(textController.text.textOrNull);
+                logger.d(workout.toJson());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,

@@ -19,6 +19,6 @@ class WorkoutChild {
 
   Map<String, dynamic> toJson() => {
     'exercises': exerciseId,
-    'sets': sets.map((e) => e.toJson()),
+    'sets': sets.map((e) => e.toJson()).toList(),
   };
 }
