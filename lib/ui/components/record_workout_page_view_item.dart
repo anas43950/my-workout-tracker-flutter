@@ -10,24 +10,18 @@ import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/data/models/workout_set.dart';
 import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
-import 'package:workout_tracker/utils/logger.dart';
 import 'package:workout_tracker/utils/validators.dart';
 
 class RecordWorkoutPageViewItem extends StatefulWidget {
   final int index;
   final Exercise exercise;
-  final WorkoutChild? lastWorkoutChild;
-  final String? lastWorkoutDate;
-
-  // If workout date is null, it means there is no past workout for the selected routine's day
-  // If last workout date is not null, and only last workout child is null, it means there is a past workout, but no child for the current exercise
+  final WorkoutChild? lastWorkoutChild; // Last workout history for this exercise
 
   const RecordWorkoutPageViewItem({
     super.key,
     required this.exercise,
     required this.index,
     this.lastWorkoutChild,
-    this.lastWorkoutDate,
   });
 
   @override
@@ -68,64 +62,64 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
       },
       builder: (context, state) {
         if (state is RecordWorkoutInProgress) {
-          logger.d("rebuilding ${widget.exercise.id}");
+          final setsProgress = state.setsData[widget.exercise.id] ?? [];
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "${widget.index + 1} - ${widget.exercise.name}",
-                        style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
-                      ),
-                      Text(
-                        widget.exercise.setsData,
-                        style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
-                      ),
-                    ],
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.blue.shade100,
+                    ),
+                    padding: EdgeInsets.all(15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      spacing: 15,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "${widget.index + 1} - ${widget.exercise.name}",
+                            style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                        Text(
+                          widget.exercise.setsData,
+                          style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),
                   ),
-                  Divider(height: 35),
+                  15.height,
                   IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
                             spacing: 5,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Last log",
-                                    style: AppTextStyles.label,
-                                  ),
-                                  if (widget.lastWorkoutDate != null)
-                                    Text(
-                                      widget.lastWorkoutDate!,
-                                      style: AppTextStyles.bodySmall.copyWith(decoration: TextDecoration.underline),
-                                    ),
-                                ],
+                              Text(
+                                "Last log",
+                                style: AppTextStyles.label,
                               ),
                               3.height,
-                              if (widget.lastWorkoutChild != null)
+                              if (widget.lastWorkoutChild == null)
                                 Expanded(
                                   child: Center(
                                     child: Text(
-                                      widget.lastWorkoutDate == null ? "No history found" : "Not Found",
+                                      "Not Found",
                                       style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
                                     ),
                                   ),
                                 )
                               else
-                                ...List.generate(
-                                  4,
-                                  (i) => SizedBox(),
+                                ...widget.lastWorkoutChild!.sets.mapIndexed(
+                                  (i, e) => _ItemWorkoutSet(
+                                    index: i,
+                                    set: e,
+                                  ),
                                 ),
                             ],
                           ),
@@ -133,7 +127,6 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                         VerticalDivider(),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             spacing: 5,
                             children: [
                               Text(
@@ -141,15 +134,24 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 style: AppTextStyles.label,
                               ),
                               5.height,
-                              ...state.setsData[widget.exercise.id]!.mapIndexed(
-                                    (i, e) => _ItemWorkoutSet(
-                                      index: i,
-                                      showRemoveButton: i == state.setsData[widget.exercise.id]!.length - 1,
-                                      set: e,
-                                      onRemoveTap: () => context.read<RecordWorkoutCubit>().removeLastSet(),
+                              if (setsProgress.isEmpty)
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      "No progress yet",
+                                      style: AppTextStyles.bodySmall.copyWith(fontStyle: FontStyle.italic),
                                     ),
-                                  ) ??
-                                  [SizedBox()],
+                                  ),
+                                )
+                              else
+                                ...setsProgress.mapIndexed(
+                                  (i, e) => _ItemWorkoutSet(
+                                    index: i,
+                                    showRemoveButton: i == setsProgress.length - 1,
+                                    set: e,
+                                    onRemoveTap: () => context.read<RecordWorkoutCubit>().removeLastSet(),
+                                  ),
+                                ),
                             ],
                           ),
                         ),
@@ -271,14 +273,14 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
 
 class _ItemWorkoutSet extends StatelessWidget {
   final int index;
-  final bool showRemoveButton;
+  final bool? showRemoveButton;
   final WorkoutSet set;
   final VoidCallback? onRemoveTap;
 
   const _ItemWorkoutSet({
     super.key,
     required this.index,
-    required this.showRemoveButton,
+    this.showRemoveButton,
     required this.set,
     this.onRemoveTap,
   });
@@ -306,7 +308,7 @@ class _ItemWorkoutSet extends StatelessWidget {
               ],
             ),
           ),
-          if (showRemoveButton) ...[
+          if (showRemoveButton == true) ...[
             5.width,
             GestureDetector(
               onTap: onRemoveTap,

@@ -53,7 +53,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
             ),
             Text(
               routine.name,
-              style: AppTextStyles.bodyMedium.copyWith(fontSize: 16),
+              style: AppTextStyles.label,
             ),
           ],
         ),
@@ -62,7 +62,23 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          25.height,
+          5.height,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 10,
+            children: [
+              Text("Fetched History :"),
+              Text(
+                "Sun, 8 Feb",
+                style: AppTextStyles.bodyMedium,
+              ),
+              Text(
+                "Change",
+                style: TextStyle(color: Colors.blue),
+              ),
+            ],
+          ),
+          Divider(height: 35),
           Expanded(
             child: PageView.builder(
               physics: NeverScrollableScrollPhysics(),
@@ -71,7 +87,6 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                 exercise: routine.exercises[i],
                 index: i,
                 lastWorkoutChild: lastHistory?.logs.firstWhereOrNull((e) => e.exerciseId == routine.exercises[i].id),
-                lastWorkoutDate: lastHistory?.createdAt.toIso8601String(),
               ),
               itemCount: routine.exercises.length,
             ),
