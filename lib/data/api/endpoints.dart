@@ -16,4 +16,9 @@ class ApiEndpoints {
   static final addRoutine = 'routines/add';
   static final updateRoutine = 'routines/edit';
   static final deleteRoutine = 'routines/delete';
+
+  static final getWorkouts = 'workouts/';
+  static final addWorkout = 'workouts/add';
+  static final getWorkoutsForRoutine = 'workouts/for-routine';
+  static final getWorkoutsForDate = 'workouts/for-date';
 }

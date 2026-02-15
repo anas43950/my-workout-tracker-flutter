@@ -4,13 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/auth/authentication_cubit.dart';
-import 'package:workout_tracker/data/cubits/routines/routines_list_cubit.dart';
 import 'package:workout_tracker/data/cubits/exercises/exercises_list_cubit.dart';
+import 'package:workout_tracker/data/cubits/routines/routines_list_cubit.dart';
+import 'package:workout_tracker/data/cubits/workouts/workouts_list_cubit.dart';
 import 'package:workout_tracker/router.dart';
+import 'package:workout_tracker/ui/screens/main/exercises_screen.dart';
 import 'package:workout_tracker/ui/screens/main/routines_screen.dart';
 import 'package:workout_tracker/ui/screens/main/workouts_history_screen.dart';
-import 'package:workout_tracker/ui/screens/main/exercises_screen.dart';
 import 'package:workout_tracker/utils/extensions.dart';
+import 'package:workout_tracker/utils/logger.dart';
 
 class HomeBaseScreen extends StatefulWidget {
   const HomeBaseScreen({super.key});
@@ -25,12 +27,14 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
   @override
   void initState() {
     super.initState();
+    logger.d("here");
     loadData();
   }
 
   void loadData() {
     context.read<ExercisesListCubit>().fetchExercises();
     context.read<RoutinesListCubit>().fetchRoutines();
+    context.read<WorkoutsListCubit>().fetchWorkouts();
   }
 
   @override

@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 
 extension CustomContextExtensions on BuildContext {
   void clearStackAndNavigate(String location) {
-    while (GoRouter.of(this).canPop()) {
-      GoRouter.of(this).pop();
+    while (canPop()) {
+      pop();
     }
     pushReplacement(location);
   }
@@ -15,6 +15,15 @@ extension CustomContextExtensions on BuildContext {
       builder: (context) => dialog,
     );
     return result;
+  }
+
+  void popUntil(String routePath, {dynamic result}) {
+    while (GoRouter.of(this).routerDelegate.currentConfiguration.matches.last.matchedLocation != routePath) {
+      if (!canPop()) {
+        return;
+      }
+      pop(result);
+    }
   }
 }
 

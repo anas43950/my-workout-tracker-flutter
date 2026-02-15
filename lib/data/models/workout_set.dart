@@ -16,16 +16,16 @@ class WorkoutSet {
 
   factory WorkoutSet.fromJson(Map<String, dynamic> json) => WorkoutSet(
     reps: json['reps'],
-    weight: json['weight'],
+    weight: json['weight'].toDouble(),
     dropSetReps: json['drop_set_reps'],
-    dropSetWeight: json['drop_set_weight'],
+    dropSetWeight: json['drop_set_weight']?.toDouble(),
   );
 
   Map<String, dynamic> toJson() => {
     "reps": reps,
     "weight": weight,
-    "drop_set_reps": dropSetReps,
-    "drop_set_weight": dropSetWeight,
+    if (dropSetReps != null) "drop_set_reps": dropSetReps,
+    if (dropSetReps != null) "drop_set_weight": dropSetWeight,
   };
 
   String get repsData => "$reps x ${weight.formatToString}";

@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:workout_tracker/data/models/workout.dart';
+import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 
 class ItemWorkout extends StatelessWidget {
-  const ItemWorkout({super.key});
+  final Workout workout;
+
+  const ItemWorkout({super.key, required this.workout});
 
   @override
   Widget build(BuildContext context) {
-    final exercises = [
-      "Flat Bench Press",
-      "Inclined Dumbbell Press",
-      "Declined Dumbbell Press",
-      "Pec Deck Fly",
-      "Low to High Cable Crossover",
-      "High to Low Cable Crossover",
-    ];
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,
@@ -26,11 +23,11 @@ class ItemWorkout extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Wed, 21 Jan 2026  -  Chest + Triceps",
+                  DateFormat("dd MMM, yyyy").format(workout.createdAt),
                   style: AppTextStyles.bodySmall,
                 ),
                 Text(
-                  "W - R",
+                  "R - W",
                   style: AppTextStyles.bodySmall,
                 ),
               ],
@@ -46,9 +43,9 @@ class ItemWorkout extends StatelessWidget {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-                itemBuilder: (_, i) => _WorkoutChild(exerciseName: exercises[i], index: i),
+                itemBuilder: (_, i) => _WorkoutChild(workoutChild: workout.logs[i], index: i),
                 separatorBuilder: (_, i) => Divider(height: 0),
-                itemCount: exercises.length,
+                itemCount: workout.logs.length,
               ),
             ],
           ),
@@ -59,10 +56,10 @@ class ItemWorkout extends StatelessWidget {
 }
 
 class _WorkoutChild extends StatefulWidget {
-  final String exerciseName;
+  final WorkoutChild workoutChild;
   final int index;
 
-  const _WorkoutChild({required this.exerciseName, required this.index});
+  const _WorkoutChild({required this.workoutChild, required this.index});
 
   @override
   State<_WorkoutChild> createState() => _WorkoutChildState();
@@ -89,7 +86,7 @@ class _WorkoutChildState extends State<_WorkoutChild> {
             10.width,
             Expanded(
               child: Text(
-                widget.exerciseName,
+                widget.workoutChild.exerciseName,
               ),
             ),
             AnimatedAlign(
@@ -97,18 +94,20 @@ class _WorkoutChildState extends State<_WorkoutChild> {
               alignment: Alignment.centerRight,
               heightFactor: expanded ? 1 : 0,
               child: Column(
-                children: List.generate(
-                  3,
-                  (i) => AnimatedDefaultTextStyle(
-                    style: TextStyle(
-                      color: expanded ? Colors.black : Colors.transparent,
-                      fontSize: expanded ? 14 : 8,
-                      height: 1.5,
-                    ),
-                    duration: duration,
-                    child: Text("76 - 8"),
-                  ),
-                ),
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: widget.workoutChild.sets
+                    .map(
+                      (e) => AnimatedDefaultTextStyle(
+                        style: TextStyle(
+                          color: expanded ? Colors.black : Colors.transparent,
+                          fontSize: expanded ? 14 : 8,
+                          height: 1.5,
+                        ),
+                        duration: duration,
+                        child: Text(e.repsData),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ],

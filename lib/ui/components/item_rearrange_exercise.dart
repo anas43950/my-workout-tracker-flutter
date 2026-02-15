@@ -32,7 +32,7 @@ class ItemRearrangeExercise extends StatelessWidget {
           Expanded(
             child: Text(name),
           ),
-          trailing
+          trailing,
         ],
       ),
     );

@@ -50,6 +50,7 @@ class DeleteExerciseFail extends ManageExerciseState {
 
 class ManageExerciseCubit extends Cubit<ManageExerciseState> {
   final ExercisesRepository _repository = ExercisesRepository();
+
   ManageExerciseCubit() : super(ManageExercisesInit());
 
   Future<void> addExercise({

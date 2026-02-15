@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart' hide black, white;
-import 'package:workout_tracker/data/cubits/workout_history/record_workout_cubit.dart';
+import 'package:workout_tracker/data/cubits/workouts/record_workout_cubit.dart';
 import 'package:workout_tracker/data/models/exercise.dart';
 import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/data/models/workout_set.dart';
 import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
+import 'package:workout_tracker/utils/logger.dart';
 import 'package:workout_tracker/utils/validators.dart';
 
 class RecordWorkoutPageViewItem extends StatefulWidget {
@@ -34,24 +35,52 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
   final dWeightTextController = TextEditingController();
   final dRepsTextController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final weightRegex = RegExp(r'^\d+\.?\d{0,3}');
+  final repsRegex = RegExp(r'^[0-9]*$');
+
+  String? repsValidator(String? value) {
+    if (value?.trim().isEmpty == true) {
+      return "Required";
+    }
+    if (!repsRegex.hasMatch(value!)) {
+      return "Invalid reps";
+    }
+
+    return null;
+  }
+
+  String? weightValidator(String? value) {
+    if (value?.trim().isEmpty == true) {
+      return "Required";
+    }
+    if (!weightRegex.hasMatch(value!)) {
+      return "Invalid weight";
+    }
+    return null;
+  }
 
   String? dWeightValidator(String? value) {
-    if (dRepsTextController.text.trim().isNotEmpty && value?.trim().isEmpty == true) {
-      return "Required";
+    if (dRepsTextController.text.trim().isNotEmpty) {
+      if (value?.trim().isEmpty == true) {
+        return "Required";
+      }
+      if (!weightRegex.hasMatch(value!)) {
+        return "Invalid weight";
+      }
     }
     return null;
   }
 
   String? dRepsValidator(String? value) {
-    if (dWeightTextController.text.trim().isNotEmpty && value?.trim().isEmpty == true) {
-      return "Required";
+    if (dWeightTextController.text.trim().isNotEmpty) {
+      if (value?.trim().isEmpty == true) {
+        return "Required";
+      }
+      if (!repsRegex.hasMatch(value!)) {
+        return "Invalid reps";
+      }
     }
     return null;
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -178,17 +207,17 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 children: [
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Weight (Kgs)",
-                                      controller: weightTextController,
-                                      validator: (value) => Validators.emptyValidator(value, "Required"),
-                                      formatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,3}'))],
+                                      hintText: "Reps",
+                                      controller: repsTextController,
+                                      validator: repsValidator,
+                                      allowDigitsOnly: true,
                                     ),
                                   ),
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Reps",
-                                      controller: repsTextController,
-                                      validator: (value) => Validators.emptyValidator(value, "Required"),
+                                      hintText: "Weight (Kgs)",
+                                      controller: weightTextController,
+                                      validator: weightValidator,
                                       allowDigitsOnly: true,
                                     ),
                                   ),
@@ -207,17 +236,18 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 children: [
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Weight (Kgs)",
-                                      validator: dWeightValidator,
-                                      controller: dWeightTextController,
-                                      formatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,3}'))],
+                                      hintText: "Reps",
+                                      validator: dRepsValidator,
+                                      controller: dRepsTextController,
+                                      allowDigitsOnly: true,
                                     ),
                                   ),
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Reps",
-                                      validator: dRepsValidator,
-                                      controller: dRepsTextController,
+                                      hintText: "Weight (Kgs)",
+                                      validator: dWeightValidator,
+                                      controller: dWeightTextController,
+                                      changeToDoneKey: true,
                                       allowDigitsOnly: true,
                                     ),
                                   ),
@@ -267,6 +297,9 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
       );
 
       context.read<RecordWorkoutCubit>().addSet(set);
+
+      weightTextController.clear();
+      repsTextController.clear();
     }
   }
 }

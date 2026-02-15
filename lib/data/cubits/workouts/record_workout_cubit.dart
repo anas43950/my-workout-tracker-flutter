@@ -7,12 +7,20 @@ abstract class RecordWorkoutState {}
 
 class RecordWorkoutInit extends RecordWorkoutState {}
 
+class RecordWorkoutCompleted extends RecordWorkoutState {
+  Workout workout;
+
+  RecordWorkoutCompleted(this.workout);
+}
+
 class RecordWorkoutInProgress extends RecordWorkoutState {
+  int routineId;
   int currentExerciseId;
   Map<int, List<WorkoutSet>> setsData;
   RecordWorkoutEvent event;
 
   RecordWorkoutInProgress({
+    required this.routineId,
     required this.currentExerciseId,
     required this.setsData,
     required this.event,
@@ -23,6 +31,7 @@ class RecordWorkoutInProgress extends RecordWorkoutState {
     Map<int, List<WorkoutSet>>? setsData,
     RecordWorkoutEvent? event,
   }) => RecordWorkoutInProgress(
+    routineId: routineId,
     currentExerciseId: currentExerciseId ?? this.currentExerciseId,
     setsData: setsData ?? this.setsData,
     event: event ?? this.event,
@@ -32,16 +41,18 @@ class RecordWorkoutInProgress extends RecordWorkoutState {
 class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
   RecordWorkoutCubit() : super(RecordWorkoutInit());
 
+  void startWorkout(int routineId, int exerciseId) {
+    emit(
+      RecordWorkoutInProgress(
+        routineId: routineId,
+        currentExerciseId: exerciseId,
+        setsData: {exerciseId: []},
+        event: RecordWorkoutEvent.reset,
+      ),
+    );
+  }
+
   void changeExercise(int exerciseId) {
-    if (state is RecordWorkoutInit) {
-      emit(
-        RecordWorkoutInProgress(
-          currentExerciseId: exerciseId,
-          setsData: {exerciseId: []},
-          event: RecordWorkoutEvent.reset,
-        ),
-      );
-    }
     if (state is RecordWorkoutInProgress) {
       final data = state as RecordWorkoutInProgress;
       if (!data.setsData.containsKey(exerciseId)) {
@@ -77,10 +88,27 @@ class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
     }
   }
 
-  Workout completeWorkout(String? note) {
+  bool hasNonEmptySets() {
+    if (state is RecordWorkoutInProgress) {
+      final data = state as RecordWorkoutInProgress;
+      return data.setsData.values.any(((e) => e.isNotEmpty));
+    }
+    return false;
+  }
+
+  bool hasEmptySets() {
+    if (state is RecordWorkoutInProgress) {
+      final data = state as RecordWorkoutInProgress;
+      return data.setsData.values.any(((e) => e.isEmpty));
+    }
+    return false;
+  }
+
+  void completeWorkout(String? note) {
     final data = state as RecordWorkoutInProgress;
     List<WorkoutChild> logs = [];
     for (final set in data.setsData.entries) {
+      if (set.value.isEmpty) continue;
       logs.add(
         WorkoutChild(
           exerciseId: set.key,
@@ -89,12 +117,14 @@ class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
         ),
       );
     }
-    return Workout(
+    final workout = Workout(
+      routineId: data.routineId,
       id: -1,
       logs: logs,
       note: note,
       createdAt: DateTime.now(),
     );
+    emit(RecordWorkoutCompleted(workout));
   }
 }
 

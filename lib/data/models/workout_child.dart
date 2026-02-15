@@ -14,11 +14,11 @@ class WorkoutChild {
   factory WorkoutChild.fromJson(Map<String, dynamic> json) => WorkoutChild(
     exerciseId: json['exercise_id'],
     exerciseName: json['exercise_name'],
-    sets: json['sets'].map((x) => WorkoutSet.fromJson(x)).toList(),
+    sets: json['sets'].map<WorkoutSet>((x) => WorkoutSet.fromJson(x)).toList(),
   );
 
   Map<String, dynamic> toJson() => {
-    'exercises': exerciseId,
+    'exercise_id': exerciseId,
     'sets': sets.map((e) => e.toJson()).toList(),
   };
 }

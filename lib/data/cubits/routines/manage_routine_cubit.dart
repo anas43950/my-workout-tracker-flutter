@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/data/models/exercise.dart';
+import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/data/repositories/routines_repository.dart';
 
 abstract class ManageRoutineState {}
