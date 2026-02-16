@@ -25,8 +25,9 @@ class FetchSingleWorkoutInProgress extends ManageWorkoutState {}
 
 class FetchSingleWorkoutSuccess extends ManageWorkoutState {
   Workout? workout;
+  DateTime? selectedDate;
 
-  FetchSingleWorkoutSuccess({required this.workout});
+  FetchSingleWorkoutSuccess({this.workout, this.selectedDate});
 }
 
 class FetchSingleWorkoutFail extends ManageWorkoutState {
@@ -68,7 +69,7 @@ class ManageWorkoutCubit extends Cubit<ManageWorkoutState> {
     emit(FetchSingleWorkoutInProgress());
     try {
       final result = await WorkoutsRepository().fetchWorkoutsForDate(date);
-      emit(FetchSingleWorkoutSuccess(workout: result.lastOrNull));
+      emit(FetchSingleWorkoutSuccess(workout: result.lastOrNull, selectedDate: date));
     } catch (e) {
       emit(FetchSingleWorkoutFail(message: e.toString()));
     }

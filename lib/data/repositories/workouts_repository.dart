@@ -48,7 +48,7 @@ class WorkoutsRepository {
 
   Future<List<Workout>> fetchWorkoutsForDate(DateTime date) async {
     final response = await ApiService.get(
-      endpoint: ApiEndpoints.getWorkoutsForRoutine,
+      endpoint: ApiEndpoints.getWorkoutsForDate,
       queryParameters: {'date': date},
     );
     return response['data'].map<Workout>((e) => Workout.fromJson(e)).toList();

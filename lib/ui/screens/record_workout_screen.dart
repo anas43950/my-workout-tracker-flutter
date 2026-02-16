@@ -200,7 +200,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                   children: [
                     lastHistory == null
                         ? Text(
-                            "No history found\nfor this routine",
+                            "No history found",
                             style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
                             textAlign: TextAlign.end,
                           )
@@ -214,12 +214,13 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                               ),
                               Text(
                                 DateFormat("dd MMM yyyy").format(lastHistory.createdAt),
-
                               ),
                             ],
                           ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        onChangeHistoryTap(state.selectedDate);
+                      },
                       child: Icon(
                         FluentIcons.edit_12_filled,
                         color: Colors.blue,
@@ -286,5 +287,18 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
       curve: curve,
       duration: duration,
     );
+  }
+
+  void onChangeHistoryTap(DateTime? lastWorkoutHistoryDate) async {
+    final date = await showDatePicker(
+      initialDate: lastWorkoutHistoryDate,
+      helpText: "Select date for which you'd like to fetch history",
+      context: context,
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now(),
+    );
+    if (date != null && mounted) {
+      context.read<ManageWorkoutCubit>().fetchWorkoutForDate(date);
+    }
   }
 }

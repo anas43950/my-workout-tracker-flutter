@@ -46,4 +46,20 @@ final appTheme = ThemeData(
   dialogTheme: DialogThemeData(
     backgroundColor: white,
   ),
+  datePickerTheme: DatePickerThemeData(
+    backgroundColor: white,
+    dayBackgroundColor: WidgetStateProperty.resolveWith((state) {
+      if (state.contains(WidgetState.selected)) {
+        return black;
+      }
+      return null;
+    }),
+    todayForegroundColor: WidgetStatePropertyAll(Colors.black),
+    todayBackgroundColor: WidgetStateProperty.resolveWith((state) {
+      if (state.contains(WidgetState.selected)) {
+        return Colors.grey.shade400;
+      }
+      return null;
+    }),
+  ),
 );
