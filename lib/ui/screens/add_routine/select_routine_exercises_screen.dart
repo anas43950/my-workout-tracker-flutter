@@ -22,6 +22,8 @@ class SelectRoutineExercisesScreen extends StatefulWidget {
 
 class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScreen> {
   List<Exercise> selectedExercises = [];
+  final searchController = TextEditingController();
+
 
   @override
   void initState() {
@@ -29,6 +31,9 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
     if (widget.routineForEdit != null) {
       selectedExercises.addAll(widget.routineForEdit!.exercises);
     }
+    searchController.addListener(() {
+      context.read<ExercisesListCubit>().searchExercises(searchController.text);
+    });
   }
 
   @override
@@ -49,15 +54,17 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
               ),
               contentPadding: EdgeInsets.all(10),
             ),
+            controller: searchController,
           ),
           15.height,
           Expanded(
             child: BlocBuilder<ExercisesListCubit, ExercisesListState>(
               builder: (context, state) {
-                if (state is FetchExercisesSuccess) {
+                if (state is ExercisesListRefreshed) {
+                  final exercises = state.searchedExercises ?? state.exercises;
                   return ListView.builder(
                     itemBuilder: (_, i) {
-                      final exercise = state.exercises[i];
+                      final exercise = exercises[i];
                       return ItemSelectExercise(
                         name: exercise.name,
                         selected: selectedExercises.any((e) => e.id == exercise.id),
@@ -72,7 +79,7 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
                         },
                       );
                     },
-                    itemCount: state.exercises.length,
+                    itemCount: exercises.length,
                   );
                 }
                 return SizedBox();

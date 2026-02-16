@@ -11,6 +11,7 @@ import 'package:workout_tracker/ui/components/item_exercise.dart';
 import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
 import 'package:workout_tracker/utils/extensions.dart';
 import 'package:workout_tracker/utils/helpers.dart';
+import 'package:workout_tracker/utils/logger.dart';
 
 class ExercisesScreen extends StatefulWidget {
   const ExercisesScreen({super.key});
@@ -20,7 +21,15 @@ class ExercisesScreen extends StatefulWidget {
 }
 
 class _ExercisesScreenState extends State<ExercisesScreen> {
-  List<Exercise> exercises = [];
+  final searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    searchController.addListener(() {
+      context.read<ExercisesListCubit>().searchExercises(searchController.text);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +57,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                 color: lightGrey,
               ),
             ),
+            controller: searchController,
           ),
           Divider(height: 40),
           Expanded(
@@ -63,8 +73,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     return Loader();
                   } else if (state is FetchExercisesFail) {
                     return Text(state.message);
-                  } else if (state is FetchExercisesSuccess) {
-                    exercises = state.exercises;
+                  } else if (state is ExercisesListRefreshed) {
+                    final exercises = state.searchedExercises ?? state.exercises;
                     return exercises.isEmpty
                         ? Center(child: Text("No exercises added yet"))
                         : ListView.builder(

@@ -10,10 +10,19 @@ class FetchExercisesInit extends ExercisesListState {}
 
 class FetchExercisesInProgress extends ExercisesListState {}
 
-class FetchExercisesSuccess extends ExercisesListState {
+class ExercisesListRefreshed extends ExercisesListState {
   List<Exercise> exercises;
+  List<Exercise>? searchedExercises;
 
-  FetchExercisesSuccess(this.exercises);
+  ExercisesListRefreshed(this.exercises, {this.searchedExercises});
+
+  ExercisesListRefreshed copyWith({
+    List<Exercise>? exercises,
+    List<Exercise>? searchedExercises,
+  }) => ExercisesListRefreshed(
+    exercises ?? this.exercises,
+    searchedExercises: searchedExercises,
+  );
 }
 
 class FetchExercisesFail extends ExercisesListState {
@@ -29,7 +38,7 @@ class ExercisesListCubit extends Cubit<ExercisesListState> {
   ExercisesListCubit() : super(FetchExercisesInit()) {
     _repository = ExercisesRepository();
     _subscription = _repository.exercisesStream.listen((exercises) {
-      emit(FetchExercisesSuccess(exercises));
+      emit(ExercisesListRefreshed(exercises));
     });
   }
 
@@ -41,6 +50,25 @@ class ExercisesListCubit extends Cubit<ExercisesListState> {
       // Not emitting success state since that will be handled by stream listener
     } catch (e) {
       emit(FetchExercisesFail(e.toString()));
+    }
+  }
+
+  void searchExercises(String searchText) {
+    if (state is ExercisesListRefreshed) {
+      final data = state as ExercisesListRefreshed;
+
+      List<Exercise>? searchedExercises;
+      if (searchText.isEmpty) {
+        searchedExercises = null;
+      } else {
+        searchedExercises = [];
+        for (final e in (state as ExercisesListRefreshed).exercises) {
+          if (e.name.toLowerCase().contains(searchText.toLowerCase())) {
+            searchedExercises.add(e);
+          }
+        }
+      }
+      emit(data.copyWith(searchedExercises: searchedExercises));
     }
   }
 
