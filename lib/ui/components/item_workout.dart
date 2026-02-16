@@ -25,6 +25,7 @@ class _ItemWorkoutState extends State<ItemWorkout> {
       color: Colors.white,
       surfaceTintColor: Colors.white,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -64,6 +65,19 @@ class _ItemWorkoutState extends State<ItemWorkout> {
             separatorBuilder: (_, i) => Divider(height: 0),
             itemCount: widget.workout.logs.length,
           ),
+          if (widget.workout.note != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade200,
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+              ),
+              child: Text(
+                widget.workout.note!,
+                style: TextStyle(color: Colors.grey.shade800),
+              ),
+            ),
+          ],
         ],
       ),
     );
