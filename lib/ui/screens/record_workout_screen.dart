@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -8,17 +9,16 @@ import 'package:workout_tracker/data/cubits/workouts/manage_workout_cubit.dart';
 import 'package:workout_tracker/data/cubits/workouts/record_workout_cubit.dart';
 import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/data/models/workout.dart';
-import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_app_bar.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/record_workout_page_view_item.dart';
+import 'package:workout_tracker/ui/components/stopwatch_widget.dart';
 import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
 import 'package:workout_tracker/ui/dialogs/dialog_add_workout_note.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/extensions.dart';
 import 'package:workout_tracker/utils/helpers.dart';
-import 'package:workout_tracker/utils/logger.dart';
 
 class RecordWorkoutScreen extends StatefulWidget {
   final Routine routine;
@@ -32,7 +32,6 @@ class RecordWorkoutScreen extends StatefulWidget {
 class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   final pageController = PageController();
   late Routine routine;
-  List<WorkoutChild> logs = [];
   int currentExerciseIndex = 0;
   late final RecordWorkoutCubit rwCubit;
 
@@ -66,7 +65,8 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (value, result) {
-        if (value == false) { // If false -> means back button was pressed, if true -> means I invoked pop() myself
+        if (value == false) {
+          // If false -> means back button was pressed, if true -> means I invoked pop() myself
           onBackPressed();
         }
       },
@@ -90,117 +90,140 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
           ),
         ),
         padding: EdgeInsets.zero,
-        body: MultiBlocListener(
-          listeners: [
-            BlocListener<RecordWorkoutCubit, RecordWorkoutState>(
-              listener: (context, state) {
-                if (state is RecordWorkoutCompleted) {
-                  context.read<ManageWorkoutCubit>().saveWorkout(state.workout);
-                }
-              },
+        body: BlocListener<RecordWorkoutCubit, RecordWorkoutState>(
+          listener: (context, state) {
+            if (state is RecordWorkoutCompleted) {
+              context.read<ManageWorkoutCubit>().saveWorkout(state.workout);
+            }
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              buildHeader(),
+              Divider(height: 1),
+              15.height,
+              BlocConsumer<ManageWorkoutCubit, ManageWorkoutState>(
+                listener: (context, state) {
+                  if (state is SaveWorkoutSuccess) {
+                    context.go(Routes.homeBase);
+                  }
+                  if (state is SaveWorkoutFail) {
+                    showErrorSnackBar(context, state.message);
+                  }
+                  if (state is FetchSingleWorkoutFail) {
+                    showErrorSnackBar(context, state.message);
+                  }
+                },
+                builder: (context, state) {
+                  Workout? lastHistory;
+                  if (state is FetchSingleWorkoutSuccess) {
+                    lastHistory = state.workout;
+                  }
+                  return Expanded(
+                    child: PageView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      controller: pageController,
+                      itemBuilder: (_, i) => RecordWorkoutPageViewItem(
+                        exercise: routine.exercises[i],
+                        index: i,
+                        lastWorkoutChild: lastHistory?.logs.firstWhereOrNull(
+                          (e) => e.exerciseId == routine.exercises[i].id,
+                        ),
+                      ),
+                      itemCount: routine.exercises.length,
+                    ),
+                  );
+                },
+              ),
+              buildFooter(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildFooter() => Padding(
+    padding: const EdgeInsets.all(20),
+    child: Row(
+      spacing: 10,
+      children: [
+        if (currentExerciseIndex != 0)
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () => changePage(toNext: false),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: lightGrey,
+              ),
+              child: Text("Previous"),
             ),
-            BlocListener<ManageWorkoutCubit, ManageWorkoutState>(
-              listener: (context, state) {
-                if (state is SaveWorkoutFail) {
-                  showErrorSnackBar(context, state.message);
-                }
-                if (state is SaveWorkoutSuccess) {
-                  context.go(Routes.homeBase);
-                }
-              },
-            ),
-          ],
-          child: BlocBuilder<ManageWorkoutCubit, ManageWorkoutState>(
+          ),
+        Expanded(
+          child: currentExerciseIndex == routine.exercises.length - 1
+              ? ElevatedButton(
+                  onPressed: onCompleteTap,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                  ),
+                  child: Text("Complete"),
+                )
+              : ElevatedButton(
+                  onPressed: () => changePage(toNext: true),
+                  child: Text("Next"),
+                ),
+        ),
+      ],
+    ),
+  );
+
+  Widget buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        spacing: 10,
+        children: [
+          StopwatchWidget(),
+          BlocBuilder<ManageWorkoutCubit, ManageWorkoutState>(
             builder: (context, state) {
               if (state is FetchSingleWorkoutInProgress) {
-                return Center(
-                  child: Text(
-                    "Loading history...",
-                    style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
-                  ),
-                );
-              }
-              if (state is FetchSingleWorkoutFail) {
-                return Center(
-                  child: Text(
-                    state.message,
-                  ),
+                return Text(
+                  "Loading History...",
+                  style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
                 );
               }
               if (state is FetchSingleWorkoutSuccess) {
-                Workout? lastHistory = state.workout;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                final lastHistory = state.workout;
+                return Row(
+                  spacing: 8,
                   children: [
-                    5.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 10,
-                      children: [
-                        if (lastHistory == null)
-                          Text(
-                            "No history found for this routine",
+                    lastHistory == null
+                        ? Text(
+                            "No history found\nfor this routine",
                             style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                            textAlign: TextAlign.end,
                           )
-                        else ...[
-                          Text("Fetched History :"),
-                          Text(
-                            DateFormat("dd MMM yyyy").format(lastHistory.createdAt),
-                            style: AppTextStyles.bodyMedium,
-                          ),
-                          Text(
-                            "Change",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ],
-                      ],
-                    ),
-                    Divider(height: 35),
-                    Expanded(
-                      child: PageView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        controller: pageController,
-                        itemBuilder: (_, i) => RecordWorkoutPageViewItem(
-                          exercise: routine.exercises[i],
-                          index: i,
-                          lastWorkoutChild: lastHistory?.logs.firstWhereOrNull(
-                            (e) => e.exerciseId == routine.exercises[i].id,
-                          ),
-                        ),
-                        itemCount: routine.exercises.length,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        spacing: 10,
-                        children: [
-                          if (currentExerciseIndex != 0)
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () => changePage(toNext: false),
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.black,
-                                  backgroundColor: lightGrey,
-                                ),
-                                child: Text("Previous"),
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            spacing: 3,
+                            children: [
+                              Text(
+                                "Fetched History :",
+                                style: AppTextStyles.bodySmall,
                               ),
-                            ),
-                          Expanded(
-                            child: currentExerciseIndex == routine.exercises.length - 1
-                                ? ElevatedButton(
-                                    onPressed: onCompleteTap,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blueAccent,
-                                    ),
-                                    child: Text("Complete"),
-                                  )
-                                : ElevatedButton(
-                                    onPressed: () => changePage(toNext: true),
-                                    child: Text("Next"),
-                                  ),
+                              Text(
+                                DateFormat("dd MMM yyyy").format(lastHistory.createdAt),
+
+                              ),
+                            ],
                           ),
-                        ],
+                    InkWell(
+                      onTap: () {},
+                      child: Icon(
+                        FluentIcons.edit_12_filled,
+                        color: Colors.blue,
+                        size: 16,
                       ),
                     ),
                   ],
@@ -209,7 +232,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
               return SizedBox();
             },
           ),
-        ),
+        ],
       ),
     );
   }

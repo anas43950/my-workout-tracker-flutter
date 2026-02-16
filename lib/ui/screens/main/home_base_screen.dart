@@ -27,7 +27,6 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
   @override
   void initState() {
     super.initState();
-    logger.d("here");
     loadData();
   }
 
