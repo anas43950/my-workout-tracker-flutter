@@ -27,7 +27,7 @@ class ItemWorkout extends StatelessWidget {
                   style: AppTextStyles.bodySmall,
                 ),
                 Text(
-                  "R - W",
+                  "W x R",
                   style: AppTextStyles.bodySmall,
                 ),
               ],

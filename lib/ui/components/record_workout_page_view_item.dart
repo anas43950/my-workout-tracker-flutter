@@ -207,17 +207,17 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 children: [
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Reps",
-                                      controller: repsTextController,
-                                      validator: repsValidator,
+                                      hintText: "Weight (Kgs)",
+                                      controller: weightTextController,
+                                      validator: weightValidator,
                                       allowDigitsOnly: true,
                                     ),
                                   ),
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Weight (Kgs)",
-                                      controller: weightTextController,
-                                      validator: weightValidator,
+                                      hintText: "Reps",
+                                      controller: repsTextController,
+                                      validator: repsValidator,
                                       allowDigitsOnly: true,
                                     ),
                                   ),
@@ -236,18 +236,18 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 children: [
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Reps",
-                                      validator: dRepsValidator,
-                                      controller: dRepsTextController,
+                                      hintText: "Weight (Kgs)",
+                                      validator: dWeightValidator,
+                                      controller: dWeightTextController,
+                                      changeToDoneKey: true,
                                       allowDigitsOnly: true,
                                     ),
                                   ),
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Weight (Kgs)",
-                                      validator: dWeightValidator,
-                                      controller: dWeightTextController,
-                                      changeToDoneKey: true,
+                                      hintText: "Reps",
+                                      validator: dRepsValidator,
+                                      controller: dRepsTextController,
                                       allowDigitsOnly: true,
                                     ),
                                   ),

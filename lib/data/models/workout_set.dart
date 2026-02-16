@@ -28,7 +28,7 @@ class WorkoutSet {
     if (dropSetReps != null) "drop_set_weight": dropSetWeight,
   };
 
-  String get repsData => "$reps x ${weight.formatToString}";
+  String get repsData => "${weight.formatToString} x $reps";
 
-  String get dropSetRepsData => "$dropSetReps x ${dropSetWeight?.formatToString}";
+  String get dropSetRepsData => "${dropSetWeight?.formatToString} x $dropSetReps";
 }
