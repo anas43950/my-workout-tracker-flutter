@@ -33,7 +33,7 @@ class WorkoutsRepository {
       parameter: workout.toJson(),
     );
     final addedWorkout = Workout.fromJson(response['data']);
-    _cache.add(addedWorkout);
+    _cache.insert(0, addedWorkout);
     _controller.add(_cache);
     return addedWorkout;
   }

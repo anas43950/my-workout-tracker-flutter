@@ -36,7 +36,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
   final dRepsTextController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final weightRegex = RegExp(r'^\d+\.?\d{0,3}');
-  final repsRegex = RegExp(r'^[0-9]*$');
+  final repsRegex = RegExp(r'^\d*$');
 
   String? repsValidator(String? value) {
     if (value?.trim().isEmpty == true) {
@@ -300,6 +300,8 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
 
       weightTextController.clear();
       repsTextController.clear();
+      dRepsTextController.clear();
+      dWeightTextController.clear();
     }
   }
 }
