@@ -26,6 +26,7 @@ class RoutinesScreen extends StatelessWidget {
           floatingActionButton: state is FetchRoutinesInProgress
               ? null
               : FloatingActionButton.extended(
+                  heroTag: null,
                   onPressed: () {
                     if (state is FetchRoutinesSuccess) {
                       onStartWorkoutTap(context, state);

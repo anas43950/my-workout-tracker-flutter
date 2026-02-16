@@ -12,7 +12,6 @@ import 'package:workout_tracker/ui/screens/main/exercises_screen.dart';
 import 'package:workout_tracker/ui/screens/main/routines_screen.dart';
 import 'package:workout_tracker/ui/screens/main/workouts_history_screen.dart';
 import 'package:workout_tracker/utils/extensions.dart';
-import 'package:workout_tracker/utils/logger.dart';
 
 class HomeBaseScreen extends StatefulWidget {
   const HomeBaseScreen({super.key});
@@ -46,11 +45,14 @@ class _HomeBaseScreenState extends State<HomeBaseScreen> {
             context.clearStackAndNavigate(Routes.login);
           }
         },
-        child: [
-          RoutinesScreen(),
-          ExercisesScreen(),
-          WorkoutsHistoryScreen(),
-        ][selectedIndex],
+        child: IndexedStack(
+          index: selectedIndex,
+          children: [
+            RoutinesScreen(),
+            ExercisesScreen(),
+            WorkoutsHistoryScreen(),
+          ],
+        ),
       ),
     );
   }

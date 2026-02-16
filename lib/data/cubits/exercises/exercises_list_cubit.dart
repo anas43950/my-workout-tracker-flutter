@@ -12,16 +12,18 @@ class FetchExercisesInProgress extends ExercisesListState {}
 
 class ExercisesListRefreshed extends ExercisesListState {
   List<Exercise> exercises;
-  List<Exercise>? searchedExercises;
+
+  // We need a tag to keep track of exercises searched on different screens
+  Map<String, Iterable<Exercise>>? searchedExercises;
 
   ExercisesListRefreshed(this.exercises, {this.searchedExercises});
 
   ExercisesListRefreshed copyWith({
     List<Exercise>? exercises,
-    List<Exercise>? searchedExercises,
+    Map<String, Iterable<Exercise>>? searchedExercises,
   }) => ExercisesListRefreshed(
     exercises ?? this.exercises,
-    searchedExercises: searchedExercises,
+    searchedExercises: searchedExercises ?? this.searchedExercises,
   );
 }
 
@@ -53,20 +55,16 @@ class ExercisesListCubit extends Cubit<ExercisesListState> {
     }
   }
 
-  void searchExercises(String searchText) {
+  void searchExercises(String searchText, String tag) {
     if (state is ExercisesListRefreshed) {
       final data = state as ExercisesListRefreshed;
 
-      List<Exercise>? searchedExercises;
+      final searchedExercises = data.searchedExercises ?? {};
+
       if (searchText.isEmpty) {
-        searchedExercises = null;
+        searchedExercises.remove(tag);
       } else {
-        searchedExercises = [];
-        for (final e in (state as ExercisesListRefreshed).exercises) {
-          if (e.name.toLowerCase().contains(searchText.toLowerCase())) {
-            searchedExercises.add(e);
-          }
-        }
+        searchedExercises[tag] = data.exercises.where((e) => e.name.toLowerCase().contains(searchText.toLowerCase()));
       }
       emit(data.copyWith(searchedExercises: searchedExercises));
     }
