@@ -99,7 +99,9 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              5.height,
               buildHeader(),
+              12.height,
               Divider(height: 1),
               15.height,
               BlocConsumer<ManageWorkoutCubit, ManageWorkoutState>(
@@ -178,63 +180,65 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   );
 
   Widget buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 5, 20, 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        spacing: 10,
-        children: [
-          StopwatchWidget(),
-          BlocBuilder<ManageWorkoutCubit, ManageWorkoutState>(
-            builder: (context, state) {
-              if (state is FetchSingleWorkoutInProgress) {
-                return Text(
-                  "Loading History...",
-                  style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
-                );
-              }
-              if (state is FetchSingleWorkoutSuccess) {
-                final lastHistory = state.workout;
-                return Row(
-                  spacing: 8,
-                  children: [
-                    lastHistory == null
-                        ? Text(
-                            "No history found",
-                            style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
-                            textAlign: TextAlign.end,
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            spacing: 3,
-                            children: [
-                              Text(
-                                "Fetched History :",
-                                style: AppTextStyles.bodySmall,
-                              ),
-                              Text(
-                                DateFormat("dd MMM yyyy").format(lastHistory.createdAt),
-                              ),
-                            ],
-                          ),
-                    InkWell(
-                      onTap: () {
-                        onChangeHistoryTap(state.selectedDate);
-                      },
+    return Row(
+      spacing: 10,
+      children: [
+        8.width,
+        StopwatchWidget(),
+        Spacer(),
+        BlocBuilder<ManageWorkoutCubit, ManageWorkoutState>(
+          builder: (context, state) {
+            if (state is FetchSingleWorkoutInProgress) {
+              return Text(
+                "Loading History...",
+                style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+              );
+            }
+            if (state is FetchSingleWorkoutSuccess) {
+              final lastHistory = state.workout;
+              return Row(
+                children: [
+                  lastHistory == null
+                      ? Text(
+                          "No history found",
+                          style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                          textAlign: TextAlign.end,
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          spacing: 3,
+                          children: [
+                            Text(
+                              "Fetched History :",
+                              style: AppTextStyles.bodySmall,
+                            ),
+                            Text(
+                              DateFormat("dd MMM yyyy").format(lastHistory.createdAt),
+                            ),
+                          ],
+                        ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(100),
+                    onTap: () {
+                      onChangeHistoryTap(state.selectedDate);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Icon(
                         FluentIcons.edit_12_filled,
                         color: Colors.blue,
                         size: 16,
                       ),
                     ),
-                  ],
-                );
-              }
-              return SizedBox();
-            },
-          ),
-        ],
-      ),
+                  ),
+                  12.width,
+                ],
+              );
+            }
+            return SizedBox();
+          },
+        ),
+      ],
     );
   }
 

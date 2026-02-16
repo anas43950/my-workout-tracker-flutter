@@ -56,7 +56,7 @@ class ManageWorkoutCubit extends Cubit<ManageWorkoutState> {
     emit(FetchSingleWorkoutInProgress());
     try {
       final result = await WorkoutsRepository().fetchWorkoutsForRoutine(routineId);
-      emit(FetchSingleWorkoutSuccess(workout: result.lastOrNull));
+      emit(FetchSingleWorkoutSuccess(workout: result.lastOrNull, selectedDate: result.lastOrNull?.createdAt));
     } on TypeError catch (e, st) {
       emit(FetchSingleWorkoutFail(message: e.toString()));
       debugPrint(e.toString() + st.toString());
