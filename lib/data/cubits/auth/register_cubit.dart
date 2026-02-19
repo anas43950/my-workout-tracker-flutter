@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workout_tracker/data/models/user.dart';
 import 'package:workout_tracker/data/repositories/auth_repository.dart';
 
 abstract class RegisterState {}
@@ -8,9 +9,10 @@ class RegisterInitial extends RegisterState {}
 class RegisterInProgress extends RegisterState {}
 
 class RegisterSuccess extends RegisterState {
-  final Map<String, dynamic> payload;
+  final User user;
+  final String token;
 
-  RegisterSuccess(this.payload);
+  RegisterSuccess(this.user, this.token);
 }
 
 class RegisterFail extends RegisterState {
@@ -30,7 +32,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: email,
         password: password,
       );
-      emit(RegisterSuccess(result));
+      emit(RegisterSuccess(User.fromJson(result['data']), result['token']));
     } catch (e) {
       emit(RegisterFail(e.toString()));
     }

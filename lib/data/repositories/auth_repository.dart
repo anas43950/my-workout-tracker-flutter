@@ -1,6 +1,5 @@
 import 'package:workout_tracker/data/api/api_service.dart';
 import 'package:workout_tracker/data/api/endpoints.dart';
-import 'package:workout_tracker/utils/constants.dart';
 
 class AuthRepository {
   Future<Map<String, dynamic>> register({
@@ -17,10 +16,7 @@ class AuthRepository {
         'password_confirmation': password,
       },
     );
-    return {
-      AppStrings.token: result[AppStrings.token],
-      AppStrings.user: result['data'],
-    };
+    return result;
   }
 
   Future<Map<String, dynamic>> login({required String email, required String password}) async {
@@ -31,9 +27,6 @@ class AuthRepository {
         'password': password,
       },
     );
-    return {
-      AppStrings.token: result[AppStrings.token],
-      AppStrings.user: result['data'],
-    };
+    return result;
   }
 }

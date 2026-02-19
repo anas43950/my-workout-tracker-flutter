@@ -140,7 +140,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           listener: (context, state) {
             if (state is RegisterSuccess) {
-              SharedPrefUtils.storeString(AppStrings.token, state.payload['token']);
+              SharedPrefUtils.storeString(AppStrings.token, state.token);
+              SharedPrefUtils.storeString(AppStrings.userFullName, state.user.name);
               showSuccessSnackBar(context, "Account created successfully");
               context.clearStackAndNavigate(Routes.homeBase);
             } else if (state is RegisterFail) {

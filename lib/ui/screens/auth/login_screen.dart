@@ -104,7 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           listener: (context, state) {
             if (state is LoginSuccess) {
-              SharedPrefUtils.storeString(AppStrings.token, state.payload['token']);
+              SharedPrefUtils.storeString(AppStrings.token, state.token);
+              SharedPrefUtils.storeString(AppStrings.userFullName, state.user.name);
               showSuccessSnackBar(context, "Logged in successfully");
               context.clearStackAndNavigate(Routes.homeBase);
             } else if (state is LoginFail) {

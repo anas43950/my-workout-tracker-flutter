@@ -14,6 +14,7 @@ import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/constants.dart';
 import 'package:workout_tracker/utils/extensions.dart';
 import 'package:workout_tracker/utils/helpers.dart';
+import 'package:workout_tracker/utils/shared_preferences_utils.dart';
 
 class RoutinesScreen extends StatelessWidget {
   const RoutinesScreen({super.key});
@@ -50,7 +51,7 @@ class RoutinesScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Hello, Anas 👋",
+                    "Hello, ${SharedPrefUtils.getString(AppStrings.userFullName)} 👋",
                     style: AppTextStyles.heading,
                   ),
                   IconButton(

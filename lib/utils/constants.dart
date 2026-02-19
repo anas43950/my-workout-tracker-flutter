@@ -15,5 +15,5 @@ class AppStrings {
   AppStrings._();
 
   static final token = 'token';
-  static final user = 'user';
+  static final userFullName = 'user_full_name';
 }

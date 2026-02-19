@@ -8,6 +8,7 @@ class ApiEndpoints {
 
   static final register = 'register';
   static final login = 'login';
+  static final getCurrentUser = 'user';
 
   static final getExercises = 'exercises/';
   static final addExercise = 'exercises/add';
