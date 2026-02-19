@@ -185,8 +185,6 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
   }
 
   void onAddExerciseTap() {
-    showErrorSnackBar(context, "Test");
-    return;
     if (formKey.currentState?.validate() == true) {
       final name = nameController.text;
       final setsStr = setsController.text;
