@@ -51,7 +51,6 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -186,6 +185,8 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
   }
 
   void onAddExerciseTap() {
+    showErrorSnackBar(context, "Test");
+    return;
     if (formKey.currentState?.validate() == true) {
       final name = nameController.text;
       final setsStr = setsController.text;

@@ -50,8 +50,13 @@ android {
     }
 
     buildTypes {
+        debug{
+            manifestPlaceholders["label"] = "WT Debug"
+            applicationIdSuffix = ".debug"
+        }
         release {
             signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["label"] = "Workout Tracker - No BS"
         }
     }
 }

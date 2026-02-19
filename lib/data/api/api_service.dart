@@ -5,7 +5,7 @@ import 'package:workout_tracker/data/api/endpoints.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/utils/constants.dart';
 import 'package:workout_tracker/utils/extensions.dart';
-import 'package:workout_tracker/utils/network_request_interseptor.dart';
+import 'package:workout_tracker/utils/network_request_interceptor.dart';
 import 'package:workout_tracker/utils/shared_preferences_utils.dart';
 
 class ApiService {
