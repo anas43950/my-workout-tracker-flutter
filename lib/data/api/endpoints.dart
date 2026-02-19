@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static final baseUrl = 'http://10.0.2.2:8000/api/';
+  static final baseUrl = kDebugMode ? 'http://10.0.2.2:8000/api/' : 'https://anas-workout-tracker.fly.dev/api/';
 
   static final register = 'register';
   static final login = 'login';
