@@ -101,9 +101,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
             children: [
               5.height,
               buildHeader(),
-              12.height,
-              Divider(height: 1),
-              15.height,
+              Divider(height: 20),
               BlocConsumer<ManageWorkoutCubit, ManageWorkoutState>(
                 listener: (context, state) {
                   if (state is SaveWorkoutSuccess) {
@@ -137,7 +135,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                   );
                 },
               ),
-              buildFooter(),
+              if (MediaQuery.of(context).viewInsets.bottom == 0) buildFooter(),
             ],
           ),
         ),

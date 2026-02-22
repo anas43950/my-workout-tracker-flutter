@@ -95,12 +95,28 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
+                  if (state.lastSetTimestamp != null) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Last entry at : ",
+                          style: TextStyle(color: Colors.grey.shade700),
+                        ),
+                        Text(
+                          getTimeText(state.lastSetTimestamp!),
+                          style: AppTextStyles.heading3,
+                        ),
+                      ],
+                    ),
+                    10.height,
+                  ],
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.blue.shade100,
                     ),
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.all(12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       spacing: 15,
@@ -185,19 +201,20 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                       ],
                     ),
                   ),
-                  Divider(height: 40),
+                  Divider(height: 30),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     spacing: 15,
                     children: [
                       Expanded(
                         child: Form(
                           key: formKey,
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "Main working set",
-                                style: AppTextStyles.label,
-                                textAlign: TextAlign.center,
+                                style: AppTextStyles.bodyMedium,
                               ),
                               10.height,
                               Row(
@@ -209,6 +226,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                       controller: weightTextController,
                                       validator: weightValidator,
                                       allowDigitsOnly: true,
+                                      padding: EdgeInsets.symmetric(horizontal: 7),
                                     ),
                                   ),
                                   Expanded(
@@ -217,15 +235,15 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                       controller: repsTextController,
                                       validator: repsValidator,
                                       allowDigitsOnly: true,
+                                      padding: EdgeInsets.symmetric(horizontal: 7),
                                     ),
                                   ),
                                 ],
                               ),
-                              30.height,
+                              20.height,
                               Text(
                                 "Drop set (Optional)",
-                                style: AppTextStyles.label,
-                                textAlign: TextAlign.center,
+                                style: AppTextStyles.bodyMedium,
                               ),
                               10.height,
                               Row(
@@ -238,6 +256,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                       validator: dWeightValidator,
                                       controller: dWeightTextController,
                                       allowDigitsOnly: true,
+                                      padding: EdgeInsets.symmetric(horizontal: 7),
                                     ),
                                   ),
                                   Expanded(
@@ -247,6 +266,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                       controller: dRepsTextController,
                                       allowDigitsOnly: true,
                                       changeToDoneKey: true,
+                                      padding: EdgeInsets.symmetric(horizontal: 7),
                                     ),
                                   ),
                                 ],
@@ -255,39 +275,16 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  15.height,
-                  Padding(
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 2),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
+                      ElevatedButton(
                         onPressed: onEnterTap,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                         ),
                         child: Text("Enter"),
                       ),
-                    ),
+                    ],
                   ),
-                  if (state.lastSetTimestamp != null) ...[
-                    15.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Last Set Entered at : ",
-                          style: TextStyle(color: Colors.grey.shade700),
-                        ),
-                        Text(
-                          getTimeText(state.lastSetTimestamp!),
-                          style: AppTextStyles.heading3,
-                        ),
-                      ],
-                    ),
-                  ],
                 ],
               ),
             ),

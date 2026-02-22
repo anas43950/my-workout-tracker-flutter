@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? hintText;
@@ -8,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String? value)? validator;
   final int? maxLines;
   final bool? changeToDoneKey;
+  final EdgeInsetsGeometry? padding;
 
   const CustomTextField({
     super.key,
@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.maxLines,
     this.changeToDoneKey,
+    this.padding,
   });
 
   @override
@@ -25,7 +26,10 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxLines,
       validator: validator,
       controller: controller,
-      decoration: InputDecoration(hintText: hintText),
+      decoration: InputDecoration(
+        hintText: hintText,
+        contentPadding: padding,
+      ),
       keyboardType: allowDigitsOnly == true ? TextInputType.number : null,
       textInputAction: changeToDoneKey == true ? TextInputAction.done : TextInputAction.next,
     );
