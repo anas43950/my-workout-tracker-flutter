@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart' hide black, white;
 import 'package:workout_tracker/data/cubits/workouts/record_workout_cubit.dart';
@@ -10,8 +9,7 @@ import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/data/models/workout_set.dart';
 import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
-import 'package:workout_tracker/utils/logger.dart';
-import 'package:workout_tracker/utils/validators.dart';
+import 'package:workout_tracker/utils/helpers.dart';
 
 class RecordWorkoutPageViewItem extends StatefulWidget {
   final int index;
@@ -239,7 +237,6 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                       hintText: "Weight (Kgs)",
                                       validator: dWeightValidator,
                                       controller: dWeightTextController,
-                                      changeToDoneKey: true,
                                       allowDigitsOnly: true,
                                     ),
                                   ),
@@ -249,6 +246,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                       validator: dRepsValidator,
                                       controller: dRepsTextController,
                                       allowDigitsOnly: true,
+                                      changeToDoneKey: true,
                                     ),
                                   ),
                                 ],
@@ -260,17 +258,36 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                     ],
                   ),
                   15.height,
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: onEnterTap,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 2),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        onPressed: onEnterTap,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                        ),
+                        child: Text("Enter"),
                       ),
-                      child: Text("Enter"),
                     ),
                   ),
+                  if (state.lastSetTimestamp != null) ...[
+                    15.height,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Last Set Entered at : ",
+                          style: TextStyle(color: Colors.grey.shade700),
+                        ),
+                        Text(
+                          getTimeText(state.lastSetTimestamp!),
+                          style: AppTextStyles.heading3,
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

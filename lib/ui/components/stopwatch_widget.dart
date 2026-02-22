@@ -4,7 +4,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
-import 'package:workout_tracker/utils/logger.dart';
+import 'package:workout_tracker/utils/helpers.dart';
 
 class StopwatchWidget extends StatefulWidget {
   const StopwatchWidget({super.key});
@@ -45,7 +45,9 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
           ),
         ),
         Text(
-          _getTimeText(secondsPassed),
+          showCurrentTime
+              ? DateFormat("HH${timeSeparator}mm${timeSeparator}ss").format(DateTime.now())
+              : getTimeText(secondsPassed),
           style: AppTextStyles.heading.copyWith(fontSize: 30, height: 0),
         ),
       ],
@@ -61,21 +63,5 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
   void cancelTimer() {
     timer?.cancel();
     timer = null;
-  }
-
-  String _getTimeText(int seconds) {
-    final _sep = " : ";
-    if (showCurrentTime) {
-      return DateFormat("HH${_sep}mm${_sep}ss").format(DateTime.now());
-    } else {
-      var duration = Duration(seconds: seconds);
-      String twoDigits(int n) => n.toString().padLeft(2, "0");
-      String sDuration =
-          "${twoDigits(duration.inHours) + _sep}"
-          "${twoDigits(duration.inMinutes.remainder(60)) + _sep}"
-          "${twoDigits(duration.inSeconds.remainder(60))}";
-
-      return sDuration;
-    }
   }
 }

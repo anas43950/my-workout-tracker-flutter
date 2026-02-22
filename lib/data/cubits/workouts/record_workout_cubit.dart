@@ -19,6 +19,7 @@ class RecordWorkoutInProgress extends RecordWorkoutState {
   Map<int, List<WorkoutSet>> setsData;
   RecordWorkoutEvent event;
   final DateTime startedAt;
+  int? lastSetTimestamp;
 
   RecordWorkoutInProgress({
     required this.routineId,
@@ -26,18 +27,21 @@ class RecordWorkoutInProgress extends RecordWorkoutState {
     required this.setsData,
     required this.event,
     required this.startedAt,
+    this.lastSetTimestamp,
   });
 
   RecordWorkoutInProgress copyWith({
     int? currentExerciseId,
     Map<int, List<WorkoutSet>>? setsData,
     RecordWorkoutEvent? event,
+    int? lastSetTimestamp,
   }) => RecordWorkoutInProgress(
     routineId: routineId,
     currentExerciseId: currentExerciseId ?? this.currentExerciseId,
     setsData: setsData ?? this.setsData,
     event: event ?? this.event,
     startedAt: startedAt,
+    lastSetTimestamp: lastSetTimestamp ?? this.lastSetTimestamp,
   );
 }
 
@@ -78,7 +82,13 @@ class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
       final setsData = data.setsData;
 
       setsData[data.currentExerciseId]!.add(set);
-      emit(data.copyWith(setsData: setsData, event: RecordWorkoutEvent.addSet));
+      emit(
+        data.copyWith(
+          setsData: setsData,
+          event: RecordWorkoutEvent.addSet,
+          lastSetTimestamp: DateTime.now().difference(data.startedAt).inSeconds,
+        ),
+      );
     }
   }
 

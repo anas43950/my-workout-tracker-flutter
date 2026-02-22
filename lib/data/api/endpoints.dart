@@ -3,10 +3,11 @@ import 'package:flutter/foundation.dart';
 class ApiEndpoints {
   ApiEndpoints._();
 
-  // static final baseUrl = kDebugMode ? 'http://10.0.2.2:8000/api/' : 'https://anas-workout-tracker.fly.dev/api/';
-  static final baseUrl = kDebugMode
-      ? 'https://bcfd-2401-4900-88d6-1ac1-a9e8-ae90-1c0a-c5f8.ngrok-free.app/api/'
-      : 'https://anas-workout-tracker.fly.dev/api/';
+  // static final baseUrl = kDebugMode
+  //     ? 'https://6892-2401-4900-88d4-c9d2-e8fd-ac1f-fb99-600f.ngrok-free.app/api/' // ngrok http 8000
+  //     : 'https://anas-workout-tracker.fly.dev/api/';
+
+  static final baseUrl = kDebugMode ? 'http://10.0.2.2:8000/api/' : 'https://anas-workout-tracker.fly.dev/api/';
 
   static final register = 'register';
   static final login = 'login';

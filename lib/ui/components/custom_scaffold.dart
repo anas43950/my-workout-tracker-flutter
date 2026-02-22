@@ -11,6 +11,7 @@ class CustomScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final EdgeInsetsGeometry? padding;
   final bool? showBackBtn;
+  final bool? resizeToAvoidBottomInset;
 
   CustomScaffold({
     super.key,
@@ -22,6 +23,7 @@ class CustomScaffold extends StatelessWidget {
     this.appBar,
     this.padding,
     this.showBackBtn,
+    this.resizeToAvoidBottomInset,
   }) {
     if (title != null && appBar != null) {
       throw Exception("Can't pass both title and appBar");
@@ -31,6 +33,7 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar:
           appBar ??
           (title != null
