@@ -6,6 +6,7 @@ class Workout {
   final String? note;
   final List<WorkoutChild> logs;
   final DateTime createdAt;
+  final DateTime? startedAt;
 
   Workout({
     required this.id,
@@ -13,6 +14,7 @@ class Workout {
     this.note,
     required this.logs,
     required this.createdAt,
+    required this.startedAt,
   });
 
   factory Workout.fromJson(Map<String, dynamic> json) => Workout(
@@ -21,11 +23,13 @@ class Workout {
     note: json['note'],
     logs: json['logs'].map<WorkoutChild>((x) => WorkoutChild.fromJson(x)).toList(),
     createdAt: DateTime.parse(json['created_at']),
+    startedAt: DateTime.tryParse(json['started_at'] ?? ""),
   );
 
   Map<String, dynamic> toJson() => {
     'note': note,
     'routine_id': routineId,
+    'started_at': startedAt,
     'logs': logs.map((e) => e.toJson()).toList(),
   };
 }

@@ -35,7 +35,15 @@ class _ItemWorkoutState extends State<ItemWorkout> {
                   DateFormat("EEE, dd MMM yyyy").format(widget.workout.createdAt),
                   style: AppTextStyles.bodySmall,
                 ),
-                Spacer(),
+                expanded && widget.workout.startedAt != null
+                    ? Expanded(
+                        child: Text(
+                          formatDuration(widget.workout.createdAt.difference(widget.workout.startedAt!)),
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.bodyMedium.copyWith(fontSize: 13),
+                        ),
+                      )
+                    : Spacer(),
                 Text(
                   "W x R",
                   style: AppTextStyles.bodySmall,
@@ -81,6 +89,17 @@ class _ItemWorkoutState extends State<ItemWorkout> {
         ],
       ),
     );
+  }
+
+  String formatDuration(Duration duration) {
+    int hoursInt = duration.inHours > 0 ? duration.inHours : 0;
+    String hours = "";
+    if (hoursInt > 0) {
+      String hoursPrefix = hoursInt > 1 ? "hrs" : "hr";
+      hours = "$hoursInt $hoursPrefix ";
+    }
+    int minutes = duration.inMinutes.remainder(60);
+    return "$hours$minutes min";
   }
 }
 
