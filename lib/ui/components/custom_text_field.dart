@@ -28,8 +28,7 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        contentPadding: padding,
-      ),
+        contentPadding: padding, hintStyle: TextStyle(fontSize: 14)),
       keyboardType: allowDigitsOnly == true ? TextInputType.number : null,
       textInputAction: changeToDoneKey == true ? TextInputAction.done : TextInputAction.next,
     );

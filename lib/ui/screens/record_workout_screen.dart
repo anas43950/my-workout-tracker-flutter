@@ -179,9 +179,8 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
 
   Widget buildHeader() {
     return Row(
-      spacing: 10,
       children: [
-        8.width,
+        12.width,
         StopwatchWidget(),
         Spacer(),
         BlocBuilder<ManageWorkoutCubit, ManageWorkoutState>(
@@ -198,7 +197,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                 children: [
                   lastHistory == null
                       ? Text(
-                          "No history found",
+                          "Not found",
                           style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
                           textAlign: TextAlign.end,
                         )
@@ -229,13 +228,13 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                       ),
                     ),
                   ),
-                  12.width,
                 ],
               );
             }
             return SizedBox();
           },
         ),
+        7.width,
       ],
     );
   }

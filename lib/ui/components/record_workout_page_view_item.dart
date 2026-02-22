@@ -222,7 +222,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 children: [
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Weight (Kgs)",
+                                      hintText: "Wt. (Kgs)",
                                       controller: weightTextController,
                                       validator: weightValidator,
                                       allowDigitsOnly: true,
@@ -252,7 +252,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 children: [
                                   Expanded(
                                     child: CustomTextField(
-                                      hintText: "Weight (Kgs)",
+                                      hintText: "Wt. (Kgs)",
                                       validator: dWeightValidator,
                                       controller: dWeightTextController,
                                       allowDigitsOnly: true,
