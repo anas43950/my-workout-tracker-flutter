@@ -38,6 +38,8 @@ class _DialogSelectRoutineState extends State<DialogSelectRoutine> {
       child: BlocBuilder<RoutinesListCubit, RoutinesListState>(
         builder: (context, state) {
           if (state is FetchRoutinesSuccess) {
+            final routines = state.routines;
+            routines.sort((r1, r2) => wdPos[r1.name]!.compareTo(wdPos[r2.name]!));
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -56,7 +58,7 @@ class _DialogSelectRoutineState extends State<DialogSelectRoutine> {
                           textAlign: TextAlign.center,
                         ),
                   15.height,
-                  ...state.routines.expand(
+                  ...routines.expand(
                     (e) => [
                       ItemSelectRoutine(
                         name: e.name,
