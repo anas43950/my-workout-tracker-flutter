@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -102,6 +104,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
               5.height,
               buildHeader(),
               Divider(height: 20),
+              _LastEntryTimer(),
               BlocConsumer<ManageWorkoutCubit, ManageWorkoutState>(
                 listener: (context, state) {
                   if (state is SaveWorkoutSuccess) {
@@ -301,5 +304,82 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
     if (date != null && mounted) {
       context.read<ManageWorkoutCubit>().fetchWorkoutForDate(date);
     }
+  }
+}
+
+class _LastEntryTimer extends StatefulWidget {
+  const _LastEntryTimer();
+
+  @override
+  State<_LastEntryTimer> createState() => _LastEntryTimerState();
+}
+
+class _LastEntryTimerState extends State<_LastEntryTimer> {
+  Timer? timer;
+  int? secondsSinceLastEntry;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<RecordWorkoutCubit, RecordWorkoutState>(
+      listener: (context, state) {
+        if (state is RecordWorkoutInProgress) {
+          if (state.event == RecordWorkoutEvent.addSet) {
+            resetTimer();
+          }
+        }
+      },
+      child: secondsSinceLastEntry != null
+          ? Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Since last entry : ",
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
+                  Text(
+                    getTimeText(secondsSinceLastEntry!),
+                    style: AppTextStyles.heading3,
+                  ),
+                  10.width,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        secondsSinceLastEntry = null;
+                        cancelTimer();
+                      });
+                    },
+                    child: Icon(
+                      FluentIcons.subtract_circle_12_regular,
+                      color: Colors.red,
+                      size: 18,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : SizedBox(),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    cancelTimer();
+  }
+
+  void cancelTimer() {
+    timer?.cancel();
+    timer = null;
+  }
+
+  void resetTimer() {
+    cancelTimer();
+
+    setState(() => secondsSinceLastEntry = 0);
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() => secondsSinceLastEntry = timer.tick);
+    });
   }
 }

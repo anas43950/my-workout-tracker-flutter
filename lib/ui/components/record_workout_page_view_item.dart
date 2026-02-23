@@ -9,7 +9,6 @@ import 'package:workout_tracker/data/models/workout_child.dart';
 import 'package:workout_tracker/data/models/workout_set.dart';
 import 'package:workout_tracker/ui/components/custom_text_field.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
-import 'package:workout_tracker/utils/helpers.dart';
 
 class RecordWorkoutPageViewItem extends StatefulWidget {
   final int index;
@@ -35,6 +34,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
   final formKey = GlobalKey<FormState>();
   final weightRegex = RegExp(r'^\d+\.?\d{0,3}');
   final repsRegex = RegExp(r'^\d*$');
+  bool showDropSetFields = false;
 
   String? repsValidator(String? value) {
     if (value?.trim().isEmpty == true) {
@@ -58,7 +58,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
   }
 
   String? dWeightValidator(String? value) {
-    if (dRepsTextController.text.trim().isNotEmpty) {
+    if (showDropSetFields) {
       if (value?.trim().isEmpty == true) {
         return "Required";
       }
@@ -70,7 +70,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
   }
 
   String? dRepsValidator(String? value) {
-    if (dWeightTextController.text.trim().isNotEmpty) {
+    if (showDropSetFields) {
       if (value?.trim().isEmpty == true) {
         return "Required";
       }
@@ -95,22 +95,6 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  if (state.lastSetTimestamp != null) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Last entry at : ",
-                          style: TextStyle(color: Colors.grey.shade700),
-                        ),
-                        Text(
-                          getTimeText(state.lastSetTimestamp!),
-                          style: AppTextStyles.heading3,
-                        ),
-                      ],
-                    ),
-                    10.height,
-                  ],
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
@@ -212,9 +196,25 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Main working set",
-                                style: AppTextStyles.bodyMedium,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Main working set",
+                                    style: AppTextStyles.bodyMedium,
+                                  ),
+
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() => showDropSetFields = !showDropSetFields);
+                                    },
+                                    child: Text(
+                                      "${!showDropSetFields ? "Add" : "Remove"} Drop Set",
+                                      style: AppTextStyles.bodySmall.copyWith(
+                                          decoration: TextDecoration.underline, fontSize: 13),
+                                    ),
+                                  ),
+                                ],
                               ),
                               10.height,
                               Row(
@@ -240,37 +240,39 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                   ),
                                 ],
                               ),
-                              20.height,
-                              Text(
-                                "Drop set (Optional)",
-                                style: AppTextStyles.bodyMedium,
-                              ),
-                              10.height,
-                              Row(
-                                spacing: 15,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: CustomTextField(
-                                      hintText: "Wt. (Kgs)",
-                                      validator: dWeightValidator,
-                                      controller: dWeightTextController,
-                                      allowDigitsOnly: true,
-                                      padding: EdgeInsets.symmetric(horizontal: 7),
+                              if (showDropSetFields) ...[
+                                20.height,
+                                Text(
+                                  "Drop set (Optional)",
+                                  style: AppTextStyles.bodyMedium,
+                                ),
+                                10.height,
+                                Row(
+                                  spacing: 15,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: CustomTextField(
+                                        hintText: "Wt. (Kgs)",
+                                        validator: dWeightValidator,
+                                        controller: dWeightTextController,
+                                        allowDigitsOnly: true,
+                                        padding: EdgeInsets.symmetric(horizontal: 7),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: CustomTextField(
-                                      hintText: "Reps",
-                                      validator: dRepsValidator,
-                                      controller: dRepsTextController,
-                                      allowDigitsOnly: true,
-                                      changeToDoneKey: true,
-                                      padding: EdgeInsets.symmetric(horizontal: 7),
+                                    Expanded(
+                                      child: CustomTextField(
+                                        hintText: "Reps",
+                                        validator: dRepsValidator,
+                                        controller: dRepsTextController,
+                                        allowDigitsOnly: true,
+                                        changeToDoneKey: true,
+                                        padding: EdgeInsets.symmetric(horizontal: 7),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
+                              ],
                             ],
                           ),
                         ),
@@ -280,6 +282,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent,
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                          textStyle: TextStyle(fontSize: 14),
                         ),
                         child: Text("Enter"),
                       ),
@@ -316,6 +319,8 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
       repsTextController.clear();
       dRepsTextController.clear();
       dWeightTextController.clear();
+
+      setState(() => showDropSetFields = false);
     }
   }
 }
@@ -327,7 +332,6 @@ class _ItemWorkoutSet extends StatelessWidget {
   final VoidCallback? onRemoveTap;
 
   const _ItemWorkoutSet({
-    super.key,
     required this.index,
     this.showRemoveButton,
     required this.set,
