@@ -64,7 +64,7 @@ class _ItemWorkoutState extends State<ItemWorkout> {
           ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
             itemBuilder: (_, i) => _WorkoutChild(
               workoutChild: widget.workout.logs[i],
               index: i,
@@ -75,7 +75,7 @@ class _ItemWorkoutState extends State<ItemWorkout> {
           ),
           if (widget.workout.note != null) ...[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
                 color: Colors.blue.shade200,
                 borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
@@ -92,14 +92,13 @@ class _ItemWorkoutState extends State<ItemWorkout> {
   }
 
   String formatDuration(Duration duration) {
-    int hoursInt = duration.inHours > 0 ? duration.inHours : 0;
-    String hours = "";
-    if (hoursInt > 0) {
-      String hoursPrefix = hoursInt > 1 ? "hrs" : "hr";
-      hours = "$hoursInt $hoursPrefix ";
-    }
-    int minutes = duration.inMinutes.remainder(60);
-    return "$hours$minutes min";
+    int hoursInt = duration.inHours;
+    String hoursPrefix = hoursInt > 1 ? "hrs" : "hr";
+
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    return "$hoursInt $hoursPrefix "
+        "${twoDigits(duration.inMinutes.remainder(60))} min";
   }
 }
 
