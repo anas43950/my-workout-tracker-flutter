@@ -12,19 +12,22 @@ import 'package:workout_tracker/utils/extensions.dart';
 class ItemRoutine extends StatelessWidget {
   final String name;
   final Routine? routine;
+  final bool isToday;
 
   const ItemRoutine({
     super.key,
     required this.name,
     this.routine,
+    required this.isToday,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isToday ? Colors.blue.shade50 : Colors.white,
         borderRadius: BorderRadius.circular(5),
+        border: isToday ? Border.all(color: Colors.blue, width: 0.5) : null,
       ),
       padding: EdgeInsets.all(12),
       child: Row(

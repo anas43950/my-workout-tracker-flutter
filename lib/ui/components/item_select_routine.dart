@@ -5,20 +5,23 @@ class ItemSelectRoutine extends StatelessWidget {
   final String name;
   final VoidCallback onSelectTap;
   final bool isSelected;
+  final bool isToday;
 
   const ItemSelectRoutine({
     super.key,
     required this.name,
     required this.onSelectTap,
     required this.isSelected,
+    required this.isToday,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isToday ? Colors.blue.shade50 : Colors.white,
         borderRadius: BorderRadius.circular(5),
+        border: isToday ? Border.all(color: Colors.blue, width: 0.5) : null,
       ),
       padding: EdgeInsets.all(12),
       child: Row(
@@ -28,11 +31,11 @@ class ItemSelectRoutine extends StatelessWidget {
               name,
             ),
           ),
-          ClickableText(
-            text: isSelected ? "Selected" : "Select",
-            onTap: onSelectTap,
-            textColor: isSelected ? Colors.grey : null,
-          ),
+          if (!isSelected)
+            ClickableText(
+              text: "Select",
+              onTap: onSelectTap,
+            ),
         ],
       ),
     );

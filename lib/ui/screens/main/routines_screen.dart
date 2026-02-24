@@ -89,6 +89,7 @@ class RoutinesScreen extends StatelessWidget {
                           return ItemRoutine(
                             name: name,
                             routine: routine,
+                            isToday: name == todayWeekDay,
                           );
                         },
                         separatorBuilder: (_, i) => Divider(

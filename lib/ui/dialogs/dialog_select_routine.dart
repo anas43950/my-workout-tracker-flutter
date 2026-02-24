@@ -34,14 +34,15 @@ class _DialogSelectRoutineState extends State<DialogSelectRoutine> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      insetPadding: EdgeInsets.symmetric(horizontal: 24),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: BlocBuilder<RoutinesListCubit, RoutinesListState>(
         builder: (context, state) {
           if (state is FetchRoutinesSuccess) {
             final routines = state.routines;
             routines.sort((r1, r2) => wdPos[r1.name]!.compareTo(wdPos[r2.name]!));
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,10 +53,18 @@ class _DialogSelectRoutineState extends State<DialogSelectRoutine> {
                           style: TextStyle(color: Colors.grey.shade700),
                           textAlign: TextAlign.center,
                         )
-                      : Text(
-                          "Selected routine: ${selectedRoutine?.name}",
-                          style: AppTextStyles.heading3,
-                          textAlign: TextAlign.center,
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Selected: ",
+                              style: AppTextStyles.label.copyWith(color: grey),
+                            ),
+                            Text(
+                              selectedRoutine?.name ?? "",
+                              style: AppTextStyles.label,
+                            ),
+                          ],
                         ),
                   15.height,
                   ...routines.expand(
@@ -64,6 +73,7 @@ class _DialogSelectRoutineState extends State<DialogSelectRoutine> {
                         name: e.name,
                         onSelectTap: () => setState(() => selectedRoutine = e),
                         isSelected: selectedRoutine == e,
+                        isToday: e == selectedRoutine,
                       ),
                       10.height,
                     ],
