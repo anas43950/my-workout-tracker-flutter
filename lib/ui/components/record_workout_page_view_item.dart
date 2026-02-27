@@ -27,6 +27,8 @@ class RecordWorkoutPageViewItem extends StatefulWidget {
 }
 
 class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
+  final FocusNode weightFocusNode = FocusNode();
+
   final weightTextController = TextEditingController();
   final repsTextController = TextEditingController();
   final dWeightTextController = TextEditingController();
@@ -211,7 +213,9 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                     child: Text(
                                       "${!showDropSetFields ? "Add" : "Remove"} Drop Set",
                                       style: AppTextStyles.bodySmall.copyWith(
-                                          decoration: TextDecoration.underline, fontSize: 13),
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 13,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -222,6 +226,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
                                 children: [
                                   Expanded(
                                     child: CustomTextField(
+                                      focusNode: weightFocusNode,
                                       hintText: "Wt. (Kgs)",
                                       controller: weightTextController,
                                       validator: weightValidator,
@@ -320,6 +325,7 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
       dRepsTextController.clear();
       dWeightTextController.clear();
 
+      weightFocusNode.requestFocus();
       setState(() => showDropSetFields = false);
     }
   }

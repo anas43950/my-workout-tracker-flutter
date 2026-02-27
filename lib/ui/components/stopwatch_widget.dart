@@ -16,7 +16,7 @@ class StopwatchWidget extends StatefulWidget {
 class _StopwatchWidgetState extends State<StopwatchWidget> {
   Timer? timer;
   int secondsPassed = 0;
-  bool showCurrentTime = false;
+  bool showCurrentTime = true;
 
   @override
   void initState() {
