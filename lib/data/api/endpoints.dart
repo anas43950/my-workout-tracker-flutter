@@ -1,15 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiEndpoints {
   ApiEndpoints._();
 
   // ngrok http 8000
 
-  static final baseUrl = kDebugMode
-      ? 'https://2c51-2401-4900-88d4-c9d2-38d3-1d5c-f8e-4622.ngrok-free.app/api/'
-      : 'https://anas-workout-tracker.fly.dev/api/';
-
-  // static final baseUrl = kDebugMode ? 'http://10.0.2.2:8000/api/' : 'https://anas-workout-tracker.fly.dev/api/';
+  static final baseUrl = "${dotenv.get('BASE_URL')}/api/";
 
   static final register = 'register';
   static final login = 'login';

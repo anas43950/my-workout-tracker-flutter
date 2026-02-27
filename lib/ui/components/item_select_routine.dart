@@ -19,9 +19,9 @@ class ItemSelectRoutine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isToday ? Colors.blue.shade50 : Colors.white,
+        color: isToday ? Colors.green.shade50 : Colors.white,
         borderRadius: BorderRadius.circular(5),
-        border: isToday ? Border.all(color: Colors.blue, width: 0.5) : null,
+        border: isToday ? Border.all(color: Colors.green, width: 0.5) : null,
       ),
       padding: EdgeInsets.all(12),
       child: Row(

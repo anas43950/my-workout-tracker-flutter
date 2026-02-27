@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/app_cubits.dart';
 import 'package:workout_tracker/router.dart';
@@ -11,6 +13,11 @@ void main() async {
 
   await initialize();
   await SharedPrefUtils.init();
+  if (kDebugMode) {
+    await dotenv.load(fileName: 'local.env');
+  } else {
+    await dotenv.load();
+  }
   runApp(const MyApp());
 }
 
