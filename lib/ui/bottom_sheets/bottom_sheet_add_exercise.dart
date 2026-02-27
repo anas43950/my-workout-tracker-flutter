@@ -31,6 +31,8 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
   late final Exercise? exerciseForEdit;
   late bool isEditing;
 
+  final FocusNode nameFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +70,7 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
                 Divider(),
                 20.height,
                 TextFieldWithLabel(
+                  focusNode: nameFocusNode,
                   label: 'Name',
                   hintText: 'Enter exercise name...',
                   controller: nameController,
@@ -86,31 +89,33 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
                   "Reps",
                   style: AppTextStyles.bodyMedium,
                 ),
-                RadioGroup(
-                  onChanged: (val) {
-                    if (val == null) return;
-                    setState(() => repsType = val);
-                    repsFromController.clear();
-                    repsToController.clear();
-                  },
-                  groupValue: repsType,
-                  child: SizedBox(
-                    width: 200,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: RadioListTile(
-                            value: RANGE,
-                            title: Text(RANGE),
+                ExcludeFocus(
+                  child: RadioGroup(
+                    onChanged: (val) {
+                      if (val == null) return;
+                      setState(() => repsType = val);
+                      repsFromController.clear();
+                      repsToController.clear();
+                    },
+                    groupValue: repsType,
+                    child: SizedBox(
+                      width: 200,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: RadioListTile(
+                              value: RANGE,
+                              title: Text(RANGE),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: RadioListTile(
-                            value: FIXED,
-                            title: Text(FIXED),
+                          Expanded(
+                            child: RadioListTile(
+                              value: FIXED,
+                              title: Text(FIXED),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -139,6 +144,7 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
                           allowDigitsOnly: true,
                           controller: repsToController,
                           validator: (value) => Validators.emptyValidator(value, "'To' can't be empty"),
+                          changeToDoneKey: true,
                         ),
                       ),
                     ],
@@ -152,6 +158,8 @@ class _BottomSheetAddExerciseState extends State<BottomSheetAddExercise> {
                       setsController.clear();
                       repsFromController.clear();
                       repsToController.clear();
+
+                      nameFocusNode.requestFocus();
                     }
                     if (state is AddExerciseFail) {
                       showErrorSnackBar(context, state.message);

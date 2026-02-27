@@ -8,6 +8,7 @@ class TextFieldWithLabel extends StatelessWidget {
   final TextEditingController? controller;
   final bool? allowDigitsOnly;
   final String? Function(String? value)? validator;
+  final FocusNode? focusNode;
 
   const TextFieldWithLabel({
     super.key,
@@ -16,6 +17,7 @@ class TextFieldWithLabel extends StatelessWidget {
     this.controller,
     this.allowDigitsOnly,
     this.validator,
+    this.focusNode,
   });
 
   @override
@@ -31,6 +33,7 @@ class TextFieldWithLabel extends StatelessWidget {
           ),
         ),
         CustomTextField(
+          focusNode: focusNode,
           controller: controller,
           hintText: hintText,
           allowDigitsOnly: allowDigitsOnly,
