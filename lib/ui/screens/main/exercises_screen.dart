@@ -8,6 +8,7 @@ import 'package:workout_tracker/data/models/exercise.dart';
 import 'package:workout_tracker/ui/bottom_sheets/bottom_sheet_add_exercise.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_exercise.dart';
+import 'package:workout_tracker/ui/components/search_text_field.dart';
 import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
 import 'package:workout_tracker/utils/extensions.dart';
 import 'package:workout_tracker/utils/helpers.dart';
@@ -50,16 +51,9 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextField(
-            decoration: InputDecoration(
-              hintText: "Search exercises...",
-              hintStyle: TextStyle(color: grey),
-              prefixIcon: Icon(
-                FluentIcons.search_12_regular,
-                color: lightGrey,
-              ),
-            ),
+          SearchTextField(
             controller: searchController,
+            hintText: "Search Exercises",
           ),
           Divider(height: 40),
           Expanded(

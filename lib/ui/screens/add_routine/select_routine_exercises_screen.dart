@@ -1,4 +1,3 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +8,7 @@ import 'package:workout_tracker/data/models/routine.dart';
 import 'package:workout_tracker/router.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_select_exercise.dart';
+import 'package:workout_tracker/ui/components/search_text_field.dart';
 
 class SelectRoutineExercisesScreen extends StatefulWidget {
   final String name;
@@ -46,17 +46,9 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextField(
-            decoration: InputDecoration(
-              hintText: "Search exercises...",
-              hintStyle: TextStyle(color: grey),
-              prefixIcon: Icon(
-                FluentIcons.search_12_regular,
-                color: lightGrey,
-              ),
-              contentPadding: EdgeInsets.all(10),
-            ),
+          SearchTextField(
             controller: searchController,
+            hintText: "Search Exercises",
           ),
           15.height,
           Expanded(
