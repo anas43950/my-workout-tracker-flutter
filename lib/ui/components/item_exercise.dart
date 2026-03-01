@@ -1,6 +1,8 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart' hide white, black;
 import 'package:workout_tracker/data/models/exercise.dart';
-import 'package:workout_tracker/ui/components/clickable_text.dart';
+import 'package:workout_tracker/ui/theme/colors.dart';
 
 class ItemExercise extends StatelessWidget {
   final VoidCallback? onEditPressed;
@@ -24,10 +26,10 @@ class ItemExercise extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
       ),
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        spacing: 10,
         children: [
+          12.width,
           Expanded(
             child: Text(
               exercise.name,
@@ -37,16 +39,62 @@ class ItemExercise extends StatelessWidget {
             " ( ${exercise.setsData} )",
           ),
           if (showButtons) ...[
-            ClickableText(
-              textColor: Colors.red,
-              text: "Delete",
-              onTap: onDeletePressed,
+            5.width,
+            PopupMenuButton(
+              color: white,
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem(
+                  onTap: onEditPressed,
+                  child: Text('Edit'),
+                ),
+                PopupMenuItem(
+                  onTap: onDeletePressed,
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+              child: Icon(
+                FluentIcons.more_vertical_16_filled,
+                size: 20,
+              ),
             ),
-            ClickableText(
-              text: "Edit",
-              onTap: onEditPressed,
-            ),
-          ],
+            4.width,
+            // 8.width,
+            // InkWell(
+            //   onTap: onEditPressed,
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            //     child: Icon(
+            //       FluentIcons.edit_12_regular,
+            //       size: 16,
+            //     ),
+            //   ),
+            // ),
+            // InkWell(
+            //   onTap: onDeletePressed,
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            //     child: Icon(
+            //       FluentIcons.delete_12_regular,
+            //       color: Colors.red,
+            //       size: 18,
+            //     ),
+            //   ),
+            // ),
+            // 8.width,
+            // ClickableText(
+            //   textColor: Colors.red,
+            //   text: "Delete",
+            //   onTap: onDeletePressed,
+            // ),
+            // ClickableText(
+            //   text: "Edit",
+            //   onTap: onEditPressed,
+            // ),
+          ] else
+            12.width,
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:workout_tracker/data/cubits/exercises/exercises_list_cubit.dart';
 import 'package:workout_tracker/data/cubits/exercises/manage_exercise_cubit.dart';
+import 'package:workout_tracker/data/models/exercise.dart';
 import 'package:workout_tracker/ui/bottom_sheets/bottom_sheet_add_exercise.dart';
 import 'package:workout_tracker/ui/components/custom_scaffold.dart';
 import 'package:workout_tracker/ui/components/item_exercise.dart';
@@ -19,14 +20,16 @@ class ExercisesScreen extends StatefulWidget {
 }
 
 class _ExercisesScreenState extends State<ExercisesScreen> {
+  List<Exercise>? filteredExercises;
   final searchController = TextEditingController();
-  final _searchTag = "all_exercises";
 
   @override
   void initState() {
     super.initState();
     searchController.addListener(() {
-      context.read<ExercisesListCubit>().searchExercises(searchController.text, _searchTag);
+      setState(() {
+        filteredExercises = context.read<ExercisesListCubit>().filterExercises(searchController.text);
+      });
     });
   }
 
@@ -73,7 +76,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                   } else if (state is FetchExercisesFail) {
                     return Text(state.message);
                   } else if (state is ExercisesListRefreshed) {
-                    final exercises = state.searchedExercises?[_searchTag]?.toList() ?? state.exercises;
+                    final exercises = filteredExercises ?? state.exercises;
                     return exercises.isEmpty
                         ? Center(child: Text("No exercises added yet"))
                         : ListView.builder(

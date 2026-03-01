@@ -13,18 +13,7 @@ class FetchExercisesInProgress extends ExercisesListState {}
 class ExercisesListRefreshed extends ExercisesListState {
   List<Exercise> exercises;
 
-  // We need a tag to keep track of exercises searched on different screens
-  Map<String, Iterable<Exercise>>? searchedExercises;
-
-  ExercisesListRefreshed(this.exercises, {this.searchedExercises});
-
-  ExercisesListRefreshed copyWith({
-    List<Exercise>? exercises,
-    Map<String, Iterable<Exercise>>? searchedExercises,
-  }) => ExercisesListRefreshed(
-    exercises ?? this.exercises,
-    searchedExercises: searchedExercises ?? this.searchedExercises,
-  );
+  ExercisesListRefreshed(this.exercises);
 }
 
 class FetchExercisesFail extends ExercisesListState {
@@ -55,19 +44,16 @@ class ExercisesListCubit extends Cubit<ExercisesListState> {
     }
   }
 
-  void searchExercises(String searchText, String tag) {
+  List<Exercise>? filterExercises(String searchText) {
     if (state is ExercisesListRefreshed) {
       final data = state as ExercisesListRefreshed;
 
-      final searchedExercises = data.searchedExercises ?? {};
-
-      if (searchText.isEmpty) {
-        searchedExercises.remove(tag);
-      } else {
-        searchedExercises[tag] = data.exercises.where((e) => e.name.toLowerCase().contains(searchText.toLowerCase()));
+      if (searchText.trim().isNotEmpty) {
+        return data.exercises.where((e) => e.name.toLowerCase().contains(searchText.toLowerCase())).toList();
       }
-      emit(data.copyWith(searchedExercises: searchedExercises));
+      return null;
     }
+    return null;
   }
 
   @override

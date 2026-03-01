@@ -21,9 +21,9 @@ class SelectRoutineExercisesScreen extends StatefulWidget {
 }
 
 class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScreen> {
+  List<Exercise>? filteredExercises;
   List<Exercise> selectedExercises = [];
   final searchController = TextEditingController();
-  final _searchTag = "select_exercises";
 
   @override
   void initState() {
@@ -32,7 +32,9 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
       selectedExercises.addAll(widget.routineForEdit!.exercises);
     }
     searchController.addListener(() {
-      context.read<ExercisesListCubit>().searchExercises(searchController.text, _searchTag);
+      setState(() {
+        filteredExercises = context.read<ExercisesListCubit>().filterExercises(searchController.text);
+      });
     });
   }
 
@@ -61,7 +63,7 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
             child: BlocBuilder<ExercisesListCubit, ExercisesListState>(
               builder: (context, state) {
                 if (state is ExercisesListRefreshed) {
-                  final exercises = state.searchedExercises?[_searchTag]?.toList() ?? state.exercises;
+                  final exercises = filteredExercises ?? state.exercises;
                   return ListView.builder(
                     itemBuilder: (_, i) {
                       final exercise = exercises[i];
