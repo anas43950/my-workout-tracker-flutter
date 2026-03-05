@@ -29,7 +29,9 @@ class DialogWorkoutHistoryNote extends StatelessWidget {
             ),
             10.height,
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pop();
+              },
               style: ElevatedButton.styleFrom(padding: EdgeInsets.all(0)),
               child: Text(
                 "Dismiss",

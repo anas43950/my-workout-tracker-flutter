@@ -76,7 +76,7 @@ class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
     }
   }
 
-  void addSet(WorkoutSet set) {
+  int addSet(WorkoutSet set) {
     if (state is RecordWorkoutInProgress) {
       final data = (state as RecordWorkoutInProgress);
       final setsData = data.setsData;
@@ -89,7 +89,9 @@ class RecordWorkoutCubit extends Cubit<RecordWorkoutState> {
           lastSetTimestamp: DateTime.now().difference(data.startedAt).inSeconds,
         ),
       );
+      return setsData[data.currentExerciseId]!.length;
     }
+    return -1;
   }
 
   void removeLastSet() {
