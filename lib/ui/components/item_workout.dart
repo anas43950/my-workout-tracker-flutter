@@ -27,38 +27,36 @@ class _ItemWorkoutState extends State<ItemWorkout> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              children: [
-                Text(
-                  DateFormat("EEE, dd MMM yyyy").format(widget.workout.createdAt),
-                  style: AppTextStyles.bodySmall,
+          Row(
+            children: [
+              10.width,
+              Text(
+                DateFormat("EEE, dd MMM yyyy").format(widget.workout.createdAt),
+                style: AppTextStyles.bodySmall,
+              ),
+              widget.workout.startedAt != null
+                  ? Expanded(
+                      child: Text(
+                        formatDuration(widget.workout.createdAt.difference(widget.workout.startedAt!)),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 13),
+                      ),
+                    )
+                  : Spacer(),
+              Text(
+                "W x R",
+                style: AppTextStyles.bodySmall,
+              ),
+              10.width,
+              IconButton(
+                onPressed: () => setState(() => expanded = !expanded),
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
+                  expanded ? FluentIcons.eye_off_16_filled : FluentIcons.eye_12_filled,
+                  size: 20,
                 ),
-                expanded && widget.workout.startedAt != null
-                    ? Expanded(
-                        child: Text(
-                          formatDuration(widget.workout.createdAt.difference(widget.workout.startedAt!)),
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.bodyMedium.copyWith(fontSize: 13),
-                        ),
-                      )
-                    : Spacer(),
-                Text(
-                  "W x R",
-                  style: AppTextStyles.bodySmall,
-                ),
-                10.width,
-                InkWell(
-                  borderRadius: BorderRadius.circular(100),
-                  onTap: () => setState(() => expanded = !expanded),
-                  child: Icon(
-                    expanded ? FluentIcons.eye_off_16_filled : FluentIcons.eye_12_filled,
-                    size: 20,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
           Divider(height: 1),
           ListView.separated(

@@ -18,6 +18,7 @@ import 'package:workout_tracker/ui/components/record_workout_page_view_item.dart
 import 'package:workout_tracker/ui/components/stopwatch_widget.dart';
 import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
 import 'package:workout_tracker/ui/dialogs/dialog_add_workout_note.dart';
+import 'package:workout_tracker/ui/dialogs/dialog_workout_history_note.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/extensions.dart';
 import 'package:workout_tracker/utils/helpers.dart';
@@ -115,6 +116,13 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                   }
                   if (state is FetchSingleWorkoutFail) {
                     showErrorSnackBar(context, state.message);
+                  }
+                  if (state is FetchSingleWorkoutSuccess) {
+                    if (state.workout?.note != null) {
+                      context.dialog(
+                        DialogWorkoutHistoryNote(note: state.workout!.note!),
+                      );
+                    }
                   }
                 },
                 builder: (context, state) {
