@@ -80,7 +80,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                                 exercise: exercise,
                                 onEditPressed: () {
                                   showModalBottomSheet(
-                                    scrollControlDisabledMaxHeightRatio: 9 / 15.5,
+                                    scrollControlDisabledMaxHeightRatio: 500 / MediaQuery.of(context).size.height,
                                     context: context,
                                     builder: (_) => BottomSheetAddExercise(exercise: exercise),
                                   );
