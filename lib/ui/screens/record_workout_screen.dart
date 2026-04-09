@@ -18,6 +18,7 @@ import 'package:workout_tracker/ui/components/record_workout_page_view_item.dart
 import 'package:workout_tracker/ui/components/stopwatch_widget.dart';
 import 'package:workout_tracker/ui/dialogs/confirmation_dialog.dart';
 import 'package:workout_tracker/ui/dialogs/dialog_add_workout_note.dart';
+import 'package:workout_tracker/ui/dialogs/dialog_last_workout_history_detail.dart';
 import 'package:workout_tracker/ui/dialogs/dialog_workout_history_note.dart';
 import 'package:workout_tracker/ui/theme/app_text_styles.dart';
 import 'package:workout_tracker/utils/extensions.dart';
@@ -205,14 +206,9 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
             if (state is FetchSingleWorkoutSuccess) {
               final lastHistory = state.workout;
               return Row(
-                children: [
-                  lastHistory == null
-                      ? Text(
-                          "Not found",
-                          style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
-                          textAlign: TextAlign.end,
-                        )
-                      : Column(
+                children: lastHistory != null
+                    ? [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           spacing: 3,
                           children: [
@@ -225,21 +221,52 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
                             ),
                           ],
                         ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(100),
-                    onTap: () {
-                      onChangeHistoryTap(state.selectedDate);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Icon(
-                        FluentIcons.edit_12_filled,
-                        color: Colors.blue,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                ],
+                        10.width,
+                        PopupMenuButton(
+                          color: white,
+                          itemBuilder: (BuildContext context) => [
+                            PopupMenuItem(
+                              onTap: () {
+                                onViewHistoryTap(lastHistory);
+                              },
+                              child: Text('View History'),
+                            ),
+                            PopupMenuItem(
+                              onTap: () {
+                                onChangeHistoryTap(state.selectedDate);
+                              },
+                              child: Text(
+                                'Change Date',
+                              ),
+                            ),
+                          ],
+                          child: Icon(
+                            FluentIcons.more_vertical_16_filled,
+                            size: 20,
+                          ),
+                        ),
+                      ]
+                    : [
+                        Text(
+                          "Not found",
+                          style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                          textAlign: TextAlign.end,
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(100),
+                          onTap: () {
+                            onChangeHistoryTap(state.selectedDate);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Icon(
+                              FluentIcons.edit_12_filled,
+                              color: Colors.blue,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
               );
             }
             return SizedBox();
@@ -312,6 +339,13 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
     if (date != null && mounted) {
       context.read<ManageWorkoutCubit>().fetchWorkoutForDate(date);
     }
+  }
+
+  void onViewHistoryTap(Workout? lastHistory) async {
+    if (lastHistory == null) return;
+    context.dialog(
+      DialogLastWorkoutHistoryDetail(lastHistory: lastHistory),
+    );
   }
 }
 

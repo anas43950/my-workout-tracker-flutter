@@ -31,3 +31,13 @@ String getTimeText(int seconds) {
 
   return sDuration;
 }
+
+String formatDuration(Duration duration) {
+  int hoursInt = duration.inHours;
+  String hoursPrefix = hoursInt > 1 ? "hrs" : "hr";
+
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+  return "$hoursInt $hoursPrefix "
+      "${twoDigits(duration.inMinutes.remainder(60))} min";
+}

@@ -61,38 +61,6 @@ class ItemExercise extends StatelessWidget {
               ),
             ),
             4.width,
-            // 8.width,
-            // InkWell(
-            //   onTap: onEditPressed,
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-            //     child: Icon(
-            //       FluentIcons.edit_12_regular,
-            //       size: 16,
-            //     ),
-            //   ),
-            // ),
-            // InkWell(
-            //   onTap: onDeletePressed,
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-            //     child: Icon(
-            //       FluentIcons.delete_12_regular,
-            //       color: Colors.red,
-            //       size: 18,
-            //     ),
-            //   ),
-            // ),
-            // 8.width,
-            // ClickableText(
-            //   textColor: Colors.red,
-            //   text: "Delete",
-            //   onTap: onDeletePressed,
-            // ),
-            // ClickableText(
-            //   text: "Edit",
-            //   onTap: onEditPressed,
-            // ),
           ] else
             12.width,
         ],
