@@ -40,7 +40,7 @@ class _DialogSelectRoutineState extends State<DialogSelectRoutine> {
         builder: (context, state) {
           if (state is FetchRoutinesSuccess) {
             final routines = state.routines;
-            routines.sort((r1, r2) => wdPos[r1.name]!.compareTo(wdPos[r2.name]!));
+            routines.sort((r1, r2) => sortedWeekdays.indexOf(r1.name).compareTo(sortedWeekdays.indexOf(r2.name)));
             return Padding(
               padding: const EdgeInsets.all(12),
               child: Column(

@@ -7,17 +7,19 @@ const weekdays = [
   'Thursday',
   'Friday',
   'Saturday',
-  'Sunday'
+  'Sunday',
 ]; // Starting from monday here as dart's week starts from monday
-final wdPos = {
-  'Sunday': 0,
-  'Monday': 1,
-  'Tuesday': 2,
-  'Wednesday': 3,
-  'Thursday': 4,
-  'Friday': 5,
-  'Saturday': 6,
-};
+
+
+final sortedWeekdays = [
+  'Saturday',
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+];
 
 String get todayWeekDay => weekdays[DateTime.now().weekday - 1];
 

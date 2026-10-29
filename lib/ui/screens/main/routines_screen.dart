@@ -84,8 +84,9 @@ class RoutinesScreen extends StatelessWidget {
                     : state is FetchRoutinesSuccess
                     ? ListView.separated(
                         itemBuilder: (_, i) {
-                          final name = weekdays[i];
-                          final routine = state.routines.firstWhereOrNull((element) => element.name == name);
+                          final name = sortedWeekdays.elementAt(i);
+                          final routines = state.routines;
+                          final routine = routines.firstWhereOrNull((element) => element.name == name);
                           return ItemRoutine(
                             name: name,
                             routine: routine,
@@ -96,7 +97,7 @@ class RoutinesScreen extends StatelessWidget {
                           height: 25,
                           thickness: 0.1,
                         ),
-                        itemCount: weekdays.length,
+                        itemCount: sortedWeekdays.length,
                       )
                     : Container(),
               ),
