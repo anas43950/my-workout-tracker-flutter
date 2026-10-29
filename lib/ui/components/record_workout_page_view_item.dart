@@ -318,14 +318,14 @@ class _RecordWorkoutPageViewItemState extends State<RecordWorkoutPageViewItem> {
         dropSetWeight: dWeight,
       );
 
-      final totalSets = context.read<RecordWorkoutCubit>().addSet(set);
+      final completedSets = context.read<RecordWorkoutCubit>().addSet(set);
 
       weightTextController.clear();
       repsTextController.clear();
       dRepsTextController.clear();
       dWeightTextController.clear();
 
-      if (totalSets < widget.exercise.sets) {
+      if (completedSets < widget.exercise.sets) {
         weightFocusNode.requestFocus();
       } else {
         FocusScope.of(context).unfocus();

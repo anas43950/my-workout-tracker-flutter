@@ -16,7 +16,7 @@ class WorkoutsRepository {
     return _instance!;
   }
 
-  Stream<List<Workout>> get routinesStream => _controller.stream;
+  Stream<List<Workout>> get workoutsStream => _controller.stream;
 
   Future<void> fetchWorkouts() async {
     final response = await ApiService.get(

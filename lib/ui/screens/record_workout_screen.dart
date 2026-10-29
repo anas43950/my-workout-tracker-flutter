@@ -37,20 +37,20 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   final pageController = PageController();
   late Routine routine;
   int currentExerciseIndex = 0;
-  late final RecordWorkoutCubit rwCubit;
+  late final RecordWorkoutCubit rWCubit;
 
   @override
   void initState() {
     super.initState();
 
     routine = widget.routine;
-    rwCubit = context.read<RecordWorkoutCubit>();
-    rwCubit.startWorkout(routine.id, routine.exercises.first.id);
-    context.read<ManageWorkoutCubit>().fetchWorkoutForRoutine(routine.id);
+    rWCubit = context.read<RecordWorkoutCubit>();
+    rWCubit.startWorkout(routine.id, routine.exercises.first.id);
+    context.read<ManageWorkoutCubit>().fetchLastWorkoutForRoutine(routine.id);
   }
 
   void onBackPressed() {
-    if (rwCubit.hasNonEmptySets()) {
+    if (rWCubit.hasNonEmptySets()) {
       context.dialog(
         ConfirmationDialog(
           message: "Do you want to exit?\nAll of the progress will be lost.",
@@ -278,9 +278,9 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
   }
 
   void onCompleteTap() {
-    if (!rwCubit.hasNonEmptySets()) {
+    if (!rWCubit.hasNonEmptySets()) {
       showErrorSnackBar(context, "Add at least one exercise's sets");
-    } else if (rwCubit.hasEmptySets()) {
+    } else if (rWCubit.hasEmptySets()) {
       context.dialog(
         ConfirmationDialog(
           message:
@@ -302,7 +302,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
     context.dialog(
       DialogAddWorkoutNote(
         onSavePressed: (String? note) {
-          rwCubit.completeWorkout(note);
+          rWCubit.completeWorkout(note);
         },
       ),
     );
@@ -316,7 +316,7 @@ class _RecordWorkoutScreenState extends State<RecordWorkoutScreen> {
       index = pageController.page!.round() - 1;
     }
 
-    rwCubit.changeExercise(routine.exercises[index].id);
+    rWCubit.changeExercise(routine.exercises[index].id);
     setState(() => currentExerciseIndex = index);
 
     final duration = const Duration(milliseconds: 400);

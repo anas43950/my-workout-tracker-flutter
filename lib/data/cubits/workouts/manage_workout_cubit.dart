@@ -52,7 +52,7 @@ class ManageWorkoutCubit extends Cubit<ManageWorkoutState> {
     }
   }
 
-  Future<void> fetchWorkoutForRoutine(int routineId) async {
+  Future<void> fetchLastWorkoutForRoutine(int routineId) async {
     emit(FetchSingleWorkoutInProgress());
     try {
       final result = await WorkoutsRepository().fetchWorkoutsForRoutine(routineId);

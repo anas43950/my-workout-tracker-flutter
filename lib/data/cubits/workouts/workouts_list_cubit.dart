@@ -28,7 +28,7 @@ class WorkoutsListCubit extends Cubit<WorkoutsListState> {
 
   WorkoutsListCubit() : super(FetchWorkoutsInit()) {
     _repository = WorkoutsRepository();
-    _subscription = _repository.routinesStream.listen((workouts) {
+    _subscription = _repository.workoutsStream.listen((workouts) {
       emit(FetchWorkoutsSuccess(workouts));
     });
   }

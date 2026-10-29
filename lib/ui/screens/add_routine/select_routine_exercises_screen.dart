@@ -24,6 +24,7 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
   List<Exercise>? filteredExercises;
   List<Exercise> selectedExercises = [];
   final searchController = TextEditingController();
+  bool selectAll = false;
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      title: "Select exercises for Sunday routine",
+      title: "${widget.name} routine",
       showBackBtn: true,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -50,7 +51,15 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
             controller: searchController,
             hintText: "Search Exercises",
           ),
-          15.height,
+          5.height,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text("Select All"),
+              Checkbox(value: selectAll, onChanged: onSelectAllChanged),
+            ],
+          ),
+          5.height,
           Expanded(
             child: BlocBuilder<ExercisesListCubit, ExercisesListState>(
               builder: (context, state) {
@@ -63,13 +72,7 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
                         name: exercise.name,
                         selected: selectedExercises.any((e) => e.id == exercise.id),
                         onSelectionChanged: (bool value) {
-                          setState(() {
-                            if (value) {
-                              selectedExercises.add(exercise);
-                            } else {
-                              selectedExercises.removeWhere((e) => e.id == exercise.id);
-                            }
-                          });
+                          onExerciseSelectionChanged(exercise, value);
                         },
                       );
                     },
@@ -99,5 +102,29 @@ class _SelectRoutineExercisesScreenState extends State<SelectRoutineExercisesScr
         ],
       ),
     );
+  }
+
+  void onSelectAllChanged(bool? value) {
+    if (value == null) return;
+    if (value) {
+      selectedExercises.addAll((context.read<ExercisesListCubit>().state as ExercisesListRefreshed).exercises);
+    } else {
+      selectedExercises.clear();
+    }
+    setState(() => selectAll = value);
+  }
+
+  void onExerciseSelectionChanged(Exercise exercise, bool selected) {
+    setState(() {
+      if (selected) {
+        selectedExercises.add(exercise);
+        if (selectedExercises.length == (context.read<ExercisesListCubit>().state as ExercisesListRefreshed).exercises.length) {
+          selectAll = true;
+        }
+      } else {
+        selectedExercises.removeWhere((e) => e.id == exercise.id);
+        selectAll = false;
+      }
+    });
   }
 }
